@@ -1,0 +1,82 @@
+.idea/
+*.iml
+
+## File-based project format:
+*.iws
+
+*.mvn/
+
+## Plugin-specific files:
+
+# IntelliJ
+/out/
+
+### Java template
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+### Maven template
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
+!/.mvn/wrapper/maven-wrapper.jar
+
+# compiled output
+frontend/dist
+frontend/tmp
+frontend/out-tsc
+
+# dependencies
+frontend/node_modules
+
+# IDEs and editors
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+frontend/.sass-cache
+frontend/connect.lock
+frontend/coverage
+frontend/libpeerconnection.log
+frontend/npm-debug.log
+frontend/testem.log
+frontend/typings
+frontend/yarn-error.log
+
+# e2e
+frontend/e2e/*.js
+frontend/e2e/*.map
+
+# System Files
+.DS_Store
+Thumbs.db
