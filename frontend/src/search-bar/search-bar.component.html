@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="row">
+        <h2>Stylish Search Box</h2>
+        <div class=" col-xs-8 col-xs-offset-2">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <select style="width: 137px;" class="form-control" [(ngModel)]="selectedOption">
+                        
+                        <option *ngFor="let queryOption of options;" [ngValue]="queryOption">{{queryOption.name}}</option>
+                    </select>
+                </div>
+                <input type="hidden" name="search_param" value="all" id="search_param">
+                <input #searchForm id='search-form' class="search-query form-control" (keyup)="search(searchForm.value)" placeholder="Search"
+                />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="col-md-12 ">
+        <p class="search-results-count">About {{count}} results</p>
+        <section *ngFor="let subject of subjects | async" class="search-result-item">
+            <div class="search-result-item-body">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h4 class="search-result-item-heading"><a href="#">{{subject.courseNumber}} - {{subject.title}}</a></h4>
+                        <p class="info">{{subject.availability}}:: {{subject.studentType}}</p>
+                        <p class="info"></p>
+                        <p class="description">{{subject.description}}</p>
+                    </div>
+                    <div class="col-sm-3 text-align-center">
+                        <p class="value3 mt-sm"></p>
+                        <p *ngIf="subject.requisite" class="fs-mini text-muted">Prerequisite: {{subject.requisite}}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section *ngIf='!count' class="empty-search-result">
+            <div class="search-result-item-body">
+
+                <div class="row">
+                    <div class="col-sm-9 text-center">
+                        <h2 style="text-transform: uppercase; letter-spacing:4px; color:#adadad; margin-top:10%">No Result</h2>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
