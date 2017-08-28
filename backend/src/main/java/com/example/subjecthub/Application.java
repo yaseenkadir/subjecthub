@@ -31,7 +31,12 @@ public class Application {
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
-                .antMatchers("/", "/**").permitAll();
+                    .antMatchers("/", "/**").permitAll().and()
+                .csrf()
+                    // disabling csrf so that we can access the h2-console webpage
+                    .ignoringAntMatchers("/h2-console/**").and()
+                .headers()
+                    .frameOptions().sameOrigin();
         }
     }
 
