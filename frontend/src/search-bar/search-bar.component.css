@@ -2,6 +2,15 @@ body {
   margin-top: 20px;
   background-color: #eee;
 }
+.search-result-item-body-faded {
+  margin-left: 200px;
+  opacity: 0.3;
+}
+
+.search-result-item-body-faded:hover {
+  margin-left: 200px;
+  opacity: 1;
+}
 
 .search-result-categories > li > a {
   color: #b6b6b6;
@@ -43,7 +52,7 @@ body {
 
 .search-result-item:after,
 .search-result-item:before {
-  content: " ";
+  content: ' ';
   display: table;
 }
 
