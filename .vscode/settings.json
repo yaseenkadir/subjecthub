@@ -1,6 +1,7 @@
-// Place your settings in this file to overwrite default and user settings.
 {
-    "editor.formatOnSave": true,
-    "prettier.bracketSpacing": true,
-    "prettier.eslintIntegration": true
+  // Place your settings in this file to overwrite default and user settings.
+  "editor.formatOnSave": true,
+  "prettier.bracketSpacing": true,
+  "prettier.eslintIntegration": true,
+  "java.configuration.updateBuildConfiguration": "interactive"
 }

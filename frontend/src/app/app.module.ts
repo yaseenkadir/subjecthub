@@ -10,6 +10,7 @@ import { InMemoryDataService } from './in-memory-data.service';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from '../navigation/navigation.component';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { FuseSearchBarComponent } from '../search-bar/fuse-search-bar.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,12 @@ import { SearchBarComponent } from '../search-bar/search-bar.component';
     HttpModule,
     InMemoryWebApiModule.forRoot(InMemoryDataService),
   ],
-  declarations: [AppComponent, NavigationComponent, SearchBarComponent],
+  declarations: [
+    AppComponent,
+    NavigationComponent,
+    SearchBarComponent,
+    FuseSearchBarComponent,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
