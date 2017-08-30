@@ -24,14 +24,17 @@
                 <div *ngIf="subjects.indexOf(subject) === 0" class="search-result-item-body">
                     <div class="row">
                         <div class="col-sm-9">
-                            <h4 class="search-result-item-heading"><a href="#">{{subject.courseNumber}} - {{subject.title}}</a></h4>
-                            <p class="info">{{subject.availability}}:: {{subject.studentType}}</p>
+                            <h4 class="search-result-item-heading"><a href="#">{{subject.code}} - {{subject.name}}</a></h4>
+                            <p class="info">{{subject.creditPoints}} Credit Points :: {{subject.faculty.name}}</p>
                             <p class="info"></p>
                             <p class="description">{{subject.description}}</p>
+                            <p class="info"></p>
+                            <h4>Requirements</h4>
+                            <p *ngIf="subject.minRequirements" class="fs-mini text-muted"> {{subject.minRequirements}}</p>
                         </div>
                         <div class="col-sm-3 text-align-center">
                             <p class="value3 mt-sm"></p>
-                            <p *ngIf="subject.requisite" class="fs-mini text-muted">Prerequisite: {{subject.requisite}}</p>
+                            <p class="fs-mini text-muted"> {{subject.faculty.university.name}}</p>
                         </div>
                     </div>
                 </div>
@@ -40,14 +43,17 @@
                 <div *ngIf="subjects.indexOf(subject) > 0" class="search-result-item-body-faded">
                     <div class="row">
                         <div class="col-sm-9">
-                            <h4 class="search-result-item-heading"><a href="#">{{subject.courseNumber}} - {{subject.title}}</a></h4>
-                            <p class="info">{{subject.availability}}:: {{subject.studentType}}</p>
+                            <h4 class="search-result-item-heading"><a href="#">{{subject.code}} - {{subject.name}}</a></h4>
+                            <p class="info">{{subject.creditPoints}} Credit Points :: {{subject.faculty.name}}</p>
                             <p class="info"></p>
                             <p class="description">{{subject.description}}</p>
+                            <p class="info"></p>
+                            <h4>Requirements</h4>
+                            <p *ngIf="subject.minRequirements" class="fs-mini text-muted"> {{subject.minRequirements}}</p>
                         </div>
                         <div class="col-sm-3 text-align-center">
                             <p class="value3 mt-sm"></p>
-                            <p *ngIf="subject.requisite" class="fs-mini text-muted">Prerequisite: {{subject.requisite}}</p>
+                            <p class="fs-mini text-muted"> {{subject.faculty.university.name}}</p>
                         </div>
                     </div>
                 </div>
@@ -55,7 +61,7 @@
 
 
 
-            <section *ngIf='!count' class="empty-search-result">
+            <section *ngIf='this.subjects.length === 0' class="empty-search-result">
                 <div class="search-result-item-body">
 
                     <div class="row">

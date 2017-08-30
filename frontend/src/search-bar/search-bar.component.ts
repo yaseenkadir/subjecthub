@@ -28,18 +28,17 @@ class Option {
   providers: [SubjectSearchService],
 })
 export class SearchBarComponent implements OnInit {
-  subjects: Observable<SubjectResult[]>;
+  subjects: SubjectResult[];
   count: number;
 
   private searchTerms = new Subject<string>();
   selectedOption: Option;
 
   options = [
-    new Option('Title', 'title'),
-    new Option('Course Number', 'courseNumber'),
-    new Option('Pre-requisites', 'requisite'),
-    new Option('Availability', 'availability'),
-    new Option('studentType', 'Course Type'),
+    new Option('Name', 'name'),
+    new Option('Subject Code', 'subjectCode'),
+    new Option('Faculty', 'facultyName'),
+    new Option('Credit Points', 'creditPoints'),
   ];
 
   constructor(private subjectSearchService: SubjectSearchService) {
@@ -47,13 +46,12 @@ export class SearchBarComponent implements OnInit {
   }
 
   search(term: string): void {
-    this.subjects.subscribe(t => (this.count = t.length));
     this.searchTerms.next(term);
   }
 
   ngOnInit(): void {
-    this.subjects = this.searchTerms
-      .debounceTime(300)
+    this.searchTerms
+      .debounceTime(600)
       .distinctUntilChanged()
       .switchMap(
         term =>
@@ -64,6 +62,10 @@ export class SearchBarComponent implements OnInit {
       .catch(error => {
         console.log(error);
         return Observable.of<SubjectResult[]>([]);
+      })
+      .subscribe(subjects => {
+        this.subjects = subjects;
+        this.count = subjects.length;
       });
   }
 }
