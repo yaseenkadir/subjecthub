@@ -1,8 +1,18 @@
 export class SubjectResult {
-  title: string;
-  availability: Array<string>;
+  assessments: Array<{}>;
+  availability: boolean;
   description: string;
-  requisite: string;
+  creditPoints: number;
   courseNumber: number;
   studentType: string;
+  faculty: {};
+  id: number;
+  minRequirements: string;
+  name: string;
+  numRatings: number;
+  postgrad: boolean;
+  rating: number;
+  spring: boolean;
+  summer: boolean;
+  undergrad: boolean;
 }
