@@ -31,14 +31,18 @@ export class FuseSearchBarComponent implements OnInit {
     maxPatternLength: 32,
     minMatchCharLength: 3,
     keys: [
-      'title',
-      'courseNumber',
+      'code',
+      'name',
       'availability',
-      'studentType',
-      'description',
+      'university.name',
+      'university.abbreviation',
+      'creditPoints',
+      'description	',
     ],
   };
-  constructor(private subjectSearchService: SubjectSearchService) {}
+  constructor(private subjectSearchService: SubjectSearchService) {
+    this.subjects = [];
+  }
 
   search(term: string): void {
     this.subjects = this.fuse.search(term);
@@ -52,14 +56,18 @@ export class FuseSearchBarComponent implements OnInit {
           const formatted = {};
           Object.keys(subject).forEach(key => {
             formatted[key] = subject[key];
-            if (key === 'courseNumber')
+            if (key === 'creditPoints')
               formatted[key] = formatted[key].toString();
           });
           return formatted;
         });
       })
       .then(subjects => {
+        console.log(subjects);
         this.fuse = new Fuse(subjects, this.options);
+      })
+      .catch(err => {
+        console.log(err);
       });
   }
 }

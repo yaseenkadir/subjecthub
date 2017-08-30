@@ -13,13 +13,7 @@ import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { FuseSearchBarComponent } from '../search-bar/fuse-search-bar.component';
 
 @NgModule({
-  imports: [
-    NgbModule.forRoot(),
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    InMemoryWebApiModule.forRoot(InMemoryDataService),
-  ],
+  imports: [NgbModule.forRoot(), BrowserModule, FormsModule, HttpModule],
   declarations: [
     AppComponent,
     NavigationComponent,
