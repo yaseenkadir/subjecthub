@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import * as Fuse from 'fuse.js';
+import { Observable } from "rxjs/Observable";
+import { Subject } from "rxjs/Subject";
+import * as Fuse from "fuse.js";
 
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/toPromise';
+import "rxjs/add/observable/of";
+import "rxjs/add/operator/switchMap";
+import "rxjs/add/operator/toPromise";
 
-import { SubjectSearchService } from '../app/subject-search.service';
-import { SubjectResult } from '../app/subject-result';
+import { SubjectSearchService } from "../app/subject-search.service";
+import { SubjectResult } from "../app/subject-result";
 
 @Component({
-  selector: 'fuse-search-bar',
-  templateUrl: './fuse-search-bar.component.html',
-  styleUrls: ['./search-bar.component.css'],
-  providers: [SubjectSearchService],
+  selector: "fuse-search-bar",
+  templateUrl: "./fuse-search-bar.component.html",
+  styleUrls: ["./search-bar.component.css"],
+  providers: [SubjectSearchService]
 })
 export class FuseSearchBarComponent implements OnInit {
   subjects: {}[];
@@ -31,14 +31,14 @@ export class FuseSearchBarComponent implements OnInit {
     maxPatternLength: 32,
     minMatchCharLength: 3,
     keys: [
-      'code',
-      'name',
-      'availability',
-      'university.name',
-      'university.abbreviation',
-      'creditPoints',
-      'description	',
-    ],
+      "code",
+      "name",
+      "availability",
+      "university.name",
+      "university.abbreviation",
+      "creditPoints",
+      "description	"
+    ]
   };
   constructor(private subjectSearchService: SubjectSearchService) {
     this.subjects = [];
@@ -56,7 +56,7 @@ export class FuseSearchBarComponent implements OnInit {
           const formatted = {};
           Object.keys(subject).forEach(key => {
             formatted[key] = subject[key];
-            if (key === 'creditPoints')
+            if (key === "creditPoints")
               formatted[key] = formatted[key].toString();
           });
           return formatted;

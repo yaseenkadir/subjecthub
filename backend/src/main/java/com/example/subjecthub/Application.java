@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @SpringBootApplication
 public class Application {
 
-    public static final Logger log = LoggerFactory.getLogger( Application.class );
+    public static final Logger log = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -22,6 +22,7 @@ public class Application {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
+            // clang-format off
             http
                 .authorizeRequests()
                     .antMatchers("/", "/**").permitAll().and()
