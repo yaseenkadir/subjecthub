@@ -102,3 +102,40 @@ VALUES (
     FALSE,
     1
 );
+
+/* Communications for IT Professionals */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements, undergrad,
+                      postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    7,
+    '31265',
+    'Communications for IT Professionals',
+    6,
+    'This subject focuses on developing the academic written and spoken language skills required for undergraduate study in information technology and for the professional workplace. Students take a critical and analytical approach to understanding and producing written and spoken texts appropriate for IT professionals in the Australian context. Students consider the ethical and social issues that IT raises within both society and the IT industry. Accordingly, students undertake a range of listening, speaking, reading and writing activities individually and in groups to maximise the development of their written and spoken communication and academic literacy.',
+    'A student must achieve a mark of 50% or greater in Assessment Task 4.\nThey must also achieve an overall mark of 50% or greater in the subject.',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    1
+);
+
+/* Programming Fundamentals */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements, undergrad,
+                      postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    8,
+    '48023',
+    'Programming Fundamentals',
+    6,
+    'This subject provides basic skills in Java programming and software design, with no assumed knowledge of programming. It covers the topics of object-oriented (OO) programming concepts, data flow, control flow, arrays, and the basics of sorting and searching algorithms. The subject teaches and illustrates a design process using a set of design notations and design rules, and shows how to develop a correct, readable and reusable solution from a problem specification.',
+    'To pass, students must successfully complete all pass/fail lab tests, under exam conditions. If a student does not successfully complete all of the pass/fail lab tests, then all other assessment items will be ignored, even if those assessment items have been submitted and marked.',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    1
+);
+
