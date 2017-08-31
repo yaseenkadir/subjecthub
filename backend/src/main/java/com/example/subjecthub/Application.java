@@ -22,7 +22,7 @@ public class Application {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            // clang-format off
+
             http
                 .authorizeRequests()
                     .antMatchers("/", "/**").permitAll().and()
