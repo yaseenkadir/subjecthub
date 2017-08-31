@@ -18,7 +18,7 @@ CREATE TABLE subjects (
     name VARCHAR(100) NOT NULL,
     credit_points INT NOT NULL,
     description VARCHAR(10000) NOT NULL,
-    min_requirements VARCHAR(1000) NOT NULL,
+    min_requirements VARCHAR(10000) NOT NULL,
     undergrad BOOLEAN NOT NULL,
     postgrad BOOLEAN NOT NULL,
     autumn BOOLEAN NOT NULL,
