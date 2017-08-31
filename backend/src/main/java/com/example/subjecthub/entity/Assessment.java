@@ -38,7 +38,8 @@ public class Assessment {
     @Column(nullable = false)
     private boolean groupWork;
 
-    // Using a string here because length can differ e.g. could be "5000 words" or "60 minutes" etc.
+    // Using a string here because length can differ e.g. could be "5000 words"
+    // or "60 minutes" etc.
     @Column(nullable = false)
     private String length;
 
@@ -50,11 +51,10 @@ public class Assessment {
     private Subject subject;
 
     public Assessment() {
-
     }
 
-    public Assessment(String name, String description, int weighting, boolean groupWork,
-        String length, AssessmentType type) {
+    public Assessment(String name, String description, int weighting,
+                      boolean groupWork, String length, AssessmentType type) {
         this.name = name;
         this.description = description;
         this.weighting = weighting;
