@@ -1,6 +1,5 @@
 package com.example.subjecthub.entity;
 
-import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,9 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
-@Table(name="universities")
+@Table(name = "universities")
 @ParametersAreNonnullByDefault
 public class University {
 

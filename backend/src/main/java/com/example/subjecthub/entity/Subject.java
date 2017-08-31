@@ -1,6 +1,5 @@
 package com.example.subjecthub.entity;
 
-import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
 @Table(name = "subjects")
@@ -70,71 +70,124 @@ public class Subject {
     @JoinColumn(name = "assessment_id")
     private List<Assessment> assessments;
 
-    public Subject() {}
+    public Subject() {
+    }
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public void setId(Long id) { this.id = id; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getCode() { return code; }
+    public String getCode() {
+        return code;
+    }
 
-    public void setCode(String code) { this.code = code; }
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Faculty getFaculty() { return faculty; }
+    public Faculty getFaculty() {
+        return faculty;
+    }
 
-    public void setFaculty(Faculty faculty) { this.faculty = faculty; }
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
+    }
 
-    public int getCreditPoints() { return creditPoints; }
+    public int getCreditPoints() {
+        return creditPoints;
+    }
 
     public void setCreditPoints(int creditPoints) {
         this.creditPoints = creditPoints;
     }
 
-    public String getDescription() { return description; }
+    public String getDescription() {
+        return description;
+    }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getMinRequirements() { return minRequirements; }
+    public String getMinRequirements() {
+        return minRequirements;
+    }
 
     public void setMinRequirements(String minRequirements) {
         this.minRequirements = minRequirements;
     }
 
-    public boolean isUndergrad() { return undergrad; }
+    public boolean isUndergrad() {
+        return undergrad;
+    }
 
-    public void setUndergrad(boolean undergrad) { this.undergrad = undergrad; }
+    public void setUndergrad(boolean undergrad) {
+        this.undergrad = undergrad;
+    }
 
-    public boolean isPostgrad() { return postgrad; }
+    public boolean isPostgrad() {
+        return postgrad;
+    }
 
-    public void setPostgrad(boolean postgrad) { this.postgrad = postgrad; }
+    public void setPostgrad(boolean postgrad) {
+        this.postgrad = postgrad;
+    }
 
-    public boolean isAutumn() { return autumn; }
+    public boolean isAutumn() {
+        return autumn;
+    }
 
-    public void setAutumn(boolean autumn) { this.autumn = autumn; }
+    public void setAutumn(boolean autumn) {
+        this.autumn = autumn;
+    }
 
-    public boolean isSpring() { return spring; }
+    public boolean isSpring() {
+        return spring;
+    }
 
-    public void setSpring(boolean spring) { this.spring = spring; }
+    public void setSpring(boolean spring) {
+        this.spring = spring;
+    }
 
-    public boolean isSummer() { return summer; }
+    public boolean isSummer() {
+        return summer;
+    }
 
-    public void setSummer(boolean summer) { this.summer = summer; }
+    public void setSummer(boolean summer) {
+        this.summer = summer;
+    }
 
-    public double getRating() { return rating; }
+    public double getRating() {
+        return rating;
+    }
 
-    public void setRating(double rating) { this.rating = rating; }
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
 
-    public int getNumRatings() { return numRatings; }
+    public int getNumRatings() {
+        return numRatings;
+    }
 
-    public void setNumRatings(int numRatings) { this.numRatings = numRatings; }
+    public void setNumRatings(int numRatings) {
+        this.numRatings = numRatings;
+    }
 
-    public List<Assessment> getAssessments() { return assessments; }
+    public List<Assessment> getAssessments() {
+        return assessments;
+    }
 
     public void setAssessments(List<Assessment> assessments) {
         this.assessments = assessments;

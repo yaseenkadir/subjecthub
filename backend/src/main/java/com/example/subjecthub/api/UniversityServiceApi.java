@@ -1,10 +1,11 @@
 package com.example.subjecthub.api;
 
 import com.example.subjecthub.entity.University;
-import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @RequestMapping("/api/universities")
 public interface UniversityServiceApi {
