@@ -10,16 +10,16 @@ import { InMemoryDataService } from './in-memory-data.service';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from '../navigation/navigation.component';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { FuseSearchBarComponent } from '../search-bar/fuse-search-bar.component';
 
 @NgModule({
-  imports: [
-    NgbModule.forRoot(),
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    InMemoryWebApiModule.forRoot(InMemoryDataService),
+  imports: [NgbModule.forRoot(), BrowserModule, FormsModule, HttpModule],
+  declarations: [
+    AppComponent,
+    NavigationComponent,
+    SearchBarComponent,
+    FuseSearchBarComponent,
   ],
-  declarations: [AppComponent, NavigationComponent, SearchBarComponent],
   providers: [],
   bootstrap: [AppComponent],
 })

@@ -6,9 +6,12 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface SubjectRepository extends CrudRepository<Subject, Long> {
 
-    List<Subject> findAll();
+  List<Subject> findAll();
 
-    List<Subject> findAllByCode(String code);
+  List<Subject> findByCodeContainingIgnoreCase(String code);
+  List<Subject> findByNameContainingIgnoreCase(String name);
 
-    List<Subject> findAllByRatingBetween(double l, double r);
+  List<Subject> findByCreditPoints(Integer creditPoints);
+
+  List<Subject> findAllByRatingBetween(double l, double r);
 }
