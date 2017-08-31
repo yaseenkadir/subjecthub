@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UniversityServiceApi {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<University> getUniversities(
-        @RequestParam(required = false) String abbreviation
-    );
+    public List<University> getUniversities(@RequestParam(required = false) String abbreviation);
 
     @RequestMapping(value = "university/{id}", method = RequestMethod.GET)
     public University getUniversity();
