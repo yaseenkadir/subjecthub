@@ -9,6 +9,7 @@ public interface SubjectRepository extends CrudRepository<Subject, Long> {
   List<Subject> findAll();
 
   List<Subject> findByCodeContainingIgnoreCase(String code);
+
   List<Subject> findByNameContainingIgnoreCase(String name);
 
   List<Subject> findByCreditPoints(Integer creditPoints);

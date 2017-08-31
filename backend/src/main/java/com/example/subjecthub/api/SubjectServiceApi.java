@@ -12,19 +12,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 @CrossOrigin(origins = "http://localhost:4200")
 public interface SubjectServiceApi {
 
-  @RequestMapping(value = "", method = RequestMethod.GET)
-  public List<Subject> getSubjects(
-      @RequestParam(required = false) String subjectCode,
-      @RequestParam(required = false) String name,
-      @RequestParam(required = false) Long facultyId,
-      @RequestParam(required = false) String facultyName,
-      @RequestParam(required = false) Double ratingStart,
-      @RequestParam(required = false) Double ratingEnd,
-      @RequestParam(required = false) Integer creditPoints,
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public List<Subject> getSubjects(
+        @RequestParam(required = false) String subjectCode,
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) Long facultyId,
+        @RequestParam(required = false) String facultyName,
+        @RequestParam(required = false) Double ratingStart,
+        @RequestParam(required = false) Double ratingEnd,
+        @RequestParam(required = false) Integer creditPoints,
+        @RequestParam(required = false) String instructor);
 
-      @RequestParam(required = false) String instructor // TODO: Use instructor
-      );
-
-  @RequestMapping(value = "/subject/{id}", method = RequestMethod.GET)
-  public Subject getSubject(@PathVariable Long id);
+    @RequestMapping(value = "/subject/{id}", method = RequestMethod.GET)
+    public Subject getSubject(@PathVariable Long id);
 }

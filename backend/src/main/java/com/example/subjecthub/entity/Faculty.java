@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="faculties")
+@Table(name = "faculties")
 @ParametersAreNonnullByDefault
 public class Faculty {
 
@@ -31,7 +31,6 @@ public class Faculty {
     private University university;
 
     public Faculty() {
-
     }
 
     public Faculty(String name, String code, University university) {
