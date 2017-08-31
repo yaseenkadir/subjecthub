@@ -103,6 +103,42 @@ VALUES (
     1
 );
 
+/* Fundamentals of Interaction Design */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements, undergrad,
+                      postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    5,
+    '31260',
+    'Fundamentals of Interaction Design',
+    6,
+    'This subject focuses on the design, evaluation and implementation of interactive computing systems for human use within actual situations. Students gain an understanding of human–computer interaction (HCI) and interaction design principles, including the main concepts, tools and techniques available to build human-centred systems. The subject considers the effects on use of the different metaphors for human activity that designers use in their systems and how human-centred design and evaluation methods can improve the usability of computer systems.',
+    'A student must have a total mark for the subject >= 50%',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    1
+);
+
+/* Networking Essentials */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements, undergrad,
+                      postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    6,
+    '31270',
+    'Networking Essentials',
+    6,
+    'Computer networks are now business critical in all modern organisations and business enterprises. They are important in everyday life. This subject introduces students to the fundamental issues in modern data communications and computer networks. This is essential knowledge for all users of IT, IT professionals and those who wish to specialise in computer networking. Students learn about the layered networking model and are introduced to networking devices and protocols. They learn how these are used in computer networks and in net-based application programs. The primary focus of this subject is Local Area Networks (LAN). Student practical work includes designing and building simple peer-to-peer networks and LANs that are connected to the Internet. The core set of protocols employed on the global Internet, TCP/IP, is studied.',
+    'Students must satisfactorily complete a minimum of eight (8) chapter tests. Students must also complete the online final exam, written exam, and skills based assessment. Failure to meet these requirements will result in an X grade for the subject.\nStudents must obtain a minimum of 50% from all marks available to pass this subject.',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    1
+);
+
 /* Communications for IT Professionals */
 INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements, undergrad,
                       postgrad, autumn, spring, summer, faculty_id)
@@ -138,4 +174,3 @@ VALUES (
     FALSE,
     1
 );
-
