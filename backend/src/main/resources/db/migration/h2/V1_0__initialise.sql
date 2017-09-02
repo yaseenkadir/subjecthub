@@ -7,7 +7,7 @@ CREATE TABLE universities (
 CREATE TABLE faculties (
     faculty_id    BIGINT IDENTITY PRIMARY KEY,
     name          VARCHAR(100) NOT NULL,
-    code          VARCHAR(5)   NOT NULL,
+    code          VARCHAR(5)   DEFAULT NULL,
     university_id BIGINT       NOT NULL,
     FOREIGN KEY (university_id) REFERENCES universities (university_id)
 );
@@ -18,7 +18,7 @@ CREATE TABLE subjects (
     name             VARCHAR(100)   NOT NULL,
     credit_points    INT            NOT NULL,
     description      VARCHAR(10000) NOT NULL,
-    min_requirements VARCHAR(10000) NOT NULL,
+    min_requirements VARCHAR(10000) DEFAULT NULL,
     undergrad        BOOLEAN        NOT NULL,
     postgrad         BOOLEAN        NOT NULL,
     autumn           BOOLEAN        NOT NULL,
@@ -42,16 +42,18 @@ CREATE TABLE assessments (
     FOREIGN KEY (subject_id) REFERENCES subjects (subject_id)
 );
 
+/*
+  _   _   _____   ____
+ | | | | |_   _| / ___|
+ | | | |   | |   \___ \
+ | |_| |   | |    ___) |
+  \___/    |_|   |____/
 
-/* Initialise universities */
+ */
+
+
 INSERT INTO universities (university_id, name, abbreviation)
 VALUES (1, 'University of Technology Sydney', 'UTS');
-
-INSERT INTO universities (university_id, name, abbreviation)
-VALUES (2, 'University of Wollongong', 'UOW');
-
-INSERT INTO universities (university_id, name, abbreviation)
-VALUES (3, 'University of Sydney', 'USYD');
 
 /* Initialise faculties */
 INSERT INTO faculties (faculty_id, name, code, university_id)
@@ -63,9 +65,7 @@ VALUES (2, 'Faculty of Health', 'FOH', 1);
 INSERT INTO faculties (faculty_id, name, code, university_id)
 VALUES (3, 'Faculty of Law', 'FOL', 1);
 
-
 /* Initialise subjects */
-
 /* SOFTWARE ENGINEERING PRACTICE */
 INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
                       undergrad, postgrad, autumn, spring, summer, faculty_id)
@@ -208,4 +208,53 @@ VALUES (
     TRUE,
     FALSE,
     1
+);
+
+
+/*
+  _   _    ___   __        __
+ | | | |  / _ \  \ \      / /
+ | | | | | | | |  \ \ /\ / /
+ | |_| | | |_| |   \ V  V /
+  \___/   \___/     \_/\_/
+
+ */
+INSERT INTO universities (university_id, name, abbreviation)
+VALUES (2, 'University of Wollongong', 'UOW');
+
+INSERT INTO faculties (faculty_id, name, code, university_id)
+VALUES (4, 'Business', NULL, 2);
+
+INSERT INTO faculties (faculty_id, name, code, university_id)
+VALUES (5, 'Engineering and Information Sciences', NULL, 2);
+
+/* Subjects */
+INSERT INTO subjects (code, name, credit_points, description, undergrad, postgrad, autumn, spring,
+                      summer, faculty_id)
+VALUES (
+    'CSIT111',
+    'Programming Fundamentals',
+    6,
+    'The broad aim of this subject is to develop in students an understanding of the fundamental principles of programming. The subject focusses on the object oriented view of problem analysis and solving. It enables students to develop skills in the design and implementation of well structured programs in a range of domains.',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    5
+);
+
+INSERT INTO subjects (code, name, credit_points, description, undergrad, postgrad, autumn, spring,
+                      summer, faculty_id)
+VALUES (
+    'CSIT128',
+    'Introduction to Web Technology',
+    6,
+    'This subject introduces students to fundamental web technologies that underlie the World Wide Web and its commercial applications. Topics include an overview of internet communications, an introduction to the web-browser/web-server client-server systems, HTML5/CSS/XHTML/XML markup languages, web forms and client side scripting. Students will build working web-sites with dynamic content. The subject explains the differences between client-side and server-side Web development, and demonstrates how to build simple applications using scripting and other tools. The subject also covers current Web “standards” and future W3C recommendations.',
+    TRUE,
+    FALSE,
+    FALSE,
+    TRUE,
+    FALSE,
+    5
 );

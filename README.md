@@ -14,3 +14,8 @@ safe to ignore.
 1. `cd backend`
 2. `mvn spring-boot:run`
 3. Press CTRL+C or CTRL+Q to exit
+
+
+## Other
+To connect to the embedded h2 database go to http://localhost:8080/h2-console/. In the JDBC url 
+enter: jdbc:h2:mem:testdb, and then connect. No password is necessary.

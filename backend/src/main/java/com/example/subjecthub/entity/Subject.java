@@ -42,7 +42,7 @@ public class Subject {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
+    @Column
     private String minRequirements;
 
     @Column(nullable = false)
@@ -121,6 +121,7 @@ public class Subject {
         this.description = description;
     }
 
+    @Nullable
     public String getMinRequirements() {
         return minRequirements;
     }

@@ -1,5 +1,6 @@
 package com.example.subjecthub.entity;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ public class Faculty {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String code;
 
     @OneToOne
@@ -55,6 +56,7 @@ public class Faculty {
         this.name = name;
     }
 
+    @Nullable
     public String getCode() {
         return code;
     }
