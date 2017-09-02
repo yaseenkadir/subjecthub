@@ -6,13 +6,17 @@ import com.example.subjecthub.entity.Subject;
 import com.example.subjecthub.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
+@ParametersAreNonnullByDefault
 @CrossOrigin(origins = "http://localhost:4200")
 public class SubjectServiceController implements SubjectServiceApi {
 
@@ -21,58 +25,45 @@ public class SubjectServiceController implements SubjectServiceApi {
 
     @Override
     public List<Subject> getSubjects(
-        String subjectCode,
-        String name,
-        Long facultyId,
-        String facultyName,
-        Double ratingStart,
-        Double ratingEnd,
-        Integer creditPoints,
-        String instructor
+        @PathVariable Long universityId,
+        @RequestParam(required = false) String subjectCode,
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) Long facultyId,
+        @RequestParam(required = false) String facultyName,
+        @RequestParam(required = false) Double ratingStart,
+        @RequestParam(required = false) Double ratingEnd,
+        @RequestParam(required = false) Integer creditPoints,
+        @RequestParam(required = false) String instructor
     ) {
         // TODO: Move subjectCode retrieval to it's own method.
         // It is unique within a uni. We shouldn't return a list.
-        Application.log.info("Received:\nsubjectCode {}\nfacultyId: {}\nratingStart: {}\n " +
-            "ratingEnd: {}", subjectCode, facultyId, ratingStart, ratingEnd);
+        Application.log.info("Received:\nsubjectCode {}\nfacultyId: {}\nratingStart: {}\n" +
+                "ratingEnd: {}\nuniversityId: {}", subjectCode, facultyId, ratingStart, ratingEnd,
+            universityId
+        );
 
         // If subjectCode is supplied we don't check other GET params
         if (subjectCode != null) {
             return subjectRepository.findByCodeContainingIgnoreCase(subjectCode);
         }
 
-        if (name != null) {
-            return subjectRepository.findByNameContainingIgnoreCase(name);
-        }
-
-        if (creditPoints != null) {
-            return subjectRepository.findByCreditPoints(creditPoints);
-        }
-        Stream<Subject> subjectStream = subjectRepository.findAll().stream();
-
-        if (facultyId != null) {
-            subjectStream = subjectStream
-                .filter(s -> s.getFaculty().getId().equals(facultyId));
-        }
-
-        if (facultyName != null) {
-            subjectStream = subjectStream
-                .filter(s -> s.getFaculty().getName().contains(facultyName));
-        }
-
-        if (ratingStart != null || ratingEnd != null) {
-            final Double start = (ratingStart == null ? new Double("0.0") : ratingStart);
-            final Double end = (ratingEnd == null ? new Double("10.0") : ratingEnd);
-
-            subjectStream = subjectStream
-                .filter(s -> s.getRating() >= start)
-                .filter(s -> s.getRating() <= end);
-        }
-
-        return subjectStream.collect(Collectors.toList());
+        // If any of the params are not null we filter by their criteria.
+        return subjectRepository.findByFaculty_University_Id(universityId).stream()
+            .filter(s -> (facultyId == null || s.getFaculty().getId().equals(facultyId)))
+            .filter(s -> (facultyName == null || s.getFaculty().getName()
+                .equalsIgnoreCase(facultyName)))
+            .filter(s -> (name == null || s.getName().equalsIgnoreCase(name)))
+            .filter(s -> (creditPoints == null || s.getCreditPoints() == creditPoints))
+            .filter(s -> (ratingStart == null || s.getRating() >= ratingStart))
+            .filter(s -> (ratingEnd == null) || s.getRating() <= ratingEnd)
+            .collect(Collectors.toList());
     }
 
     @Override
-    public Subject getSubject(Long id) {
-        return subjectRepository.findOne(id);
+    public Subject getSubject(
+        Long universityId,
+        Long subjectId
+    ) {
+        return subjectRepository.findOne(subjectId);
     }
 }

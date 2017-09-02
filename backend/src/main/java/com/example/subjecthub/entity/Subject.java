@@ -1,5 +1,8 @@
 package com.example.subjecthub.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +37,8 @@ public class Subject {
 
     @ManyToOne
     @JoinColumn(name = "faculty_id")
+    // Ignoring the university field inside faculty. Unnecessary details since uni is known.
+    @JsonIgnoreProperties(value = {"university"})
     private Faculty faculty;
 
     @Column(nullable = false)

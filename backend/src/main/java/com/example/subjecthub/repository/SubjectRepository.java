@@ -7,13 +7,7 @@ import java.util.List;
 
 public interface SubjectRepository extends CrudRepository<Subject, Long> {
 
-    List<Subject> findAll();
+    List<Subject> findByFaculty_University_Id(Long universityId);
 
     List<Subject> findByCodeContainingIgnoreCase(String code);
-
-    List<Subject> findByNameContainingIgnoreCase(String name);
-
-    List<Subject> findByCreditPoints(Integer creditPoints);
-
-    List<Subject> findAllByRatingBetween(double l, double r);
 }
