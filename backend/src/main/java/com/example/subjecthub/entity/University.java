@@ -65,6 +65,14 @@ public class University {
         this.abbreviation = abbreviation;
     }
 
+    public List<Faculty> getFaculties() {
+        return faculties;
+    }
+
+    public void setFaculties(List<Faculty> faculties) {
+        this.faculties = faculties;
+    }
+
     @Override
     public String toString() {
         return "University{" +
