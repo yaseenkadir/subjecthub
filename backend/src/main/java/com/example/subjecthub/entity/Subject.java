@@ -198,4 +198,14 @@ public class Subject {
     public void setAssessments(List<Assessment> assessments) {
         this.assessments = assessments;
     }
+
+    @Override
+    public String toString() {
+        return "Subject{" +
+            "id=" + id +
+            ", code='" + code + '\'' +
+            ", name='" + name + '\'' +
+            ", faculty=" + faculty.getName() +
+            '}';
+    }
 }

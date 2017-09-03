@@ -72,4 +72,13 @@ public class Faculty {
     public void setUniversity(University university) {
         this.university = university;
     }
+
+    @Override
+    public String toString() {
+        return "Faculty{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", university=" + university.getName() +
+            '}';
+    }
 }

@@ -126,4 +126,14 @@ public class Assessment {
     public void setSubject(Subject subject) {
         this.subject = subject;
     }
+
+    @Override
+    public String toString() {
+        return "Assessment{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", type=" + type +
+            ", subject=" + subject.getName() +
+            '}';
+    }
 }
