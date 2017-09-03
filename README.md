@@ -1,5 +1,8 @@
 # Subject Hub
 
+## Master build status
+[![Build Status](https://travis-ci.com/yaseen95/subjecthub.svg?token=ZBxgtsxTU6WzeE88dbTf&branch=master)](https://travis-ci.com/yaseen95/subjecthub)
+
 ## Setup
 ### Angular
 1. Follow angular install instructions.
