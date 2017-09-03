@@ -7,3 +7,6 @@ TODO: Add users/students
 TODO: Add role based permissions
 TODO: Add pre-requisites
 TODO: Add courses
+
+TODO: Add angular tests
+TODO: Add angular test config to run-tests.sh.
