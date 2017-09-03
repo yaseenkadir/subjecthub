@@ -1,9 +1,56 @@
 TODO: Add tags to entity module
-TODO: Add instructor to entity module
-TODO: Add missing Controller's: UniversitiesController, AssessmentController, FacultyController
+1. Add Tag to database schemas and create associate entity to map M:N between Tag and Subject
+2. Add Tag entity
+3. Add tag/s field to Subjects
+
+Later
+4. Add api method to subjects allowing users to add tags
+
 TODO: Add rating feature
+1. Add api method to SubjectServiceApi allowing students to rate
+2. Add implementation to SubjectServiceController
+3. Add rating/stars to angular app that connects with backend
+
+Later
+4. Refactor rating to be it's own entity, instead of calculating a rolling average
+
 TODO: Add commenting
+1. Add Comment to database schema
+2. Add Comment entity
+3. Add comments field to Subjects
+4. Add api method to SubjectServiceApi allowing comments
+5. Add implementation for comments to SubjectServiceController
+6. Add comments component to subjects page
+7. Add comments input field on the subject details page
+
+Later
+8. Add flagging
+9. Add thumbs up options
+
+TODO: Add home page which lets users select their university
+
+TODO: Add missing Universities Controller
+2. Add a findByAbbreviation method
+3. Use a similar pattern to SubjectServiceApi-SubjectServiceController
+
+TODO: Add missing Faculties Controller and FacultyServiceApi
+1. The api should be a child of /api/universities/ i.e. /api/universities/faculties
+2. Add a findByCode method
+
+TODO: Add Assessments Controller and AssessmentsServiceApi
+1. Should be a child of /api/universities/subjects/{subject_id}/assessments
+2. Should return all assessments for a subjects
+3. Add filtering abilities using GET params e.g. assessment type, weighting, and/or if it involves
+group work
+4. Add assessment component to angular
+
 TODO: Add users/students
+1. (No idea how to do this, we'll learn together)
+2. Add login page
+3. Add user profile page which includes a feed of all their comments.
+4. Add user/student component
+
+TODO: Add instructor to entity module
 TODO: Add role based permissions
 TODO: Add pre-requisites
 TODO: Add courses
