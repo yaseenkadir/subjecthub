@@ -26,6 +26,6 @@ after_success:
 deploy:
   provider: script
   skip_cleanup: true
-  script: ssh spring@128.199.99.10 'bash /data/run-new-version.sh'
+  script: ssh spring@128.199.99.10 'bash /data/run-new-version.sh $DOCKER_USERNAME $DOCKER_PASSWORD'
   on:
     all_branches: true
