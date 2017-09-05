@@ -18,8 +18,8 @@ before_deploy:
   - ssh-add /tmp/deploy_rsa
 
 after_success:
-  - docker build -t subjecthub/backend . docker;
-    login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  - docker build -t subjecthub/backend .;
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     docker tag subject/backend yaseenk/subjecthub:latest;
     docker push yaseenk/subjecthub:latest;
 
@@ -27,5 +27,3 @@ deploy:
   provider: script
   skip_cleanup: true
   script: ssh spring@128.199.99.10 'bash /data/run-new-version.sh'
-  on:
-    branch: master
