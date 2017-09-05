@@ -20,7 +20,7 @@ before_deploy:
 after_success:
   - docker build -t subjecthub/backend .;
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker tag subject/backend yaseenk/subjecthub:latest;
+    docker tag subjecthub/backend yaseenk/subjecthub:latest;
     docker push yaseenk/subjecthub:latest;
 
 deploy:
