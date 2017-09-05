@@ -27,4 +27,5 @@ deploy:
   provider: script
   skip_cleanup: true
   script: ssh spring@128.199.99.10 'bash /data/run-new-version.sh'
-  all_branches: true
+  on:
+    all_branches: true
