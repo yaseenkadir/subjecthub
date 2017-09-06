@@ -55,7 +55,7 @@ public class SubjectServiceControllerTests {
 
     @Test
     public void testAddSubject() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/universities/1/subjects"))
+        MvcResult result = mockMvc.perform(get("/api/universities/university/1/subjects"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(2)))
             .andReturn();
@@ -65,7 +65,7 @@ public class SubjectServiceControllerTests {
         createSubject(u1f1, "Test", "abcxyz");
 
         // Checks that new subject appears in list
-        result = mockMvc.perform(get("/api/universities/1/subjects"))
+        result = mockMvc.perform(get("/api/universities/university/1/subjects"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(3)))
             .andExpect(jsonPath("$[2].name", is("Test")))
@@ -76,7 +76,7 @@ public class SubjectServiceControllerTests {
     public void testOtherUni() throws Exception {
 
         // Tests that data for university2 exists.
-        MvcResult result = mockMvc.perform(get("/api/universities/2/subjects"))
+        MvcResult result = mockMvc.perform(get("/api/universities/university/2/subjects"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].name", is("Accounting or something")))
