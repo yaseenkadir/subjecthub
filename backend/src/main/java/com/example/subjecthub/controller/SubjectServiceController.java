@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @ParametersAreNonnullByDefault
@@ -61,9 +60,12 @@ public class SubjectServiceController implements SubjectServiceApi {
 
     @Override
     public Subject getSubject(
-        Long universityId,
-        Long subjectId
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId
     ) {
+        // TODO: Move annotations from Service interface to implementation
+        // TODO: Return null or throw exception if no subject is found
+        // TODO: Don't allow cross university fetching
         return subjectRepository.findOne(subjectId);
     }
 }
