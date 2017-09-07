@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -84,10 +85,25 @@ public class SubjectServiceControllerTests {
             .andReturn();
     }
 
+    @Test
+    public void testGetSingleSubject() throws Exception {
+        // Creates a subject and checks that it can be fetched.
+        University u1 = universityRepository.findAll().get(0);
+        Faculty u1f1 = facultyRepository.findByUniversityId(u1.getId()).get(0);
+        Subject s = createSubject(u1f1, "test", "ABCDEF");
+
+        String subjectUri = "/api/universities/university/1/subjects/subject/" + s.getId();
+        MvcResult result = mockMvc.perform(get(subjectUri))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name", is("test")))
+            .andExpect(jsonPath("$.code", is("ABCDEF")))
+            .andReturn();
+    }
+
     /**
      * Util test method that handles extraneous params for creating subject objects.
      */
-    private void createSubject(Faculty faculty, String name, String code) {
+    private Subject createSubject(Faculty faculty, String name, String code) {
         Subject testSubject = new Subject();
         testSubject.setName(name);
         testSubject.setCode(code);
@@ -102,6 +118,6 @@ public class SubjectServiceControllerTests {
         testSubject.setCreditPoints(1);
         testSubject.setUndergrad(true);
         testSubject.setPostgrad(true);
-        subjectRepository.save(testSubject);
+        return subjectRepository.save(testSubject);
     }
 }
