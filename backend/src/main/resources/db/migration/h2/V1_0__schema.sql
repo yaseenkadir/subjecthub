@@ -41,3 +41,13 @@ CREATE TABLE assessments (
     subject_id    BIGINT       NOT NULL,
     FOREIGN KEY (subject_id) REFERENCES subjects (subject_id)
 );
+
+CREATE TABLE comments (
+    comment_id      BIGINT IDENTITY PRIMARY KEY,
+    post            VARCHAR(200)    NOT NULL,
+    //thumbs_up     INT DEFAULT     0,
+    //thumbs_down   INT DEFAULT     0,
+    //is_flagged    BOOLEAN,
+    //FOREIGN KEY (user_id) REFERENCES users (user_id),
+    FOREIGN KEY (subject_id) REFERENCES subjects (subject_id)
+);
