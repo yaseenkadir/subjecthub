@@ -47,11 +47,17 @@ public class SubjectServiceControllerTests {
 
     private MockMvc mockMvc;
 
+    private University university;
+    private Faculty faculty;
+
     @Before
     public void setUp() throws Exception {
         mockMvc = MockMvcBuilders
             .standaloneSetup(controller)
             .build();
+
+        this.university = universityRepository.findAll().get(0);
+        this.faculty = facultyRepository.findByUniversityId(university.getId()).get(0);
     }
 
     @Test
@@ -61,12 +67,10 @@ public class SubjectServiceControllerTests {
             .andExpect(jsonPath("$", hasSize(2)))
             .andReturn();
 
-        University u1 = universityRepository.findAll().get(0);
-        Faculty u1f1 = facultyRepository.findByUniversityId(u1.getId()).get(0);
-        createSubject(u1f1, "Test", "abcxyz");
+        createSubject("Test", "abcxyz");
 
         // Checks that new subject appears in list
-        result = mockMvc.perform(get("/api/universities/university/1/subjects"))
+        mockMvc.perform(get("/api/universities/university/1/subjects"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(3)))
             .andExpect(jsonPath("$[2].name", is("Test")))
@@ -75,9 +79,8 @@ public class SubjectServiceControllerTests {
 
     @Test
     public void testOtherUni() throws Exception {
-
         // Tests that data for university2 exists.
-        MvcResult result = mockMvc.perform(get("/api/universities/university/2/subjects"))
+        mockMvc.perform(get("/api/universities/university/2/subjects"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].name", is("Accounting or something")))
@@ -88,9 +91,7 @@ public class SubjectServiceControllerTests {
     @Test
     public void testGetSingleSubject() throws Exception {
         // Creates a subject and checks that it can be fetched.
-        University u1 = universityRepository.findAll().get(0);
-        Faculty u1f1 = facultyRepository.findByUniversityId(u1.getId()).get(0);
-        Subject s = createSubject(u1f1, "test", "ABCDEF");
+        Subject s = createSubject("test", "ABCDEF");
 
         String subjectUri = "/api/universities/university/1/subjects/subject/" + s.getId();
         MvcResult result = mockMvc.perform(get(subjectUri))
@@ -100,10 +101,46 @@ public class SubjectServiceControllerTests {
             .andReturn();
     }
 
+    @Test
+    public void testGetSubjectsFuzzySearch() throws Exception {
+        // Tests basic fuzzy matching, used as an example of behaviour. Tests should change if
+        // similarity ratios in FuzzyUtils change.
+        String s1Name = "engineering and information technology";
+        String s2Name = "engnerring nd niformatin echnlooogy";
+        createSubject(s1Name, "123456");
+        createSubject(s2Name, "123457");
+
+        String[] names = {
+            s1Name,
+            s2Name,
+            "EnGiNeErInG aNd InFoRmAtIoN TeChNoLoGy",
+            "engineerin adn info rmation tecchnolgy",
+
+            // because partial matching is used, these also match
+            "information technology",
+            "engineering"
+        };
+
+        for(String name : names) {
+            mockMvc.perform(get("/api/universities/university/1/subjects?name=" + name))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].name", is(s1Name)))
+                .andExpect(jsonPath("$[1].name", is(s2Name)))
+                .andReturn();
+        }
+
+        // Check that a non existent subject doesn't match.
+        mockMvc.perform(get("/api/universities/university/1/subjects?name=samsepiol"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(0)))
+            .andReturn();
+    }
+
     /**
      * Util test method that handles extraneous params for creating subject objects.
      */
-    private Subject createSubject(Faculty faculty, String name, String code) {
+    private Subject createSubject(String name, String code) {
         Subject testSubject = new Subject();
         testSubject.setName(name);
         testSubject.setCode(code);
