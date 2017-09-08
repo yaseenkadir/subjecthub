@@ -1,0 +1,185 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Subject-Hub",
+		"_postman_id": "c37e6093-0acb-1f09-e2d7-b9f5cd224cad",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Subjects",
+			"description": "",
+			"item": [
+				{
+					"name": "Get Subjects",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetches all subjects for a univeristy"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subjects (w GET params)",
+					"request": {
+						"url": {
+							"raw": "{{domain}}/api/universities/university/1/subjects",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"universities",
+								"university",
+								"1",
+								"subjects"
+							],
+							"query": [
+								{
+									"key": "subjectCode",
+									"value": "48024",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Applications Programming",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "facultyName",
+									"value": "Faculty of Engineering and Information Technology",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "ratingStart",
+									"value": "0",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "ratingEnd",
+									"value": "10",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "creditPoints",
+									"value": "6",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetches all subjects for a univeristy with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subjects (w GET params and Fuzzy examples)",
+					"request": {
+						"url": {
+							"raw": "{{domain}}/api/universities/university/1/subjects?name=aplicatins rpogammmming",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"universities",
+								"university",
+								"1",
+								"subjects"
+							],
+							"query": [
+								{
+									"key": "subjectCode",
+									"value": "48024",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "aplicatins rpogammmming",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "facultyName",
+									"value": "engineering",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "ratingStart",
+									"value": "0",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "ratingEnd",
+									"value": "10",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "creditPoints",
+									"value": "6",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetches all subjects for a univeristy with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subject",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetches a specific subject for a university."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get Status",
+			"request": {
+				"url": "{{domain}}/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Hits the root url and gets the status of the service."
+			},
+			"response": []
+		}
+	]
+}
