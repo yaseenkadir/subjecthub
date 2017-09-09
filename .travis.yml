@@ -3,14 +3,14 @@
 sudo: required
 
 env:
-  - SERVER="35.189.9.179"
+  - SERVER=35.189.9.179
 
 services:
   - docker
 
 addons:
   ssh_known_hosts:
-    - ${SERVER}
+    - 35.189.9.179
 
 script:
   - mvn clean install -Ptest && mvn clean package -DskipTests
