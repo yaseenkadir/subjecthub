@@ -15,4 +15,4 @@ docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
 echo -e "\n\nPulling latest changes"
 docker pull $REPO:$TAG
 echo -e "\n\nRunning new version of backed on port 80"
-docker run -d -p 443:8443 --name $IMAGE_NAME $REPO:$TAG
+docker run -d -p 80:8080 --name $IMAGE_NAME $REPO:$TAG
