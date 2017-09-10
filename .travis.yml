@@ -22,16 +22,16 @@ before_deploy:
   - ssh-add /tmp/deploy_rsa
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker build -t subjecthub/backend .;
+#  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+  - docker build -t subjecthub/backend .;
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     docker tag subjecthub/backend yaseenk/subjecthub:latest;
     docker push yaseenk/subjecthub:latest;
-    fi
+#    fi
 
 deploy:
   provider: script
   skip_cleanup: true
   script: ssh spring@$SERVER 'bash /data/run-new-version.sh $DOCKER_USERNAME $DOCKER_PASSWORD'
   on:
-    branch: master
+    all_branches: true
