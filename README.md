@@ -1,7 +1,7 @@
 # Subject Hub
 
 ## Master build status
-[![Build Status](https://travis-ci.com/yaseen95/subjecthub.svg?token=ZBxgtsxTU6WzeE88dbTf&branch=master)](https://travis-ci.com/yaseen95/subjecthub)
+[![Build Status](https://travis-ci.org/yaseen95/subjecthub.svg?branch=master)](https://travis-ci.org/yaseen95/subjecthub)
 
 ## Setup
 ### Angular
