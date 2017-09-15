@@ -1,7 +1,26 @@
 # Subject Hub
+Subject-Hub is a simple subject searching website to make it easier for university students to find
+subjects they'd like to study.
 
-## Master build status
-[![Build Status](https://travis-ci.org/yaseen95/subjecthub.svg?branch=master)](https://travis-ci.org/yaseen95/subjecthub)
+This is a group project for Software Engineering Practice at the University of Technology Sydney.
+
+|Branch|Status|
+|------|------|
+|Master|[![Build Status](https://travis-ci.org/yaseen95/subjecthub.svg?branch=master)](https://travis-ci.org/yaseen95/subjecthub)|
+
+## Description
+Subject Hub is designed to streamline the university subject-searching process. Typically, subject
+documentation is verbose, and presents information extraneous to student concerns. Additionally,
+relevant information is awkwardly distributed across several platforms, many of which are clunky,
+unresponsive, and outdated. Subject Hub highlights only the most pertinent subject details, whilst
+providing straightforward access to more specific information. Efficiency and responsiveness are
+critical, given the importance of appropriate subject selection. Too often, students waste valuable
+time navigating convoluted, buggy systems.
+
+Many existing platforms rely on legacy technologies, making them inefficient and error-prone.
+Subject Hub is designed modernly, and built using the latest technologies, ensuring security,
+scalability, extensibility, and maintainability. This is especially crucial, given that
+tech-proficient students are the target user base.
 
 ## Setup
 ### Angular
@@ -73,3 +92,21 @@ Flyway is used to manage database migrations. It is located in
 
 The scripts in that file should only be used for schema migrations. If you wish to initialise the
 database with entries, it should be done inside data.sql and not in the flyway directory.
+
+## Deployment
+Travis CI is used as the build server. If a master build passes all tests a Docker image is created
+and uploaded to Dockerhub. Travis CI executes the `run-new-version.sh` script on the remote host.
+That script must be uploaded by the user, it is NOT uploaded by Travis.
+
+Both the docker image and the script need access to secrets which also must be uploaded to the
+server. The secrets required are:
+
+|Environment Secret|Description|
+|---------|-------|
+|`DOCKER_USERNAME`|dockerhub username with access to Subject Hub repo|
+|`DOCKER_PASSWORD`|password for above dockerhub user|
+|`KEYSTORE_PASSWORD`|password used to access ssl keystore (used to enable https)|
+|`JWT_SECRET_KEY`|secret key used to sign jwts|
+
+We're storing JWT_SECRET_KEY as a variable instead of generating a random so JWTs are valid across
+restarts.
