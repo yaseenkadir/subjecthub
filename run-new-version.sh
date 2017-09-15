@@ -25,3 +25,4 @@ docker run \
     -p 443:8443 \
     --name $IMAGE_NAME $REPO:$TAG
 unset KEYSTORE_PASSWORD
+unset JWT_SECRET_KEY
