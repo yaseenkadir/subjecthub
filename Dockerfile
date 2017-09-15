@@ -5,4 +5,5 @@ EXPOSE 8443
 ENTRYPOINT exec java -Djava.security.egd=file:/dev/./urandom \
     -Dspring.profiles.active=prod \
     -Dserver.ssl.key-store-password=$KEYSTORE_PASSWORD \
+    -Dcom.example.subjecthub.jwt.secretKey=$JWT_SECRET_KEY \
     -jar /app.jar

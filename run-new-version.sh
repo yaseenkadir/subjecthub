@@ -19,8 +19,10 @@ echo -e "\nRunning new version of backend on port 80 and 443"
 docker run \
     -v /etc/letsencrypt/:/etc/letsencrypt/ \
     -e KEYSTORE_PASSWORD="$KEYSTORE_PASSWORD" \
+    -e JWT_SECRET_KEY="$JWT_SECRET_KEY" \
     -d \
     -p 80:8443 \
     -p 443:8443 \
     --name $IMAGE_NAME $REPO:$TAG
 unset KEYSTORE_PASSWORD
+unset JWT_SECRET_KEY
