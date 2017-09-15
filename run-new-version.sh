@@ -19,6 +19,7 @@ echo -e "\nRunning new version of backend on port 80 and 443"
 docker run \
     -v /etc/letsencrypt/:/etc/letsencrypt/ \
     -e KEYSTORE_PASSWORD="$KEYSTORE_PASSWORD" \
+    -e JWT_SECRET_KEY="$JWT_SECRET_KEY" \
     -d \
     -p 80:8443 \
     -p 443:8443 \
