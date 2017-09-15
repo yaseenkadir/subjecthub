@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "Subject-Hub",
-		"_postman_id": "c37e6093-0acb-1f09-e2d7-b9f5cd224cad",
+		"_postman_id": "4497f870-657e-08dc-3603-049c376914e2",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -17,7 +17,10 @@
 						"url": "{{domain}}/api/universities/university/1/subjects",
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Fetches all subjects for a univeristy"
 					},
 					"response": []
@@ -26,7 +29,7 @@
 					"name": "Get Subjects (w GET params)",
 					"request": {
 						"url": {
-							"raw": "{{domain}}/api/universities/university/1/subjects",
+							"raw": "{{domain}}/api/universities/university/1/subjects?",
 							"host": [
 								"{{domain}}"
 							],
@@ -85,7 +88,10 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Fetches all subjects for a univeristy with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
 					},
 					"response": []
@@ -152,7 +158,10 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Fetches all subjects for a univeristy with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
 					},
 					"response": []
@@ -163,8 +172,85 @@
 						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/",
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Fetches a specific subject for a university."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"description": "",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"url": "{{domain}}/api/auth/register",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"example\",\n\t\"password\": \"password\",\n\t\"email\": \"test@example.com\"\n}"
+						},
+						"description": "Registers a user.\n\nNote registration simply returns a 200 http status. The user has to then login."
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate User",
+					"request": {
+						"url": "{{domain}}/api/auth/authenticate",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"example\",\n\t\"password\": \"password\"\n}"
+						},
+						"description": "Authenticates the user. A JWT is returned which can be used to authenticate for further requests."
+					},
+					"response": []
+				},
+				{
+					"name": "Self (without JWT)",
+					"request": {
+						"url": "{{domain}}/api/auth/self",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Self (with JWT)",
+					"request": {
+						"url": "{{domain}}/api/auth/self",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "copy jwt here",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Copy the token from Authenticate into the Authorization Header field."
 					},
 					"response": []
 				}
@@ -176,7 +262,10 @@
 				"url": "{{domain}}/",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": "Hits the root url and gets the status of the service."
 			},
 			"response": []
