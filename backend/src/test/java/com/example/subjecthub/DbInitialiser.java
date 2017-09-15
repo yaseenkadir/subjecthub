@@ -2,13 +2,16 @@ package com.example.subjecthub;
 
 import com.example.subjecthub.entity.Faculty;
 import com.example.subjecthub.entity.Subject;
+import com.example.subjecthub.entity.SubjectHubUser;
 import com.example.subjecthub.entity.University;
 import com.example.subjecthub.repository.FacultyRepository;
+import com.example.subjecthub.repository.SubjectHubUserRepository;
 import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.repository.UniversityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,16 +23,22 @@ public class DbInitialiser implements ApplicationRunner {
     private UniversityRepository universityRepository;
     private FacultyRepository facultyRepository;
     private SubjectRepository subjectRepository;
+    private SubjectHubUserRepository subjectHubUserRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public DbInitialiser(
         UniversityRepository universityRepository,
         FacultyRepository facultyRepository,
-        SubjectRepository subjectRepository
+        SubjectRepository subjectRepository,
+        SubjectHubUserRepository subjectHubUserRepository
     ) {
         this.universityRepository = universityRepository;
         this.facultyRepository = facultyRepository;
         this.subjectRepository = subjectRepository;
+        this.subjectHubUserRepository = subjectHubUserRepository;
     }
 
     @Override
@@ -98,5 +107,9 @@ public class DbInitialiser implements ApplicationRunner {
         u2f1Subject1.setSummer(false);
         u2f1Subject1.setFaculty(u2Faculty1);
         u2f1Subject1 = subjectRepository.save(u2f1Subject1);
+
+        String hashedPassword = passwordEncoder.encode("testpassword");
+        SubjectHubUser user = new SubjectHubUser("testuser", hashedPassword, "test@example.com");
+        user = subjectHubUserRepository.save(user);
     }
 }
