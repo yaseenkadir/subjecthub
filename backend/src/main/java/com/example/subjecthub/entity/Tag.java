@@ -1,8 +1,12 @@
 package com.example.subjecthub.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,8 +22,14 @@ public class Tag {
     @Column(nullable = false)
     private String name;
 
+    @ManyToMany(mappedBy = "tags")
+    private List<Subject> subjects = new ArrayList<>();
 
-    private List<Subject> subjects;
+
+
+    public Tag(String name) {
+        this.name = name;
+    }
 
     public Tag() {}
 
@@ -31,7 +41,7 @@ public class Tag {
 
     public void setName(String name) { this.name = name; }
 
-    @ManyToMany(mappedBy = "subjects")
+    @JsonIgnore
     public List<Subject> getSubjects() {
         return subjects;
     }

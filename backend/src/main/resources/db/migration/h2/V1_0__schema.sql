@@ -67,8 +67,10 @@ CREATE TABLE tags (
 );
 
 CREATE TABLE tags_subjects (
-    FOREIGN KEY (tag_id) REFERENCES tags (tag_id)
-    FOREIGN KEY (subject_id) REFERENCES subjects (subject_id)
+    tag_id BIGINT NOT NULL,
+    subject_id BIGINT NOT NULL,
+    FOREIGN KEY (tag_id) REFERENCES tags (tag_id),
+    FOREIGN KEY (subject_id) REFERENCES subjects (subject_id),
     PRIMARY KEY(tag_id, subject_id)
 );
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -68,7 +69,13 @@ public class Subject {
     @JoinColumn(name = "assessment_id")
     private List<Assessment> assessments;
 
-    private List<Tag> tags;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "tags_subjects",
+        joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "subject_id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
+    )
+    private List<Tag> tags = new ArrayList<>();
 
     public Subject() {
     }
@@ -194,12 +201,7 @@ public class Subject {
         this.assessments = assessments;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "tags_subjects",
-        joinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id"),
-        inverseJoinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "subject_id")
-    )
+
     public List<Tag> getTags() {
         return tags;
     }
