@@ -40,6 +40,31 @@ VALUES (
     1
 );
 
+INSERT INTO assessments (assessment_id, name, description, weighting, group_work, length, type, subject_id)
+VALUES (
+    1,
+    'Assessment task 1',
+    'Project - Agile Planning, Analysis and Architecture',
+    30,
+    TRUE,
+    'There is no word limit.',
+    4,
+    1
+);
+
+INSERT INTO assessments (assessment_id, name, description, weighting, group_work, length, type, subject_id)
+VALUES (
+    2,
+    'Assessment task 2',
+    'Project - Agile Design, Implementation and Testing',
+    60,
+    TRUE,
+    'There is no word limit.',
+    4,
+    1
+);
+
+
 /* Applications Programming */
 INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
                       undergrad, postgrad, autumn, spring, summer, faculty_id)
