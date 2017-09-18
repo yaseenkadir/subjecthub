@@ -4,14 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -74,6 +67,8 @@ public class Subject {
     @OneToMany
     @JoinColumn(name = "assessment_id")
     private List<Assessment> assessments;
+
+    private List<Tag> tags;
 
     public Subject() {
     }
@@ -197,6 +192,20 @@ public class Subject {
 
     public void setAssessments(List<Assessment> assessments) {
         this.assessments = assessments;
+    }
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "tags_subjects",
+        joinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id"),
+        inverseJoinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "subject_id")
+    )
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
     @Override
