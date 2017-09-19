@@ -44,13 +44,14 @@ CREATE TABLE assessments (
 
 CREATE TABLE comments (
     comment_id      BIGINT IDENTITY PRIMARY KEY,
-    post            VARCHAR(200)    NOT NULL,
+    user_id         BIGINT          NOT NULL,
     subject_id      BIGINT          NOT NULL,
+    post            VARCHAR(200)    NOT NULL,
     //is_flagged    BOOLEAN,
     //thumbs_up     INT DEFAULT     0,
     //thumbs_down   INT DEFAULT     0,
-    //user_id       BIGINT     NOT NULL,
-    //FOREIGN KEY (user_id) REFERENCES users (user_id),
+    post_time       DATETIME        NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (subject_id) REFERENCES subjects (subject_id)
 );
 

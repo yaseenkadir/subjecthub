@@ -17,7 +17,9 @@ Later
 TODO: Add commenting
 1. Add Comment to database schema
 2. Add Comment entity
-3. Add comments field to Subjects
+3. Add comments field to Subjects (list)
+3.3 Add comments field to SubjectHubUsers (list)
+3.6 Add some subject comments data in data.sql
 4. Add api method to SubjectServiceApi allowing comments
 5. Add implementation for comments to SubjectServiceController
 6. Add comments component to subjects page
