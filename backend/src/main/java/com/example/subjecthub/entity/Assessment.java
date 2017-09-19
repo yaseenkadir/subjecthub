@@ -1,34 +1,18 @@
 package com.example.subjecthub.entity;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "assessments")
 @ParametersAreNonnullByDefault
 public class Assessment {
 
-   /* public enum AssessmentType {
+    public enum AssessmentType {
         REPORT,
         TEST,
         FINAL,
         PROJECT
-    }*/
-
-    public enum AssessmentType {
-        REPORT(1),
-        TEST(2),
-        FINAL(3),
-        PROJECT(4);
-
-        private AssessmentType(int type){
-        }
     }
 
     @Id
@@ -54,9 +38,7 @@ public class Assessment {
     private String length;
 
     @Column(nullable = false)
-    //18092017
-    //private AssessmentType type;
-    private Integer type;
+    private AssessmentType type;
 
     @ManyToOne
     @JoinColumn(name = "subject_id", nullable = false)
@@ -65,11 +47,8 @@ public class Assessment {
     public Assessment() {
     }
 
-    //18092017
-    // public Assessment(String name, String description, int weighting,
-    //                  boolean groupWork, String length, AssessmentType type) {
     public Assessment(String name, String description, int weighting,
-                      boolean groupWork, String length, Integer type) {
+                      boolean groupWork, String length, AssessmentType type) {
         this.name = name;
         this.description = description;
         this.weighting = weighting;
@@ -126,19 +105,16 @@ public class Assessment {
         this.length = length;
     }
 
-    //18092017
-    //public AssessmentType getType() { return type; }
-    public Integer getType() { return type; }
+    public AssessmentType getType() { return type; }
 
-    //18092017
-    //public void setType(AssessmentType type) { this.type = type; }
-    public void setType(Integer type) {
-        this.type = type;
-    }
+    public void setType(AssessmentType type) { this.type = type; }
 
-    //public Subject getSubject() {
-    //    return subject;
-    // }
+    //Edited - This will cause infinite loop as a subject contains assessment object
+    // assessment has a subject object, inside it will have assignment again, then loop infinite
+    /*public Subject getSubject() {
+        return subject;
+    }*/
+    //End editing
 
     public void setSubject(Subject subject) {
         this.subject = subject;
@@ -147,7 +123,7 @@ public class Assessment {
     @Override
     public String toString() {
         return "Assessment{" +
-            "id=" + id +
+            " id=" + id +
             ", name='" + name + '\'' +
             ", type=" + type +
             ", subject=" + subject.getName() +

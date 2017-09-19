@@ -48,7 +48,7 @@ VALUES (
     30,
     TRUE,
     'There is no word limit.',
-    4,
+    3,
     1
 );
 
@@ -60,10 +60,21 @@ VALUES (
     60,
     TRUE,
     'There is no word limit.',
-    4,
+    3,
     1
 );
 
+INSERT INTO assessments (assessment_id, name, description, weighting, group_work, length, type, subject_id)
+VALUES (
+    3,
+    'Assessment task 3',
+    'Short Quiz',
+    10,
+    FALSE ,
+    'There is no word limit.',
+    1,
+    1
+);
 
 /* Applications Programming */
 INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
