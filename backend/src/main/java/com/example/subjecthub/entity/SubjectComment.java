@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "comments")
 @ParametersAreNonnullByDefault
-public class Comment {
+public class SubjectComment {
 
     // TODO: Add thumbs, Add flag, Fix Dates/Timestamp > need help
 
@@ -34,46 +34,23 @@ public class Comment {
     @Column(nullable = false)
     private String post;
 
-    //@Column(nullable = false)
-    //private DateTime postTime;
-
-    public Comment() {
+    public SubjectComment() {
     }
 
-    public Comment(Long user, Long subject, String post) {
-        this.user = user;
-        this.subject = subject;
-        this.post = post;
-        //this.postTime = currentdatetime();
-    }
-/*
-    public Comment(Long user, Long subject, String post, DateTime postTime){
-        this.user = user;
-        this.subject = subject;
-        this.post = post;
-        this.postTime = postTime;
-    }
-*/
-    public Comment(SubjectHubUser user, Subject subject, String post){
-        this.user = user.getId();
-        this.subject = subject.getId();
-        this.post = post;
-        //this.posttime = current datetime();
-    }
-/*
-    public Comment(SubjectHubUser user, Subject subject, String post, DateTime postTime){
-        this.user = user.getId();
-        this.subject = subject.getId();
-        this.post = post;
-        this.postTime = postTime;
-    }
-*/
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUser() {
+        return user;
+    }
+
+    public void setUser(Long user) {
+        this.user = user;
     }
 
     public Long getSubject() {
@@ -92,24 +69,13 @@ public class Comment {
         this.post = post;
     }
 
-    /*
-    public DateTime getPostTime() {
-        return postTime;
-    }
-
-    public void setPostTime(DateTime postTime) {
-        this.postTime = postTime;
-    }
-    */
-
     @Override
     public String toString() {
-        return "Comment{" +
+        return "SubjectComment{" +
             "id=" + id +
             ", user=" + user +
             ", subject=" + subject +
             ", post='" + post + '\'' +
-            //", postTime=" + postTime +
             '}';
     }
 }
