@@ -10,13 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Entity
 @Table(name = "comments")
 @ParametersAreNonnullByDefault
 public class SubjectComment {
-
-    // TODO: Add thumbs, Add flag, Fix Dates/Timestamp > need help
 
     @Id
     @GeneratedValue
@@ -33,6 +32,18 @@ public class SubjectComment {
 
     @Column(nullable = false)
     private String post;
+
+    @Column(nullable = false)
+    private Date postTime;
+
+    @Column(nullable = false)
+    private Boolean isFlagged; //default false in schema
+
+    @Column(nullable = false)
+    private int thumbsUp; //default 0 in schema
+
+    @Column(nullable = false)
+    private int thumbsDown; //default 0 in schema
 
     public SubjectComment() {
     }
@@ -67,6 +78,42 @@ public class SubjectComment {
 
     public void setPost(String post) {
         this.post = post;
+    }
+
+    public Date getPostTime() {
+        return postTime;
+    }
+
+    public void setPostTime(Date postTime) {
+        this.postTime = postTime;
+    }
+
+    public void setPostTimeNow(){
+        this.postTime = new Date();
+    }
+
+    public Boolean getFlagged() {
+        return isFlagged;
+    }
+
+    public void setFlagged(Boolean flagged) {
+        isFlagged = flagged;
+    }
+
+    public int getThumbsUp() {
+        return thumbsUp;
+    }
+
+    public void setThumbsUp(int thumbsUp) {
+        this.thumbsUp = thumbsUp;
+    }
+
+    public int getThumbsDown() {
+        return thumbsDown;
+    }
+
+    public void setThumbsDown(int thumbsDown) {
+        this.thumbsDown = thumbsDown;
     }
 
     @Override
