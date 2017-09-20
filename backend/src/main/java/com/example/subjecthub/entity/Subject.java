@@ -77,6 +77,7 @@ public class Subject {
 
     @OneToMany
     @JoinColumn(name = "comment_id")
+    @JsonIgnoreProperties(value = {"subject"})
     private List<SubjectComment> comments;
 
     public Subject() {

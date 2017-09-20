@@ -24,10 +24,13 @@ public class SubjectComment {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties(value = {"password", "email", "comments"})
     private SubjectHubUser user;
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
+    @JsonIgnoreProperties(value = {"creditPoints", "description", "minRequirements", "undergrad", "postgrad",
+        "autumn", "spring", "summer", "rating", "numRatings", "assessments", "comments"})
     private Subject subject;
 
     @Column(nullable = false)
