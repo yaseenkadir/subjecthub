@@ -72,7 +72,7 @@ public class Subject {
     private int numRatings;
 
     @OneToMany
-    @JoinColumn(name = "assessment_id")
+    @JoinColumn(name = "subject_id")
     private List<Assessment> assessments;
 
     public Subject() {
