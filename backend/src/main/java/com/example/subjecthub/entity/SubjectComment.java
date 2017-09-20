@@ -1,5 +1,6 @@
 package com.example.subjecthub.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -22,14 +23,16 @@ public class SubjectComment {
     @Column(nullable = false, name = "comment_id")
     private Long id;
 
+    //@JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties(value = {"password", "email", "comments"})
     private SubjectHubUser user;
 
+    //@JsonIgnore
     @ManyToOne
     @JoinColumn(name = "subject_id")
-    @JsonIgnoreProperties(value = {"creditPoints", "description", "minRequirements", "undergrad", "postgrad",
+    @JsonIgnoreProperties(value = {"creditPoints", "description", "minRequirements","faculty", "undergrad", "postgrad",
         "autumn", "spring", "summer", "rating", "numRatings", "assessments", "comments"})
     private Subject subject;
 

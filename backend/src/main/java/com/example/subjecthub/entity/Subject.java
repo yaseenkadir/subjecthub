@@ -72,11 +72,11 @@ public class Subject {
     private int numRatings;
 
     @OneToMany
-    @JoinColumn(name = "assessment_id")
+    @JoinColumn(name = "subject_id")
     private List<Assessment> assessments;
 
     @OneToMany
-    @JoinColumn(name = "comment_id")
+    @JoinColumn(name = "subject_id")
     @JsonIgnoreProperties(value = {"subject"})
     private List<SubjectComment> comments;
 

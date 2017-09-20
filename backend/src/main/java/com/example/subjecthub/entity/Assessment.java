@@ -1,5 +1,7 @@
 package com.example.subjecthub.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.*;
 
@@ -40,6 +42,7 @@ public class Assessment {
     @Column(nullable = false)
     private AssessmentType type;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "subject_id", nullable = false)
     private Subject subject;
@@ -109,12 +112,9 @@ public class Assessment {
 
     public void setType(AssessmentType type) { this.type = type; }
 
-    //Edited - This will cause infinite loop as a subject contains assessment object
-    // assessment has a subject object, inside it will have assignment again, then loop infinite
-    /*public Subject getSubject() {
+    public Subject getSubject() {
         return subject;
-    }*/
-    //End editing
+    }
 
     public void setSubject(Subject subject) {
         this.subject = subject;
