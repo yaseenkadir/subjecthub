@@ -1,13 +1,7 @@
 package com.example.subjecthub.entity;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "assessments")
@@ -111,17 +105,16 @@ public class Assessment {
         this.length = length;
     }
 
-    public AssessmentType getType() {
-        return type;
-    }
+    public AssessmentType getType() { return type; }
 
-    public void setType(AssessmentType type) {
-        this.type = type;
-    }
+    public void setType(AssessmentType type) { this.type = type; }
 
-    public Subject getSubject() {
+    //Edited - This will cause infinite loop as a subject contains assessment object
+    // assessment has a subject object, inside it will have assignment again, then loop infinite
+    /*public Subject getSubject() {
         return subject;
-    }
+    }*/
+    //End editing
 
     public void setSubject(Subject subject) {
         this.subject = subject;
@@ -130,7 +123,7 @@ public class Assessment {
     @Override
     public String toString() {
         return "Assessment{" +
-            "id=" + id +
+            " id=" + id +
             ", name='" + name + '\'' +
             ", type=" + type +
             ", subject=" + subject.getName() +
