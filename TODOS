@@ -22,12 +22,21 @@ TODO: Add commenting
 3.6 Add some subject comments data in data.sql
 4. Add api method to SubjectServiceApi allowing comments
 5. Add implementation for comments to SubjectServiceController
-6. Add comments component to subjects page
-7. Add comments input field on the subject details page
+6. Add comments component to subjects page TODO
+7. Add comments input field on the subject details page TODO
 
 Later
 8. Add flagging
 9. Add thumbs up options
+
+Potential Bugs
+1. Get Subject infinite loop potential? similarities between Assessments entity? - need to check
+2. JSON output on API get req is unusual > comments split between subjects - similar to Assessments Bug
+
+Need To Confirm
+1. Get vs Post on API methods
+2. How many thumbs can one user give/can they revoke/how is it controlled
+3. Generating ids on new comment objects and using schema defaults on new comment obejcts
 
 TODO: Add home page which lets users select their university
 

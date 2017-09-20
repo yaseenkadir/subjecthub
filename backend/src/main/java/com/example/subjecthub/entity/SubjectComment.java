@@ -51,6 +51,13 @@ public class SubjectComment {
     public SubjectComment() {
     }
 
+    public SubjectComment(SubjectHubUser user, Subject subjectId, String post){
+        this.user = user;
+        this.subject = subject;
+        this.post = post;
+        setPostTimeNow();
+    }
+
     public Long getId() {
         return id;
     }
@@ -112,6 +119,12 @@ public class SubjectComment {
         this.thumbsUp = thumbsUp;
     }
 
+    //add one to thumbsUp
+    public void addThumbUp(){this.thumbsUp++;}
+
+    //remove one from thumbsUp
+    public void removeThumbUp(){this.thumbsUp--;}
+
     public int getThumbsDown() {
         return thumbsDown;
     }
@@ -119,6 +132,12 @@ public class SubjectComment {
     public void setThumbsDown(int thumbsDown) {
         this.thumbsDown = thumbsDown;
     }
+
+    //add one to thumbsDown
+    public void addThumbDown(){this.thumbsDown++;}
+
+    //remove one from thumbsDown
+    public void removeThumbsDown(){this.thumbsDown--;}
 
     @Override
     public String toString() {
