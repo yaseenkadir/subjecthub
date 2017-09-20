@@ -88,6 +88,7 @@ public class SubjectComment {
         this.postTime = postTime;
     }
 
+    //set postTime to current time, TIMESTAMP datatype supports java.util.Date
     public void setPostTimeNow(){
         this.postTime = new Date();
     }
@@ -120,9 +121,10 @@ public class SubjectComment {
     public String toString() {
         return "SubjectComment{" +
             "id=" + id +
-            ", user=" + user +
-            ", subject=" + subject +
-            ", post='" + post + '\'' +
+            ", user=" + user.getUsername() +
+            ", subject=" + subject.getName() +
+            ", postTime=" + postTime +
+            ", isFlagged=" + isFlagged +
             '}';
     }
 }
