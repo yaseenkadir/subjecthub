@@ -29,7 +29,7 @@ public class University {
     private String abbreviation;
 
     @OneToMany
-    @JoinColumn(name = "faculty_id")
+    @JoinColumn(name = "university_id")
     private List<Faculty> faculties;
 
     public University() {
