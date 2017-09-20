@@ -2,6 +2,7 @@ package com.example.subjecthub.entity;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -21,6 +22,10 @@ public class SubjectHubUser {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany
+    @JoinColumn(name = "comment_id")
+    private List<SubjectComment> comments;
 
     public SubjectHubUser() {
 
@@ -62,6 +67,22 @@ public class SubjectHubUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<SubjectComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<SubjectComment> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(SubjectComment comment){
+        this.comments.add(comment);
+    }
+
+    public void removeComment(SubjectComment comment){
+        this.comments.remove(comment);
     }
 
     @Override

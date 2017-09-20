@@ -25,11 +25,11 @@ public class SubjectComment {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Long user;
+    private SubjectHubUser user;
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
-    private Long subject;
+    private Subject subject;
 
     @Column(nullable = false)
     private String post;
@@ -45,19 +45,19 @@ public class SubjectComment {
         this.id = id;
     }
 
-    public Long getUser() {
+    public SubjectHubUser getUser() {
         return user;
     }
 
-    public void setUser(Long user) {
+    public void setUser(SubjectHubUser user) {
         this.user = user;
     }
 
-    public Long getSubject() {
+    public Subject getSubject() {
         return subject;
     }
 
-    public void setSubject(Long subject) {
+    public void setSubject(Subject subject) {
         this.subject = subject;
     }
 
