@@ -60,3 +60,18 @@ CREATE TABLE users (
     password VARCHAR(60) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL
 );
+
+CREATE TABLE tags (
+    tag_id BIGINT IDENTITY PRIMARY KEY,
+    name VARCHAR (200) NOT NULL,
+);
+
+CREATE TABLE tags_subjects (
+    tag_id BIGINT NOT NULL,
+    subject_id BIGINT NOT NULL,
+    FOREIGN KEY (tag_id) REFERENCES tags (tag_id),
+    FOREIGN KEY (subject_id) REFERENCES subjects (subject_id),
+    PRIMARY KEY(tag_id, subject_id)
+);
+
+

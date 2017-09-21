@@ -1,16 +1,14 @@
 package com.example.subjecthub.api;
 
 import com.example.subjecthub.entity.Subject;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.example.subjecthub.entity.Tag;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RequestMapping("/api/universities/university/{universityId}/subjects")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public interface SubjectServiceApi {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -25,6 +23,9 @@ public interface SubjectServiceApi {
         @RequestParam(required = false) Integer creditPoints,
         @RequestParam(required = false) String instructor
     );
+
+    @RequestMapping(value = "/subject/{subjectId}/add-tag", method = RequestMethod.POST)
+    public Subject addTagToSubject(@PathVariable Long subjectId, @RequestBody Tag tag);
 
     @RequestMapping(value = "/subject/{subjectId}", method = RequestMethod.GET)
     public Subject getSubject(
