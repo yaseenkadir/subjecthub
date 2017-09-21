@@ -5,6 +5,7 @@ import com.example.subjecthub.api.SubjectServiceApi;
 import com.example.subjecthub.entity.Subject;
 import com.example.subjecthub.entity.SubjectComment;
 import com.example.subjecthub.entity.SubjectHubUser;
+import com.example.subjecthub.repository.SubjectCommentRepository;
 import com.example.subjecthub.repository.SubjectHubUserRepository;
 import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
@@ -28,6 +29,9 @@ public class SubjectServiceController implements SubjectServiceApi {
 
     @Autowired
     private SubjectHubUserRepository subjectHubUserRepository;
+
+    @Autowired
+    private SubjectCommentRepository subjectCommentRepository;
 
     @Override
     public List<Subject> getSubjects(
@@ -81,7 +85,7 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long userId
     ){
-        return subjectHubUserRepository.findOne(userId).getComments();
+        return subjectCommentRepository.findByUser_Id(userId);
     }
 
     //TODO: ALL COMMENT IMPLEMENTATIONS: as above, reflect null on no subject, no cross-uni fetch
@@ -90,7 +94,7 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long subjectId
     ){
-        return subjectRepository.findOne(subjectId).getComments();
+        return subjectCommentRepository.findBySubject_Id(subjectId);
     }
 
     @Override
@@ -99,79 +103,64 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        return subjectRepository.findOne(subjectId).getCommentById(commentId);
+        return subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
     }
 
     @Override
-    public Subject commentAdd(
+    public SubjectComment commentAdd(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @RequestParam Long userId,
         @RequestParam String comment
     ){
-        Subject subject = subjectRepository.findOne(subjectId);
-        SubjectHubUser user = subjectHubUserRepository.findOne(userId);
-        subject.addComment(new SubjectComment(user, subject, comment));
-        return subject;
+        SubjectComment newComment = new SubjectComment();
+        newComment.setPost(comment);
+        newComment.setUser(subjectHubUserRepository.findOne(userId));
+        newComment.setSubject(subjectRepository.findOne(subjectId));
+        return subjectCommentRepository.save(newComment);
     }
 
     @Override
-    public Subject commentThumbUp(
+    public SubjectComment commentThumbUp(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        Subject subject = subjectRepository.findOne(subjectId);
-        SubjectComment comment = subject.getCommentById(commentId);
-        if (comment != null) {
-            comment.addThumbUp();
-            return subject;
-        }
-        return subject;
+        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        comment.addThumbUp();
+        return subjectCommentRepository.save(comment);
     }
 
     @Override
-    public Subject commentThumbDown(
+    public SubjectComment commentThumbDown(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        Subject subject = subjectRepository.findOne(subjectId);
-        SubjectComment comment = subject.getCommentById(commentId);
-        if (comment != null) {
-            comment.addThumbDown();
-            return subject;
-        }
-        return subject;
+        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        comment.addThumbDown();
+        return subjectCommentRepository.save(comment);
     }
 
     @Override
-    public Subject commentFlag(
+    public SubjectComment commentFlag(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        Subject subject = subjectRepository.findOne(subjectId);
-        SubjectComment comment = subject.getCommentById(commentId);
-        if (comment != null) {
-            comment.setFlagged(true);
-            return subject;
-        }
-        return subject;
+        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        comment.setFlagged(true);
+        return subjectCommentRepository.save(comment);
     }
 
     @Override
-    public Subject commentUnflag(
+    public SubjectComment commentUnflag(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        Subject subject = subjectRepository.findOne(subjectId);
-        SubjectComment comment = subject.getCommentById(commentId);
-        if (comment != null) {
-            comment.setFlagged(false);
-            return subject;
-        }
-        return subject;
+        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        comment.setFlagged(false);
+        return subjectCommentRepository.save(comment);
     }
 }

@@ -208,24 +208,8 @@ public class Subject {
         return comments;
     }
 
-    public SubjectComment getCommentById(Long commentId){
-        for (SubjectComment comment:
-             comments) {
-            if(comment.getId() == commentId){return comment;}
-        }
-        return null;
-    }
-
     public void setComments(List<SubjectComment> comments) {
         this.comments = comments;
-    }
-
-    public void addComment(SubjectComment comment){
-        this.comments.add(comment);
-    }
-
-    public void removeComment(SubjectComment comment){
-        this.comments.remove(comment);
     }
 
     @Override

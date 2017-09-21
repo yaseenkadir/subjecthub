@@ -54,7 +54,7 @@ public interface SubjectServiceApi {
     );
 
     @RequestMapping(value = "/subject/{subjectId}/comments/comment/add", method = RequestMethod.GET)
-    public Subject commentAdd(
+    public SubjectComment commentAdd(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @RequestParam Long userId,
@@ -62,28 +62,28 @@ public interface SubjectServiceApi {
     );
 
     @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/thumbUp", method = RequestMethod.GET)
-    public Subject commentThumbUp(
+    public SubjectComment commentThumbUp(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     );
 
     @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/thumbDown", method = RequestMethod.GET)
-    public Subject commentThumbDown(
+    public SubjectComment commentThumbDown(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     );
 
     @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/flag", method = RequestMethod.GET)
-    public Subject commentFlag(
+    public SubjectComment commentFlag(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     );
 
     @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/unflag", method = RequestMethod.GET)
-    public Subject commentUnflag(
+    public SubjectComment commentUnflag(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId

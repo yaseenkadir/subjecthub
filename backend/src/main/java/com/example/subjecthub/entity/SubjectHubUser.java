@@ -80,14 +80,6 @@ public class SubjectHubUser {
         this.comments = comments;
     }
 
-    public void addComment(SubjectComment comment){
-        this.comments.add(comment);
-    }
-
-    public void removeComment(SubjectComment comment){
-        this.comments.remove(comment);
-    }
-
     @Override
     public String toString() {
         return "SubjectHubUser{" +
