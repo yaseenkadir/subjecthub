@@ -59,6 +59,30 @@ public class SubjectServiceControllerTests {
         this.university = universityRepository.findAll().get(0);
         this.faculty = facultyRepository.findByUniversityId(university.getId()).get(0);
     }
+    @Test
+    public void testAddNewTagToSubjectThatExists() throws Exception {
+
+    }
+
+    @Test
+    public void testAddNewTagToSubjectThatDoesNotExist() throws Exception {
+
+    }
+
+    @Test
+    public void testAddExistingTagToSubjectThatExists() throws Exception {
+
+    }
+
+    @Test
+    public void testAddExistingTagToSubjectThatDoesNotExist throws Exception {
+
+    }
+
+    @Test
+    public void testAddExistingTagToSubjectThatAlreadyHasTag throws Exception {
+
+    }
 
     @Test
     public void testAddSubject() throws Exception {
