@@ -24,8 +24,8 @@ public interface SubjectServiceApi {
         @RequestParam(required = false) String instructor
     );
 
-    @RequestMapping(value = "/subject/{subjectId}/add-tag", method = RequestMethod.POST)
-    public Subject addTagToSubject(@PathVariable Long subjectId, @RequestBody Tag tag);
+    @RequestMapping(value = "/subject/{subjectId}/addTag", method = RequestMethod.POST)
+    public Subject addTagToSubject(@PathVariable Long universityId, @PathVariable Long subjectId, @RequestBody Tag tag);
 
     @RequestMapping(value = "/subject/{subjectId}", method = RequestMethod.GET)
     public Subject getSubject(

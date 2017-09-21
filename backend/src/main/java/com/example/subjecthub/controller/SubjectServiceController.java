@@ -5,6 +5,7 @@ import com.example.subjecthub.api.SubjectServiceApi;
 import com.example.subjecthub.entity.Subject;
 import com.example.subjecthub.entity.Tag;
 import com.example.subjecthub.repository.SubjectRepository;
+import com.example.subjecthub.repository.TagRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,25 +24,37 @@ public class SubjectServiceController implements SubjectServiceApi {
     @Autowired
     private SubjectRepository subjectRepository;
 
+    @Autowired
+    private TagRepository tagRepository;
+
     @Override
-    public Subject addTagToSubject(  @PathVariable Long subjectId, @RequestBody Tag tag) {
+    public Subject addTagToSubject(@PathVariable Long universityId,  @PathVariable Long subjectId, @RequestBody Tag tag) {
 
-        // gets the current subject
-        Subject current = subjectRepository.findOne(subjectId);
+        Subject currentSubject = subjectRepository.findOne(subjectId);
 
-        // adds the subject to the tag object (not sure if needed)
-        List<Subject> tagSubjects = new ArrayList<>();
-        tagSubjects.add(current);
-        tag.setSubjects(tagSubjects);
+        Tag existingTag = tagRepository.findByName(tag.getName());
 
-        // sets the tags for the subject
-        List<Tag> currentTags = current.getTags();
-        currentTags.add(tag);
-        current.setTags(currentTags);
+        if (existingTag != null) {
 
+            // if the subject is included on the tag then throw an error
+            if (existingTag.getSubjects().contains(currentSubject)) {
+                throw new IllegalArgumentException();
+            }
 
-        subjectRepository.save(current);
-        return current;
+            existingTag.getSubjects().add(currentSubject);
+            tagRepository.save(existingTag);
+
+            currentSubject.getTags().add(existingTag);
+            subjectRepository.save(currentSubject);
+
+            return currentSubject;
+        }
+
+        tag.getSubjects().add(currentSubject);
+        currentSubject.getTags().add(tag);
+
+        subjectRepository.save(currentSubject);
+        return currentSubject;
 
     }
 

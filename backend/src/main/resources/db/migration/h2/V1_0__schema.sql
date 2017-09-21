@@ -63,7 +63,7 @@ CREATE TABLE users (
 
 CREATE TABLE tags (
     tag_id BIGINT IDENTITY PRIMARY KEY,
-    name VARCHAR (200) NOT NULL,
+    name VARCHAR (200) NOT NULL UNIQUE,
 );
 
 CREATE TABLE tags_subjects (

@@ -3,6 +3,7 @@ package com.example.subjecthub.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.persistence.Id;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.*;
@@ -49,4 +50,5 @@ public class Tag {
     public void setSubjects(List<Subject> subjects) {
         this.subjects = subjects;
     }
+
 }
