@@ -117,6 +117,7 @@ public class SubjectServiceController implements SubjectServiceApi {
         newComment.setPost(comment);
         newComment.setUser(subjectHubUserRepository.findOne(userId));
         newComment.setSubject(subjectRepository.findOne(subjectId));
+        newComment.setPostTimeNow();
         return subjectCommentRepository.save(newComment);
     }
 
