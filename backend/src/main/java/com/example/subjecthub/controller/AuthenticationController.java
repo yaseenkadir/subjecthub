@@ -91,7 +91,6 @@ public class AuthenticationController {
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         } catch (NullPointerException|ClassCastException e) {
             // TODO: Throw appropriate exception
-            Application.log.error("No user found");
             return ResponseEntity.badRequest().body(Collections.singletonMap("error",
                 "Not logged in"));
         }

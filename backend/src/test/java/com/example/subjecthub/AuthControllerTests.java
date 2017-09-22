@@ -6,12 +6,12 @@ import com.example.subjecthub.dto.RegisterRequest;
 import com.example.subjecthub.security.JwtTokenFilter;
 import com.example.subjecthub.security.JwtTokenUtils;
 import com.example.subjecthub.testutils.TestUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.JsonPath;
+import io.jsonwebtoken.Claims;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,12 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
-import javax.validation.constraints.Null;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.TimeZone;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,10 +44,22 @@ public class AuthControllerTests {
     @Autowired
     private AuthenticationController authController;
 
+    @Autowired
+    JwtTokenUtils jwtTokenUtils;
+
+    @Autowired
+    WebApplicationContext context;
+
     private MockMvc mockMvc;
+
+    @BeforeClass
+    public static void timezoneSetup() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    }
 
     @Before
     public void setup() {
+        // These tests
         mockMvc = MockMvcBuilders
             .standaloneSetup(authController)
             .build();
@@ -64,10 +80,23 @@ public class AuthControllerTests {
 
     @Test
     public void testAuthenticate() throws Exception {
-        authenticate()
+        // Authenticates and checks that the token is valid and expires in seven days.
+        MvcResult result = authenticate()
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.token").exists())
             .andReturn();
+
+        JsonNode n = TestUtils.fromString(result.getResponse().getContentAsString());
+        String token = n.get("token").textValue();
+        Claims c = jwtTokenUtils.getClaimsFromToken(token);
+
+        // THIS TEST MIGHT BREAK
+        // It might break in the rare case when a request is sent just before midnight and the token
+        // response is received just after midnight. The plusDays will be different.
+        ZonedDateTime expiry = ZonedDateTime.ofInstant(c.getExpiration().toInstant(),
+            ZoneId.systemDefault());
+        ZonedDateTime expected = ZonedDateTime.now().plusDays(7);
+        Assert.assertTrue(expected.toLocalDate().equals(expiry.toLocalDate()));
     }
 
     @Test
@@ -101,6 +130,19 @@ public class AuthControllerTests {
         mockMvc
             .perform(get("/api/auth/self"))
             .andExpect(status().isBadRequest())
+            .andReturn();
+    }
+
+    @Test
+    public void testExpiredToken() throws Exception {
+        String token = jwtTokenUtils.generateToken("testuser", null,
+            Date.from(ZonedDateTime.now().minusMinutes(1).toInstant()));
+
+        mockMvc
+            .perform(get("/api/auth/self")
+                .header(JwtTokenFilter.AUTHORIZATION_HEADER, token))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.error").exists())
             .andReturn();
     }
 
