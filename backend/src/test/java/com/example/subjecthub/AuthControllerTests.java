@@ -6,6 +6,7 @@ import com.example.subjecthub.dto.RegisterRequest;
 import com.example.subjecthub.security.JwtTokenFilter;
 import com.example.subjecthub.security.JwtTokenUtils;
 import com.example.subjecthub.testutils.TestUtils;
+import com.example.subjecthub.utils.ExceptionAdvice;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.JsonPath;
 import io.jsonwebtoken.Claims;
@@ -23,7 +24,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -45,10 +45,7 @@ public class AuthControllerTests {
     private AuthenticationController authController;
 
     @Autowired
-    JwtTokenUtils jwtTokenUtils;
-
-    @Autowired
-    WebApplicationContext context;
+    private JwtTokenUtils jwtTokenUtils;
 
     private MockMvc mockMvc;
 
@@ -62,6 +59,7 @@ public class AuthControllerTests {
         // These tests
         mockMvc = MockMvcBuilders
             .standaloneSetup(authController)
+            .setControllerAdvice(new ExceptionAdvice())
             .build();
     }
 
@@ -105,6 +103,8 @@ public class AuthControllerTests {
 
         authenticate(badAuthRequest)
             .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status", is(400)))
+            .andExpect(jsonPath("$.message", is("Invalid credentials.")))
             .andReturn();
     }
 
@@ -130,6 +130,8 @@ public class AuthControllerTests {
         mockMvc
             .perform(get("/api/auth/self"))
             .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status", is(400)))
+            .andExpect(jsonPath("$.message", is("Not logged in.")))
             .andReturn();
     }
 
@@ -142,7 +144,8 @@ public class AuthControllerTests {
             .perform(get("/api/auth/self")
                 .header(JwtTokenFilter.AUTHORIZATION_HEADER, token))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.error").exists())
+            .andExpect(jsonPath("$.status", is(400)))
+            .andExpect(jsonPath("$.message", is("Not logged in.")))
             .andReturn();
     }
 
