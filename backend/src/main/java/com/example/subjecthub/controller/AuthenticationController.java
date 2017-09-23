@@ -7,9 +7,10 @@ import com.example.subjecthub.dto.SubjectHubUserResponse;
 import com.example.subjecthub.entity.SubjectHubUser;
 import com.example.subjecthub.repository.SubjectHubUserRepository;
 import com.example.subjecthub.security.JwtTokenUtils;
+import com.example.subjecthub.utils.SubjectHubException;
+import com.example.subjecthub.utils.SubjectHubUnexpectedException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -58,8 +58,7 @@ public class AuthenticationController {
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (AuthenticationException ae) {
-            return ResponseEntity.badRequest().body(
-                Collections.singletonMap("error", "Invalid credentials"));
+            throw new SubjectHubException("Invalid credentials.");
         }
 
         Map<String, Object> response = new HashMap<>();
@@ -90,21 +89,19 @@ public class AuthenticationController {
             userDetails =
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         } catch (NullPointerException|ClassCastException e) {
-            // TODO: Throw appropriate exception
-            return ResponseEntity.badRequest().body(Collections.singletonMap("error",
-                "Not logged in"));
+            throw new SubjectHubException("Not logged in.");
         }
 
         Optional<SubjectHubUser> user = subjectHubUserRepository.findByUsername(
             userDetails.getUsername());
-        if (user.isPresent()) {
-            SubjectHubUserResponse response = new SubjectHubUserResponse();
-            BeanUtils.copyProperties(user.get(), response);
-            return ResponseEntity.ok(response);
-        } else {
-            Application.log.error("User is authenticated but is not found in database!");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                Collections.singletonMap("error", "Unexpected error"));
+
+        if (!user.isPresent()) {
+            throw new SubjectHubUnexpectedException(String.format("User %s is authenticated but " +
+                "was not found in database", userDetails.getUsername()));
         }
+
+        SubjectHubUserResponse response = new SubjectHubUserResponse();
+        BeanUtils.copyProperties(user.get(), response);
+        return ResponseEntity.ok(response);
     }
 }
