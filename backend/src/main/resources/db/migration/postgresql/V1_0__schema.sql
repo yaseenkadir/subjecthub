@@ -1,11 +1,18 @@
+CREATE SEQUENCE universities_seq;
+CREATE SEQUENCE faculties_seq;
+CREATE SEQUENCE subjects_seq;
+CREATE SEQUENCE assessments_seq;
+CREATE SEQUENCE comments_seq;
+CREATE SEQUENCE users_seq;
+
 CREATE TABLE universities (
-    university_id BIGINT NOT NULL PRIMARY KEY,
+    university_id BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('universities_seq'),
     name          VARCHAR(100) NOT NULL,
     abbreviation  VARCHAR(5)   NOT NULL
 );
 
 CREATE TABLE faculties (
-    faculty_id    BIGINT NOT NULL PRIMARY KEY,
+    faculty_id    BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('faculties_seq'),
     name          VARCHAR(100) NOT NULL,
     code          VARCHAR(5)   DEFAULT NULL,
     university_id BIGINT       NOT NULL,
@@ -13,7 +20,7 @@ CREATE TABLE faculties (
 );
 
 CREATE TABLE subjects (
-    subject_id       BIGINT NOT NULL PRIMARY KEY,
+    subject_id       BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('subjects_seq'),
     code             VARCHAR(10)    NOT NULL,
     name             VARCHAR(100)   NOT NULL,
     credit_points    INT            NOT NULL,
@@ -31,7 +38,7 @@ CREATE TABLE subjects (
 );
 
 CREATE TABLE assessments (
-    assessment_id BIGINT NOT NULL PRIMARY KEY,
+    assessment_id BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('assessments_seq'),
     name          VARCHAR(100) NOT NULL,
     description   VARCHAR(100) NOT NULL,
     weighting     INT          NOT NULL,
@@ -43,7 +50,7 @@ CREATE TABLE assessments (
 );
 
 CREATE TABLE comments (
-    comment_id      BIGINT NOT NULL PRIMARY KEY,
+    comment_id      BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('comments_seq'),
     post            VARCHAR(200)    NOT NULL,
     subject_id      BIGINT          NOT NULL,
 --     //is_flagged    BOOLEAN,
@@ -55,7 +62,7 @@ CREATE TABLE comments (
 );
 
 CREATE TABLE users (
-    user_id BIGINT NOT NULL PRIMARY KEY,
+    user_id BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('users_seq'),
     username VARCHAR(30) UNIQUE NOT NULL,
     password VARCHAR(60) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL
