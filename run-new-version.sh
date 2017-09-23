@@ -25,6 +25,7 @@ docker run \
     -d \
     -p 80:8443 \
     -p 443:8443 \
+    --link subjecthubdb:postgres \
     --name $IMAGE_NAME $REPO:$TAG
 unset KEYSTORE_PASSWORD
 unset JWT_SECRET_KEY
