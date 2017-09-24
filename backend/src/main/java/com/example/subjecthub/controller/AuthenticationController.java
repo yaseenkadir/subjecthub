@@ -9,6 +9,7 @@ import com.example.subjecthub.repository.SubjectHubUserRepository;
 import com.example.subjecthub.security.JwtTokenUtils;
 import com.example.subjecthub.utils.SubjectHubException;
 import com.example.subjecthub.utils.SubjectHubUnexpectedException;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -43,6 +45,9 @@ public class AuthenticationController {
 
     @Autowired
     private SubjectHubUserRepository subjectHubUserRepository;
+
+    // Username must start with a letter and can be followed by letters or numbers. Between 5-20 characters.
+    private static final Pattern usernamePattern = Pattern.compile("^[a-zA-Z]{1}[a-zA-Z0-9]{4,19}");
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> authenticate(
@@ -70,6 +75,9 @@ public class AuthenticationController {
     public ResponseEntity register(
         @RequestBody RegisterRequest registerRequest
     ) {
+        // TODO: Handle usernames as case insensitive
+        // I.e. usernames are still displayed with case sensitivity but are treated as case insensitive.
+        validateRegisterRequest(registerRequest);
         String hashedPassword = bCryptPasswordEncoder.encode(registerRequest.getPassword());
         SubjectHubUser subjectHubUser = new SubjectHubUser(registerRequest.getUsername(),
             hashedPassword, registerRequest.getEmail());
@@ -103,5 +111,28 @@ public class AuthenticationController {
         SubjectHubUserResponse response = new SubjectHubUserResponse();
         BeanUtils.copyProperties(user.get(), response);
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Validates register request by checking email and username fields.
+     * @param registerRequest
+     */
+    private void validateRegisterRequest(RegisterRequest registerRequest) {
+        if (!EmailValidator.getInstance().isValid(registerRequest.getEmail())) {
+            throw new SubjectHubException("Invalid email address.");
+        }
+
+        if (subjectHubUserRepository.existsByUsername(registerRequest.getUsername())) {
+            throw new SubjectHubException("Username already exists.");
+        }
+
+        if (subjectHubUserRepository.existsByEmail(registerRequest.getEmail())) {
+            throw new SubjectHubException("Email already exists.");
+        }
+
+        if (!usernamePattern.matcher(registerRequest.getUsername()).matches()) {
+            throw new SubjectHubException(
+                "Username is invalid. Must start with letters and be between 5 and 20 characters.");
+        }
     }
 }

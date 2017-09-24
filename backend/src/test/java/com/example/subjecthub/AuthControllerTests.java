@@ -56,7 +56,6 @@ public class AuthControllerTests {
 
     @Before
     public void setup() {
-        // These tests
         mockMvc = MockMvcBuilders
             .standaloneSetup(authController)
             .setControllerAdvice(new ExceptionAdvice())
@@ -65,8 +64,7 @@ public class AuthControllerTests {
 
     @Test
     public void testRegister() throws Exception {
-        // TODO: Add email to registration request.
-        RegisterRequest registerRequest = new RegisterRequest("__test", "test123", "a@test.com");
+        RegisterRequest registerRequest = new RegisterRequest("tester", "test123", "a@test.com");
 
         String requestJson = TestUtils.asJson(registerRequest);
         mockMvc
@@ -74,6 +72,84 @@ public class AuthControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testRegisterInvalidEmail() throws Exception {
+        String[] invalidEmails = {"test", "test@localhost", "@@@@@"};
+
+        for (String email : invalidEmails) {
+            RegisterRequest registerRequest = new RegisterRequest("tester", "test123", email);
+
+            String requestJson = TestUtils.asJson(registerRequest);
+            mockMvc
+                .perform(post("/api/auth/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestJson))
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.message", is("Invalid email address.")));
+        }
+    }
+
+    @Test
+    public void testRegisterInvalidUsername() throws Exception {
+        String[] invalidUsernames = {"test", "test@localhost", "@@@@@", "123456", "__abc", "a23456789012345678901"};
+
+        for (String username : invalidUsernames) {
+            RegisterRequest registerRequest = new RegisterRequest(username, "test123", "a@b.com");
+
+            String requestJson = TestUtils.asJson(registerRequest);
+            mockMvc
+                .perform(post("/api/auth/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestJson))
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.message",
+                    is("Username is invalid. Must start with letters and be between 5 and 20 characters.")));
+        }
+    }
+
+    @Test
+    public void testRegisterUsernameAlreadyExists() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest("exists", "exists", "a@b.com");
+        String requestJson = TestUtils.asJson(registerRequest);
+        mockMvc
+            .perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson));
+
+        RegisterRequest usernameExistsRequest = new RegisterRequest("exists", "exists", "b@c.com");
+        String usernameExistsRequestJson = TestUtils.asJson(usernameExistsRequest);
+        mockMvc
+            .perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(usernameExistsRequestJson))
+            .andExpect(status().is4xxClientError())
+            .andExpect(jsonPath("$.status", is(400)))
+            .andExpect(jsonPath("$.message", is("Username already exists.")));
+    }
+
+    @Test
+    public void testRegisterEmailAlreadyExists() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest("exists", "exists", "a@b.com");
+        String requestJson = TestUtils.asJson(registerRequest);
+        mockMvc
+            .perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson));
+
+        // Test that registering a user with the same email fails (we change the
+        RegisterRequest emailExistsRequest = new RegisterRequest("exists2", "exists", "a@b.com");
+        String emailExistsRequestJson = TestUtils.asJson(emailExistsRequest);
+        mockMvc
+            .perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(emailExistsRequestJson))
+            .andExpect(status().is4xxClientError())
+            .andExpect(jsonPath("$.status", is(400)))
+            .andExpect(jsonPath("$.message", is("Email already exists.")));
     }
 
     @Test
