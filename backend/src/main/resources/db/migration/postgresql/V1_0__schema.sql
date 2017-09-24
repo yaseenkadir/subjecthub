@@ -63,7 +63,7 @@ CREATE TABLE comments (
 
 CREATE TABLE users (
     user_id BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('users_seq'),
-    username VARCHAR(30) UNIQUE NOT NULL,
+    username VARCHAR(20) UNIQUE NOT NULL,
     password VARCHAR(60) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL
 );
