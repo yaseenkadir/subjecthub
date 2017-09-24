@@ -6,4 +6,5 @@ ENTRYPOINT exec java -Djava.security.egd=file:/dev/./urandom \
     -Dspring.profiles.active=prod \
     -Dserver.ssl.key-store-password=$KEYSTORE_PASSWORD \
     -Dcom.example.subjecthub.jwt.secretKey=$JWT_SECRET_KEY \
+    -Dspring.datasource.password=$SUBJECT_HUB_DB_PASSWORD \
     -jar /app.jar

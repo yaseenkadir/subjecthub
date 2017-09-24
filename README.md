@@ -99,7 +99,7 @@ and uploaded to Dockerhub. Travis CI executes the `run-new-version.sh` script on
 That script must be uploaded by the user, it is NOT uploaded by Travis.
 
 Both the docker image and the script need access to secrets which also must be uploaded to the
-server. The secrets required are:
+server at `~/.subject-hub/secrets.sh`. The secrets required are:
 
 |Environment Secret|Description|
 |---------|-------|
@@ -107,6 +107,21 @@ server. The secrets required are:
 |`DOCKER_PASSWORD`|password for above dockerhub user|
 |`KEYSTORE_PASSWORD`|password used to access ssl keystore (used to enable https)|
 |`JWT_SECRET_KEY`|secret key used to sign jwts|
+|`SUBJECT_HUB_DB_PASSWORD`|password to connect to subject-hub postgresql database|
 
 We're storing JWT_SECRET_KEY as a variable instead of generating a random so JWTs are valid across
 restarts.
+
+### Database Setup
+PostgreSQL is used to persist data. A postgres container is run on the same host as the application.
+To setup the container:
+```bash
+docker pull postgres
+docker run -d \
+    --name subjecthubdb \
+    -p 5432:5432 \
+    -e POSTGRES_USER=springdbuser \
+    -e POSTGRES_PASSWORD=${SUBJECT_HUB_DB_PASSWORD} \
+    -e POSTGRES_DB=subjecthubdb \
+    postgres
+```
