@@ -2,6 +2,7 @@ package com.example.subjecthub.controller;
 
 import com.example.subjecthub.Application;
 import com.example.subjecthub.api.SubjectServiceApi;
+import com.example.subjecthub.dto.AddCommentRequest;
 import com.example.subjecthub.entity.Subject;
 import com.example.subjecthub.entity.SubjectComment;
 import com.example.subjecthub.entity.SubjectHubUser;
@@ -10,10 +11,7 @@ import com.example.subjecthub.repository.SubjectHubUserRepository;
 import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @ParametersAreNonnullByDefault
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class SubjectServiceController implements SubjectServiceApi {
 
     @Autowired
@@ -110,12 +108,11 @@ public class SubjectServiceController implements SubjectServiceApi {
     public SubjectComment commentAdd(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
-        @RequestParam Long userId,
-        @RequestParam String comment
+        @RequestBody AddCommentRequest addCommentRequest
     ){
         SubjectComment newComment = new SubjectComment();
-        newComment.setPost(comment);
-        newComment.setUser(subjectHubUserRepository.findOne(userId));
+        newComment.setPost(addCommentRequest.getComment());
+        newComment.setUser(subjectHubUserRepository.findOne(addCommentRequest.getUserId()));
         newComment.setSubject(subjectRepository.findOne(subjectId));
         newComment.setPostTimeNow();
         return subjectCommentRepository.save(newComment);
