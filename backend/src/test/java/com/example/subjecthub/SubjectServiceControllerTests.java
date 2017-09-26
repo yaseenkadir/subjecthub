@@ -2,10 +2,7 @@ package com.example.subjecthub;
 
 import com.example.subjecthub.controller.SubjectServiceController;
 import com.example.subjecthub.dto.AddCommentRequest;
-import com.example.subjecthub.entity.Faculty;
-import com.example.subjecthub.entity.Subject;
-import com.example.subjecthub.entity.SubjectComment;
-import com.example.subjecthub.entity.University;
+import com.example.subjecthub.entity.*;
 import com.example.subjecthub.repository.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,12 +10,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -145,25 +146,19 @@ public class SubjectServiceControllerTests {
             .andReturn();
     }
 
-    /**
-     * need 'create user' tests above comment tests to create user and get it's id for the addComment test
-     */
-
     @Test
     public void testAddComment() throws Exception {
         // creates dud subject then adds a comment
         Subject s = createSubject("test", "ABCDEF");
-        Long u_id = Long.parseLong("1"); //alternatively (reccomended), create user and get it's id
         Long s_id = s.getId();
         String m = "tasty";
 
-        AddCommentRequest addCommentRequest = new AddCommentRequest(u_id, m);
+        AddCommentRequest addCommentRequest = new AddCommentRequest(m);
 
         // Checks that new subject appears in list
         mockMvc.perform(post("/api/universities/university/1/subjects/subject/"+s_id+"/comments/comment/add")
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"userId\":\""+addCommentRequest.getUserId()+
-                "\",\"comment\":\""+addCommentRequest.getComment()+"\"}"))
+            .content("{\"comment\":\""+addCommentRequest.getComment()+"\"}"))
             .andExpect(status().isOk()) /*
                 Alternatively, can use Gson to convert addCommentRequest to json using "gson.toJson(addCom...)"
                 if this is done, will not need to create a dependency on the key names.
@@ -172,6 +167,23 @@ public class SubjectServiceControllerTests {
             .andExpect(jsonPath("$.post", is(m)))
             .andExpect(jsonPath("$.thumbsUp", is(0)))
             .andExpect(jsonPath("$.thumbsDown", is(0)))
+            .andReturn();
+    }
+
+    @Test
+    public void testGetComments() throws Exception {
+        //test that a list of comments can be pulled for a subject
+        Subject s = createSubject("test", "ABC");
+        Long u_id = Long.parseLong("1");
+        SubjectComment c1 = createComment(u_id, s.getId(), "yumyum1");
+        SubjectComment c2 = createComment(u_id, s.getId(), "yumyum2");
+        SubjectComment c3 = createComment(u_id, s.getId(), "yumyum3");
+        SubjectComment c4 = createComment(u_id, s.getId(), "yumyum4");
+        SubjectComment c5 = createComment(u_id, s.getId(), "yumyum5");
+
+        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+"/comments"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$..post", hasSize(5)))
             .andReturn();
     }
 
@@ -271,7 +283,6 @@ public class SubjectServiceControllerTests {
             .andExpect(jsonPath("$.flagged", is(false)))
             .andReturn();
     }
-
 
     /**
      * Util test method that handles extraneous params for creating subject objects.

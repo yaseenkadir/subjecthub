@@ -7,9 +7,7 @@ import java.util.List;
 
 public interface SubjectCommentRepository extends CrudRepository<SubjectComment, Long> {
 
-    List<SubjectComment> findBySubject_Id(Long subject_id);
+    List<SubjectComment> findBySubject_Id(Long subjectId);
 
-    List<SubjectComment> findByUser_Id(Long user_id);
-
-    SubjectComment findBySubject_IdAndId(Long subject_id, Long comment_id);
+    SubjectComment findBySubject_IdAndId(Long subjectId, Long commentId);
 }

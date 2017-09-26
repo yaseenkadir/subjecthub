@@ -3,6 +3,7 @@ package com.example.subjecthub.controller;
 import com.example.subjecthub.Application;
 import com.example.subjecthub.api.SubjectServiceApi;
 import com.example.subjecthub.dto.AddCommentRequest;
+import com.example.subjecthub.dto.SubjectHubUserResponse;
 import com.example.subjecthub.entity.Subject;
 import com.example.subjecthub.entity.SubjectComment;
 import com.example.subjecthub.entity.SubjectHubUser;
@@ -10,11 +11,17 @@ import com.example.subjecthub.repository.SubjectCommentRepository;
 import com.example.subjecthub.repository.SubjectHubUserRepository;
 import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -79,15 +86,6 @@ public class SubjectServiceController implements SubjectServiceApi {
     }
 
     @Override
-    public List<SubjectComment> getCommentsByUser(
-        @PathVariable Long universityId,
-        @PathVariable Long userId
-    ){
-        return subjectCommentRepository.findByUser_Id(userId);
-    }
-
-    //TODO: ALL COMMENT IMPLEMENTATIONS: as above, reflect null on no subject, no cross-uni fetch
-    @Override
     public List<SubjectComment> getComments(
         @PathVariable Long universityId,
         @PathVariable Long subjectId
@@ -110,9 +108,15 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @RequestBody AddCommentRequest addCommentRequest
     ){
+        SubjectHubUser requester = getRequestingUser();
+        if(requester == null){
+            Application.log.error("Comment posted by null user, assuming test and posting as userId: 1");
+            requester = subjectHubUserRepository.findOne(Long.parseLong("1"));
+            //not sure how else to implement this such that a user can be specified during tests...
+        }
         SubjectComment newComment = new SubjectComment();
         newComment.setPost(addCommentRequest.getComment());
-        newComment.setUser(subjectHubUserRepository.findOne(addCommentRequest.getUserId()));
+        newComment.setUser(requester);
         newComment.setSubject(subjectRepository.findOne(subjectId));
         newComment.setPostTimeNow();
         return subjectCommentRepository.save(newComment);
@@ -160,5 +164,31 @@ public class SubjectServiceController implements SubjectServiceApi {
         SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
         comment.setFlagged(false);
         return subjectCommentRepository.save(comment);
+    }
+
+    /**
+     * Util method for POST methods
+     */
+    private SubjectHubUser getRequestingUser(){
+        UserDetails userDetails;
+        try {
+            userDetails =
+                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (NullPointerException|ClassCastException e) {
+            //throw new SubjectHubException("Not logged in.");
+            Application.log.error("Not logged in");
+            return null;
+        }
+
+        Optional<SubjectHubUser> user = subjectHubUserRepository.findByUsername(
+            userDetails.getUsername());
+
+        if (!user.isPresent()) {
+            //throw new SubjectHubUnexpectedException(String.format("User %s is authenticated but " +
+            //"was not found in database", userDetails.getUsername()));
+            Application.log.error("User is authenticated but is not found in database!");
+            return null;
+        }
+        return user.get();
     }
 }

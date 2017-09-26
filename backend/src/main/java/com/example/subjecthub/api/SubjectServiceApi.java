@@ -31,12 +31,6 @@ public interface SubjectServiceApi {
         @PathVariable Long subjectId
     );
 
-    @RequestMapping(value = "/users/user/{userId}/comments", method = RequestMethod.GET)
-    public List<SubjectComment> getCommentsByUser(
-        @PathVariable Long universityId,
-        @PathVariable Long userId
-    );
-
     @RequestMapping(value = "/subject/{subjectId}/comments", method = RequestMethod.GET)
     public List<SubjectComment> getComments(
         @PathVariable Long universityId,
