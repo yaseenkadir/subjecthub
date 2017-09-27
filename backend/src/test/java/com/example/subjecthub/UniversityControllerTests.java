@@ -86,7 +86,7 @@ public class UniversityControllerTests {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name", is("testUni")))
             .andExpect(jsonPath("$.abbreviation", is("TU")))
-            .andExpect(jsonPath("$.faculties[0]", is("Faculty of Testing"))) // this line will intentionally fail
+            .andExpect(jsonPath("$.faculties[0].name", is("Faculty of Testing")))
             .andReturn();
     }
 
