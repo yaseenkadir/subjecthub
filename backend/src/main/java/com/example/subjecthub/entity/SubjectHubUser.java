@@ -1,7 +1,6 @@
 package com.example.subjecthub.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.*;
 import java.util.List;
@@ -26,7 +25,7 @@ public class SubjectHubUser {
     private String password;
 
     @OneToMany
-    @JoinColumn(name = "comment_id")
+    @JoinColumn(name = "user_id")
     @JsonIgnoreProperties(value = {"user"})
     private List<SubjectComment> comments;
 

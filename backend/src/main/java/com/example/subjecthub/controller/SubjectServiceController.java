@@ -11,6 +11,8 @@ import com.example.subjecthub.repository.SubjectCommentRepository;
 import com.example.subjecthub.repository.SubjectHubUserRepository;
 import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
+import com.example.subjecthub.utils.SubjectHubException;
+import com.example.subjecthub.utils.SubjectHubUnexpectedException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -171,7 +173,6 @@ public class SubjectServiceController implements SubjectServiceApi {
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         } catch (NullPointerException|ClassCastException e) {
             throw new SubjectHubException("Not logged in.");
-            return null;
         }
 
         Optional<SubjectHubUser> user = subjectHubUserRepository.findByUsername(
@@ -180,7 +181,6 @@ public class SubjectServiceController implements SubjectServiceApi {
         if (!user.isPresent()) {
             throw new SubjectHubUnexpectedException(String.format("User %s is authenticated but " +
             "was not found in database", userDetails.getUsername()));
-            return null;
         }
         return user.get();
     }

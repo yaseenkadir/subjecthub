@@ -42,13 +42,13 @@ public class SubjectComment {
     @Column(nullable = false)
     private Date postTime;
 
-    @Column(nullable = false)
+    @Column
     private Boolean isFlagged; //default false in schema
 
-    @Column(nullable = false)
+    @Column
     private int thumbsUp; //default 0 in schema
 
-    @Column(nullable = false)
+    @Column
     private int thumbsDown; //default 0 in schema
 
     public SubjectComment() {
