@@ -58,8 +58,29 @@ public interface SubjectServiceApi {
         @PathVariable Long commentId
     );
 
+    @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/remThumbUp", method = RequestMethod.GET)
+    public SubjectComment commentRemThumbUp(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    );
+
     @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/thumbDown", method = RequestMethod.GET)
     public SubjectComment commentThumbDown(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    );
+
+    @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/remThumbDown", method = RequestMethod.GET)
+    public SubjectComment commentRemThumbDown(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    );
+
+    @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/remThumbs", method = RequestMethod.GET)
+    public SubjectComment commentRemThumbs(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId

@@ -92,7 +92,13 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long subjectId
     ){
-        return subjectCommentRepository.findBySubject_Id(subjectId);
+        List<SubjectComment> results;
+        try {
+            results = subjectCommentRepository.findBySubject_Id(subjectId);
+        }catch(NullPointerException|ClassCastException e){
+            throw new SubjectHubException("No comments found for subject id: "+subjectId);
+        }
+        return results;
     }
 
     @Override
@@ -101,7 +107,13 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        return subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        SubjectComment result;
+        try {
+            result = subjectCommentRepository.findBySubject_IdAndId(subjectId, commentId);
+        }catch(NullPointerException|ClassCastException e){
+            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId);
+        }
+        return result;
     }
 
     @Override
@@ -125,9 +137,15 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        comment.addThumbUp();
-        return subjectCommentRepository.save(comment);
+        SubjectComment result;
+        try{
+            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        }catch(NullPointerException|ClassCastException e){
+            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
+                ". Unable to add thumb up.");
+        }
+        result.addThumbUp();
+        return subjectCommentRepository.save(result);
     }
 
     @Override
@@ -136,20 +154,32 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        comment.addThumbDown();
-        return subjectCommentRepository.save(comment);
+        SubjectComment result;
+        try{
+            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        }catch(NullPointerException|ClassCastException e){
+            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
+                ". Unable to add thumb down.");
+        }
+        result.addThumbDown();
+        return subjectCommentRepository.save(result);
     }
 
-    @Override
+    @Override //flagged comment body should be hidden with placeholder text from frontend view
     public SubjectComment commentFlag(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        comment.setFlagged(true);
-        return subjectCommentRepository.save(comment);
+        SubjectComment result;
+        try{
+            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        }catch(NullPointerException|ClassCastException e){
+            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
+                ". Unable to flag.");
+        }
+        result.setFlagged(true);
+        return subjectCommentRepository.save(result);
     }
 
     @Override
@@ -158,9 +188,66 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        comment.setFlagged(false);
-        return subjectCommentRepository.save(comment);
+        SubjectComment result;
+        try{
+            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        }catch(NullPointerException|ClassCastException e){
+            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
+                ". Unable to unflag.");
+        }
+        result.setFlagged(false);
+        return subjectCommentRepository.save(result);
+    }
+
+    @Override
+    public SubjectComment commentRemThumbUp(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    ){
+        SubjectComment result;
+        try{
+            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        }catch(NullPointerException|ClassCastException e){
+            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
+                ". Unable to remove thumb up.");
+        }
+        result.remThumbUp();
+        return subjectCommentRepository.save(result);
+    }
+
+    @Override
+    public SubjectComment commentRemThumbDown(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    ){
+        SubjectComment result;
+        try{
+            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        }catch(NullPointerException|ClassCastException e){
+            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
+                ". Unable to remove thumb down.");
+        }
+        result.remThumbDown();
+        return subjectCommentRepository.save(result);
+    }
+
+    @Override
+    public SubjectComment commentRemThumbs(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    ){
+        SubjectComment result;
+        try{
+            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        }catch(NullPointerException|ClassCastException e){
+            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
+                ". Unable to remove all thumbs.");
+        }
+        result.remThumbs();
+        return subjectCommentRepository.save(result);
     }
 
     /**
