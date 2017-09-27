@@ -7,6 +7,8 @@ import com.example.subjecthub.entity.Tag;
 import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.repository.TagRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
+import com.example.subjecthub.utils.SubjectNotFoundException;
+import com.example.subjecthub.utils.TagAlreadyExistsOnSubjectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,13 +34,17 @@ public class SubjectServiceController implements SubjectServiceApi {
 
         Subject currentSubject = subjectRepository.findOne(subjectId);
 
+        if (currentSubject == null) {
+            throw new SubjectNotFoundException();
+        }
+
         Tag existingTag = tagRepository.findByName(tag.getName());
 
         if (existingTag != null) {
 
             // if the subject is included on the tag then throw an error
             if (existingTag.getSubjects().contains(currentSubject)) {
-                throw new IllegalArgumentException();
+                throw new TagAlreadyExistsOnSubjectException();
             }
 
             existingTag.getSubjects().add(currentSubject);
