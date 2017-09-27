@@ -67,7 +67,7 @@ public class AssessmentServiceControllerTests {
     public void testAddAssessment() throws Exception {
         mockMvc.perform(get("/api/universities/university/1/subjects/subject/1/assessments"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(3)))
+            .andExpect(jsonPath("$", hasSize(0)))
             .andReturn();
 
         createAssessment("TestAssignment",  this.subject);
@@ -75,8 +75,8 @@ public class AssessmentServiceControllerTests {
         // Checks that new assessment appears in list
         mockMvc.perform(get("/api/universities/university/1/subjects/subject/1/assessments"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(4)))
-            .andExpect(jsonPath("$[3].name", is("TestAssignment")))
+            .andExpect(jsonPath("$", hasSize(1)))
+            .andExpect(jsonPath("$[0].name", is("TestAssignment")))
             .andReturn();
     }
 
