@@ -205,7 +205,7 @@ public class SubjectServiceControllerTests {
     }
 
     @Test
-    public void thumbUpComment() throws Exception {
+    public void testAddThumbUpComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
         Long u_id = Long.parseLong("1");
@@ -213,7 +213,7 @@ public class SubjectServiceControllerTests {
 
         //checks it can be thumbed up
         mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
-            "/comments/comment/"+c.getId()+"/thumbUp"))
+            "/comments/comment/"+c.getId()+"/addThumbUp"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.user.id", is(1)))
             .andExpect(jsonPath("$.subject.name", is(s.getName())))
@@ -224,7 +224,7 @@ public class SubjectServiceControllerTests {
     }
 
     @Test
-    public void thumbDownComment() throws Exception {
+    public void testAddThumbDownComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
         Long u_id = Long.parseLong("1");
@@ -232,7 +232,7 @@ public class SubjectServiceControllerTests {
 
         //checks it can be thumbed down
         mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
-            "/comments/comment/"+c.getId()+"/thumbDown"))
+            "/comments/comment/"+c.getId()+"/addThumbDown"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.user.id", is(1)))
             .andExpect(jsonPath("$.subject.name", is(s.getName())))
@@ -243,7 +243,68 @@ public class SubjectServiceControllerTests {
     }
 
     @Test
-    public void flagComment() throws Exception {
+    public void testRemThumbUpComment() throws Exception {
+        //creates subject with comment
+        Subject s = createSubject("test", "ABC");
+        Long u_id = Long.parseLong("1");
+        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+        c.setThumbsUp(4);
+
+        //checks thumb up and down can be removed
+        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
+            "/comments/comment/"+c.getId()+"/remThumbUp"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.user.id", is(1)))
+            .andExpect(jsonPath("$.subject.name", is(s.getName())))
+            .andExpect(jsonPath("$.post",is("yumyum")))
+            .andExpect(jsonPath("$.thumbsUp", is(3)))
+            .andExpect(jsonPath("$.thumbsDown", is(0)))
+            .andReturn();
+    }
+
+    @Test
+    public void testRemThumbDownComment() throws Exception {
+        //creates subject with comment
+        Subject s = createSubject("test", "ABC");
+        Long u_id = Long.parseLong("1");
+        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+        c.setThumbsDown(5);
+
+        //checks thumb up and down can be removed
+        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
+            "/comments/comment/"+c.getId()+"/remThumbDown"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.user.id", is(1)))
+            .andExpect(jsonPath("$.subject.name", is(s.getName())))
+            .andExpect(jsonPath("$.post",is("yumyum")))
+            .andExpect(jsonPath("$.thumbsUp", is(0)))
+            .andExpect(jsonPath("$.thumbsDown", is(4)))
+            .andReturn();
+    }
+
+    @Test
+    public void testRemThumbsComment() throws Exception {
+        //creates subject with comment
+        Subject s = createSubject("test", "ABC");
+        Long u_id = Long.parseLong("1");
+        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+        c.setThumbsUp(13);
+        c.setThumbsDown(15);
+
+        //checks thumb up and down can be removed
+        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
+            "/comments/comment/"+c.getId()+"/remThumbs"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.user.id", is(1)))
+            .andExpect(jsonPath("$.subject.name", is(s.getName())))
+            .andExpect(jsonPath("$.post",is("yumyum")))
+            .andExpect(jsonPath("$.thumbsUp", is(0)))
+            .andExpect(jsonPath("$.thumbsDown", is(0)))
+            .andReturn();
+    }
+
+    @Test
+    public void testFlagComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
         Long u_id = Long.parseLong("1");
@@ -263,7 +324,7 @@ public class SubjectServiceControllerTests {
     }
 
     @Test
-    public void unflagComment() throws Exception {
+    public void testUnflagComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
         Long u_id = Long.parseLong("1");
