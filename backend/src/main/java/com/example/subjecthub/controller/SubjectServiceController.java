@@ -132,7 +132,7 @@ public class SubjectServiceController implements SubjectServiceApi {
     }
 
     @Override
-    public SubjectComment commentThumbUp(
+    public SubjectComment commentAddThumbUp(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
@@ -149,7 +149,7 @@ public class SubjectServiceController implements SubjectServiceApi {
     }
 
     @Override
-    public SubjectComment commentThumbDown(
+    public SubjectComment commentAddThumbDown(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId

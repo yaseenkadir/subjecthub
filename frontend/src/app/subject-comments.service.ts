@@ -16,38 +16,161 @@ export class SubjectCommentsService {
             .get(`http://localhost:8080/api/universities/university/${university}/subjects/subject/${subject}/comments`)
             .toPromise()
             .then(response => {
-                return response.json() as SubjectComment[];
+                if(response.status == 200){
+                    return response.json() as SubjectComment[];
+                } else {
+                    console.log(`No comments found for subject id: ${subject}`);
+                    return null;
+                }
+            })
+            .catch(e => {
+                console.log(`Comments request failed. Caught exception: ${e}`);
+                return null;
             });
     }
 
-    add(university: number, subject: number, message: string): void{
-        //unsure if this post works
-        this.http
-            .post(`http://localhost:8080/api/universities/university/${university}/subjects/subject/${subject}/comments/comment/add`,{"message":`${message}`})
-        //assuming no return is needed since fetch was promise
+    add(university: number, subject: number, message: string): Promise<SubjectComment>{
+        let requestBody = {"message": message};
+        return this.http
+            .post(`http://localhost:8080/api/universities/university/${university}/subjects/subject/${subject}/comments/comment/add`,requestBody)
+            .toPromise()
+            .then(response => {
+                if(response.status == 200){
+                    return response.json() as SubjectComment;
+                } else {
+                    console.log(`Unable to add comment for subject id: ${subject}`);
+                    return null;
+                }
+            })
+            .catch(e => {
+                console.log(`Add comment request failed. Caught exception: ${e}`);
+                return null;
+            });
     }
 
-    thumbUp(university: number, subject: number, comment: number): void{
-        this.http
-            .get(`http://localhost:8080/api/universities/university/${university}/subjects/subject/${subject}/comments/comment/${comment}/thumbUp`)
-        //assuming no return is needed since fetch was promise
+    addThumbUp(university: number, subject: number, comment: number): Promise<SubjectComment>{
+        return this.http
+            .get(`http://localhost:8080/api/universities/university/${university}/subjects/subject/${subject}/comments/comment/${comment}/addThumbUp`)
+            .toPromise()
+            .then(response => {
+                if(response.status == 200){
+                    return response.json() as SubjectComment;
+                } else {
+                    console.log(`Unable to add thumb up to comment (id:${comment}) for subject id: ${subject}`);
+                    return null;
+                }
+            })
+            .catch(e => {
+                console.log(`Add thumb up to comment (id:${comment}) request failed. Caught exception: ${e}`);
+                return null;
+            });
     }
 
-    thumbDown(university: number, subject: number, comment: number): void{
-        this.http
-            .get(`http://localhost:8080/api/universities/university/${university}/subjects/subject/${subject}/comments/comment/${comment}/thumbDown`)
-        //assuming no return is needed since fetch was promise
+    addThumbDown(university: number, subject: number, comment: number): Promise<SubjectComment>{
+        return this.http
+            .get(`http://localhost:8080/api/universities/university/${university}/subjects/subject/${subject}/comments/comment/${comment}/addThumbDown`)
+            .toPromise()
+            .then(response => {
+                if(response.status == 200){
+                    return response.json() as SubjectComment;
+                } else {
+                    console.log(`Unable to add thumb down to comment (id:${comment}) for subject id: ${subject}`);
+                    return null;
+                }
+            })
+            .catch(e => {
+                console.log(`Add thumb down to comment (id:${comment}) request failed. Caught exception: ${e}`);
+                return null;
+            });
     }
 
-    flag(university: number, subject: number, comment: number): void{
-        this.http
+    remThumbUp(university: number, subject: number, comment: number): Promise<SubjectComment>{
+        return this.http
+            .get(`http://localhost:8080/api/universities/university/${university}/subjects/subject/${subject}/comments/comment/${comment}/remThumbUp`)
+            .toPromise()
+            .then(response => {
+                if(response.status == 200){
+                    return response.json() as SubjectComment;
+                } else {
+                    console.log(`Unable to remove thumb up from comment (id:${comment}) for subject id: ${subject}`);
+                    return null;
+                }
+            })
+            .catch(e => {
+                console.log(`Remove thumb up from comment (id:${comment}) request failed. Caught exception: ${e}`);
+                return null;
+            });
+    }
+
+    remThumbDown(university: number, subject: number, comment: number): Promise<SubjectComment>{
+        return this.http
+            .get(`http://localhost:8080/api/universities/university/${university}/subjects/subject/${subject}/comments/comment/${comment}/remThumbDown`)
+            .toPromise()
+            .then(response => {
+                if(response.status == 200){
+                    return response.json() as SubjectComment;
+                } else {
+                    console.log(`Unable to remove thumb down from comment (id:${comment}) for subject id: ${subject}`);
+                    return null;
+                }
+            })
+            .catch(e => {
+                console.log(`Remove thumb down from comment (id:${comment}) request failed. Caught exception: ${e}`);
+                return null;
+            });
+    }
+
+    remThumbs(university: number, subject: number, comment: number): Promise<SubjectComment>{
+        return this.http
+            .get(`http://localhost:8080/api/universities/university/${university}/subjects/subject/${subject}/comments/comment/${comment}/remThumbs`)
+            .toPromise()
+            .then(response => {
+                if(response.status == 200){
+                    return response.json() as SubjectComment;
+                } else {
+                    console.log(`Unable to remove all thumbs from comment (id:${comment}) for subject id: ${subject}`);
+                    return null;
+                }
+            })
+            .catch(e => {
+                console.log(`Remove all thumbs from comment (id:${comment}) request failed. Caught exception: ${e}`);
+                return null;
+            });
+    }
+
+    flag(university: number, subject: number, comment: number): Promise<SubjectComment>{
+        return this.http
             .get(`http://localhost:8080/api/universities/university/${university}/subjects/subject/${subject}/comments/comment/${comment}/flag`)
-        //assuming no return is needed since fetch was promise
+            .toPromise()
+            .then(response => {
+                if(response.status == 200){
+                    return response.json() as SubjectComment;
+                } else {
+                    console.log(`Unable to flag comment (id:${comment}) for subject id: ${subject}`);
+                    return null;
+                }
+            })
+            .catch(e => {
+                console.log(`Flag comment (id:${comment}) request failed. Caught exception: ${e}`);
+                return null;
+            });
     }
 
-    unFlag(university: number, subject: number, comment: number): void{
-        this.http
+    unFlag(university: number, subject: number, comment: number): Promise<SubjectComment>{
+        return this.http
             .get(`http://localhost:8080/api/universities/university/${university}/subjects/subject/${subject}/comments/comment/${comment}/unflag`)
-        //assuming no return is needed since fetch was promise
+            .toPromise()
+            .then(response => {
+                if(response.status == 200){
+                    return response.json() as SubjectComment;
+                } else {
+                    console.log(`Unable to unflag comment (id:${comment}) for subject id: ${subject}`);
+                    return null;
+                }
+            })
+            .catch(e => {
+                console.log(`Unflag comment (id:${comment}) request failed. Caught exception: ${e}`);
+                return null;
+            });
     }
 }
