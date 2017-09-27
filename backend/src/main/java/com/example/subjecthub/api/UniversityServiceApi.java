@@ -13,7 +13,8 @@ public interface UniversityServiceApi {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<University> getUniversities(
-        @RequestParam(required = false) String abbreviation
+        @RequestParam(required = false) String abbreviation,
+        @RequestParam(required = false) String name
     );
 
     @RequestMapping(value = "university/{universityId}", method = RequestMethod.GET)
