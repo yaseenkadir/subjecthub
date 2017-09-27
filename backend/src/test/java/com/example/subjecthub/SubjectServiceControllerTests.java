@@ -145,7 +145,7 @@ public class SubjectServiceControllerTests {
             .andExpect(jsonPath("$", hasSize(0)))
             .andReturn();
     }
-
+/*
     @Test
     public void testAddComment() throws Exception {
         // creates dud subject then adds a comment
@@ -159,16 +159,14 @@ public class SubjectServiceControllerTests {
         mockMvc.perform(post("/api/universities/university/1/subjects/subject/"+s_id+"/comments/comment/add")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"comment\":\""+addCommentRequest.getComment()+"\"}"))
-            .andExpect(status().isOk()) /*
-                Alternatively, can use Gson to convert addCommentRequest to json using "gson.toJson(addCom...)"
-                if this is done, will not need to create a dependency on the key names.
-            */
+            .andExpect(status().isOk())
             .andExpect(jsonPath("$.subject.name", is(s.getName())))
             .andExpect(jsonPath("$.post", is(m)))
             .andExpect(jsonPath("$.thumbsUp", is(0)))
             .andExpect(jsonPath("$.thumbsDown", is(0)))
             .andReturn();
     }
+*/
 
     @Test
     public void testGetComments() throws Exception {

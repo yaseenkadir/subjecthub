@@ -109,11 +109,6 @@ public class SubjectServiceController implements SubjectServiceApi {
         @RequestBody AddCommentRequest addCommentRequest
     ){
         SubjectHubUser requester = getRequestingUser();
-        if(requester == null){
-            Application.log.error("Comment posted by null user, assuming test and posting as userId: 1");
-            requester = subjectHubUserRepository.findOne(Long.parseLong("1"));
-            //not sure how else to implement this such that a user can be specified during tests...
-        }
         SubjectComment newComment = new SubjectComment();
         newComment.setPost(addCommentRequest.getComment());
         newComment.setUser(requester);
@@ -175,8 +170,7 @@ public class SubjectServiceController implements SubjectServiceApi {
             userDetails =
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         } catch (NullPointerException|ClassCastException e) {
-            //throw new SubjectHubException("Not logged in.");
-            Application.log.error("Not logged in");
+            throw new SubjectHubException("Not logged in.");
             return null;
         }
 
@@ -184,9 +178,8 @@ public class SubjectServiceController implements SubjectServiceApi {
             userDetails.getUsername());
 
         if (!user.isPresent()) {
-            //throw new SubjectHubUnexpectedException(String.format("User %s is authenticated but " +
-            //"was not found in database", userDetails.getUsername()));
-            Application.log.error("User is authenticated but is not found in database!");
+            throw new SubjectHubUnexpectedException(String.format("User %s is authenticated but " +
+            "was not found in database", userDetails.getUsername()));
             return null;
         }
         return user.get();
