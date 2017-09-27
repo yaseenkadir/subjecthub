@@ -1,16 +1,15 @@
 package com.example.subjecthub.api;
 
+import com.example.subjecthub.dto.AddCommentRequest;
 import com.example.subjecthub.entity.Subject;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.example.subjecthub.entity.SubjectComment;
+import org.bouncycastle.cert.ocsp.Req;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequestMapping("/api/universities/university/{universityId}/subjects")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public interface SubjectServiceApi {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -30,5 +29,53 @@ public interface SubjectServiceApi {
     public Subject getSubject(
         @PathVariable Long universityId,
         @PathVariable Long subjectId
+    );
+
+    @RequestMapping(value = "/subject/{subjectId}/comments", method = RequestMethod.GET)
+    public List<SubjectComment> getComments(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId
+    );
+
+    @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}", method = RequestMethod.GET)
+    public SubjectComment getComment(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    );
+
+    @RequestMapping(value = "/subject/{subjectId}/comments/comment/add", method = RequestMethod.POST)
+    public SubjectComment commentAdd(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @RequestBody AddCommentRequest addCommentRequest
+    );
+
+    @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/thumbUp", method = RequestMethod.GET)
+    public SubjectComment commentThumbUp(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    );
+
+    @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/thumbDown", method = RequestMethod.GET)
+    public SubjectComment commentThumbDown(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    );
+
+    @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/flag", method = RequestMethod.GET)
+    public SubjectComment commentFlag(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    );
+
+    @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/unflag", method = RequestMethod.GET)
+    public SubjectComment commentUnflag(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
     );
 }
