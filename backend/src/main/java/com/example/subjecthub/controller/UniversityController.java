@@ -19,7 +19,12 @@ public class UniversityController implements UniversityServiceApi {
 
     @Override
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<University> getUniversities(@RequestParam(required = false) String abbreviation) {
+    public List<University> getUniversities(
+        @RequestParam(required = false) String abbreviation,
+        @RequestParam(required = false) String name
+    ) {
+        if (abbreviation != null && name != null)
+            return universityRepository.findByAbbreviationLikeIgnoreCaseOrNameLikeIgnoreCase(abbreviation, name);
         return universityRepository.findAll();
     }
 
