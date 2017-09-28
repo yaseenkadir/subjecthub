@@ -199,57 +199,6 @@ public class SubjectServiceController implements SubjectServiceApi {
         return subjectCommentRepository.save(result);
     }
 
-    @Override
-    public SubjectComment commentRemThumbUp(
-        @PathVariable Long universityId,
-        @PathVariable Long subjectId,
-        @PathVariable Long commentId
-    ){
-        SubjectComment result;
-        try{
-            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        }catch(NullPointerException|ClassCastException e){
-            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
-                ". Unable to remove thumb up.");
-        }
-        result.remThumbUp();
-        return subjectCommentRepository.save(result);
-    }
-
-    @Override
-    public SubjectComment commentRemThumbDown(
-        @PathVariable Long universityId,
-        @PathVariable Long subjectId,
-        @PathVariable Long commentId
-    ){
-        SubjectComment result;
-        try{
-            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        }catch(NullPointerException|ClassCastException e){
-            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
-                ". Unable to remove thumb down.");
-        }
-        result.remThumbDown();
-        return subjectCommentRepository.save(result);
-    }
-
-    @Override
-    public SubjectComment commentRemThumbs(
-        @PathVariable Long universityId,
-        @PathVariable Long subjectId,
-        @PathVariable Long commentId
-    ){
-        SubjectComment result;
-        try{
-            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        }catch(NullPointerException|ClassCastException e){
-            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
-                ". Unable to remove all thumbs.");
-        }
-        result.remThumbs();
-        return subjectCommentRepository.save(result);
-    }
-
     /**
      * Util method for POST methods
      */

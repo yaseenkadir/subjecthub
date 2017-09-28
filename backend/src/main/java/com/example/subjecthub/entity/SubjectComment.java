@@ -125,9 +125,6 @@ public class SubjectComment {
     //add one to thumbsUp
     public void addThumbUp(){this.thumbsUp++;}
 
-    //remove one from thumbsUp
-    public void remThumbUp(){this.thumbsUp--;}
-
     public int getThumbsDown() {
         return thumbsDown;
     }
@@ -138,12 +135,6 @@ public class SubjectComment {
 
     //add one to thumbsDown
     public void addThumbDown(){this.thumbsDown++;}
-
-    //remove one from thumbsDown
-    public void remThumbDown(){this.thumbsDown--;}
-
-    //remove all thumbs
-    public void remThumbs(){this.thumbsDown = 0; this.thumbsUp = 0;}
 
     @Override
     public String toString() {
