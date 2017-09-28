@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequestMapping(value="/api/universities/{university_id}/faculties")
+@RequestMapping(value="/api/universities/university/{universityId}/faculties")
 @RestController
 public class FacultyController {
 
@@ -19,20 +19,22 @@ public class FacultyController {
         return facultyRepository.findByCode(code);
     }
 
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Faculty> getFaculties(
         @PathVariable Long universityId,
         @RequestParam(required = false) String name,
         @RequestParam(required = false) String code
     ) {
         return facultyRepository.findByUniversityId(universityId).stream()
-            .filter(s -> (name == null||s.getName().equals(name)))
-            .filter(s -> (code == null||s.getCode().equals(code)))
+            .filter(s -> (name == null||s.getName().equalsIgnoreCase(name)))
+            .filter(s -> (code == null||s.getCode().equalsIgnoreCase(code)))
             .collect(Collectors.toList());
     }
 
+    @RequestMapping(value = "/faculty/{facultyId}", method = RequestMethod.GET)
     private Faculty getFaculty(
         @PathVariable Long universityId,
-        Long facultyId
+        @PathVariable Long facultyId
     ) {
         return facultyRepository.findOne(facultyId);
     }
