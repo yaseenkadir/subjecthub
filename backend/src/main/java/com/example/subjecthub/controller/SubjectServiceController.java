@@ -75,7 +75,7 @@ public class SubjectServiceController implements SubjectServiceApi {
 
             // if the subject is included on the tag then throw an error
             if (existingTag.getSubjects().contains(currentSubject)) {
-                throw new TagAlreadyExistsOnSubjectException();
+                throw new SubjectHubException("That Tag Already Exists");
             }
 
             existingTag.getSubjects().add(currentSubject);

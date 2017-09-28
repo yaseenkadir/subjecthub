@@ -14,6 +14,7 @@ import { FuseSearchBarComponent } from "../search-bar/fuse-search-bar.component"
 import { RegisterComponent } from './register/register.component';
 import {AlertModule} from "ngx-bootstrap";
 import { LoginComponent } from './login/login.component';
+import { AddTagComponent } from './add-tag/add-tag.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { LoginComponent } from './login/login.component';
     SearchBarComponent,
     FuseSearchBarComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    AddTagComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
