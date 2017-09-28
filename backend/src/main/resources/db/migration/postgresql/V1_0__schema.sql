@@ -57,7 +57,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE comments (
-    comment_id      BIGINT IDENTITY PRIMARY KEY,
+    comment_id      BIGINT PRIMARY KEY DEFAULT nextval('comments_seq'),
     user_id         BIGINT          NOT NULL,
     subject_id      BIGINT          NOT NULL,
     post            VARCHAR(200)    NOT NULL,
