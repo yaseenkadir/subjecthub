@@ -5,7 +5,7 @@ import { HttpModule } from "@angular/http";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 // Imports for loading & configuring the in-memory web api
 import { InMemoryWebApiModule } from "angular-in-memory-web-api";
-import { InMemoryDataService } from "./in-memory-data.service";
+import { InMemoryDataService } from "./utils/in-memory-data.service";
 
 import { AppComponent } from "./app.component";
 import { NavigationComponent } from "../navigation/navigation.component";

@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Http} from "@angular/http";
 
-import {environment} from '../environments/environment';
-import {SubjectHubApiResponse} from "./subject-hub-api-response";
+import {environment} from '../../environments/environment';
+import {SubjectHubApiResponse} from "../models/subject-hub-api-response";
 
 @Injectable()
 export class AuthService {
