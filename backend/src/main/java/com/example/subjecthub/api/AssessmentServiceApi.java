@@ -20,9 +20,10 @@ public interface AssessmentServiceApi {
     public List<Assessment> getAssessments(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
-        @RequestParam(required = false) Integer type,
+        @RequestParam(required = false) Assessment.AssessmentType type,
         @RequestParam(required = false) Integer weighting,
-        @RequestParam(required = false) Boolean groupWork
+        @RequestParam(required = false) Boolean groupWork,
+        @RequestParam(required = false) String name
     );
 
     //get a single assessment with assessmentId

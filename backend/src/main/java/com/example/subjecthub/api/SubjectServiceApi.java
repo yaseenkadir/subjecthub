@@ -2,10 +2,15 @@ package com.example.subjecthub.api;
 
 import com.example.subjecthub.dto.AddCommentRequest;
 import com.example.subjecthub.entity.Subject;
+
+import com.example.subjecthub.entity.Tag;
+
 import com.example.subjecthub.entity.SubjectComment;
 import org.bouncycastle.cert.ocsp.Req;
+
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RequestMapping("/api/universities/university/{universityId}/subjects")
@@ -24,6 +29,9 @@ public interface SubjectServiceApi {
         @RequestParam(required = false) Integer creditPoints,
         @RequestParam(required = false) String instructor
     );
+
+    @RequestMapping(value = "/subject/{subjectId}/addTag", method = RequestMethod.POST)
+    public Subject addTagToSubject(@PathVariable Long universityId, @PathVariable Long subjectId, @RequestBody Tag tag);
 
     @RequestMapping(value = "/subject/{subjectId}", method = RequestMethod.GET)
     public Subject getSubject(

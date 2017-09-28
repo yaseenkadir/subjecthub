@@ -1,17 +1,32 @@
 package com.example.subjecthub;
 
 import com.example.subjecthub.controller.SubjectServiceController;
+
+import com.example.subjecthub.entity.Faculty;
+import com.example.subjecthub.entity.Subject;
+import com.example.subjecthub.entity.Tag;
+import com.example.subjecthub.entity.University;
+import com.example.subjecthub.repository.FacultyRepository;
+import com.example.subjecthub.repository.SubjectRepository;
+import com.example.subjecthub.repository.TagRepository;
+import com.example.subjecthub.repository.UniversityRepository;
+import com.example.subjecthub.testutils.TestUtils;
+
+
 import com.example.subjecthub.dto.AddCommentRequest;
 import com.example.subjecthub.entity.*;
 import com.example.subjecthub.repository.*;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -43,6 +58,9 @@ public class SubjectServiceControllerTests {
     SubjectRepository subjectRepository;
 
     @Autowired
+    TagRepository tagRepository;
+
+    @Autowired
     FacultyRepository facultyRepository;
 
     @Autowired
@@ -67,6 +85,81 @@ public class SubjectServiceControllerTests {
 
         this.university = universityRepository.findAll().get(0);
         this.faculty = facultyRepository.findByUniversityId(university.getId()).get(0);
+    }
+    @Test
+    public void testAddNewTagToSubjectThatExists() throws Exception {
+        Tag tag = new Tag("Test Tag");
+
+        String requestJson = TestUtils.asJson(tag);
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void testAddNewTagToSubjectThatDoesNotExist() throws Exception {
+        Tag tag = new Tag("Test Tag");
+
+        String requestJson = TestUtils.asJson(tag);
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/400/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testAddExistingTagToSubjectThatExists() throws Exception {
+        Tag tag = new Tag("Test Tag");
+
+        String requestJson = TestUtils.asJson(tag);
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isOk());
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/2/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testAddExistingTagToSubjectThatDoesNotExist() throws Exception {
+        Tag tag = new Tag("Test Tag");
+
+        String requestJson = TestUtils.asJson(tag);
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isOk());
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/400/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testAddExistingTagToSubjectThatAlreadyHasTag() throws Exception {
+        Tag tag = new Tag("Test Tag");
+
+        String requestJson = TestUtils.asJson(tag);
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isOk());
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isNotAcceptable());
     }
 
     @Test
@@ -281,6 +374,8 @@ public class SubjectServiceControllerTests {
             .andExpect(jsonPath("$.flagged", is(false)))
             .andReturn();
     }
+
+
 
     /**
      * Util test method that handles extraneous params for creating subject objects.

@@ -50,6 +50,22 @@ CREATE TABLE users (
 );
 
 
+CREATE TABLE tags (
+    tag_id BIGINT IDENTITY PRIMARY KEY,
+    name VARCHAR (200) NOT NULL UNIQUE,
+);
+
+CREATE TABLE tags_subjects (
+    tag_id BIGINT NOT NULL,
+    subject_id BIGINT NOT NULL,
+    FOREIGN KEY (tag_id) REFERENCES tags (tag_id),
+    FOREIGN KEY (subject_id) REFERENCES subjects (subject_id),
+    PRIMARY KEY(tag_id, subject_id)
+);
+
+
+
+
 CREATE TABLE comments (
     comment_id      BIGINT IDENTITY PRIMARY KEY,
     user_id         BIGINT          NOT NULL,
@@ -62,3 +78,4 @@ CREATE TABLE comments (
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (subject_id) REFERENCES subjects (subject_id)
 );
+
