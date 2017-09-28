@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/share';
-import { SubjectComment } from './subject-comment';
+import { SubjectComment } from '../models/subject-comment';
 
 @Injectable()
 export class SubjectCommentsService {
