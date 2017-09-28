@@ -4,14 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -75,10 +69,20 @@ public class Subject {
     @JoinColumn(name = "subject_id")
     private List<Assessment> assessments;
 
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "tags_subjects",
+        joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "subject_id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
+    )
+    private List<Tag> tags = new ArrayList<>();
+
     @OneToMany
     @JoinColumn(name = "subject_id")
     @JsonIgnoreProperties(value = {"subject"})
     private List<SubjectComment> comments;
+
 
     public Subject() {
     }
@@ -204,12 +208,23 @@ public class Subject {
         this.assessments = assessments;
     }
 
+
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
     public List<SubjectComment> getComments() {
         return comments;
     }
 
     public void setComments(List<SubjectComment> comments) {
         this.comments = comments;
+
     }
 
     @Override

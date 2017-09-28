@@ -5,12 +5,27 @@ import com.example.subjecthub.api.SubjectServiceApi;
 import com.example.subjecthub.dto.AddCommentRequest;
 import com.example.subjecthub.dto.SubjectHubUserResponse;
 import com.example.subjecthub.entity.Subject;
+
+import com.example.subjecthub.entity.Tag;
+
 import com.example.subjecthub.entity.SubjectComment;
 import com.example.subjecthub.entity.SubjectHubUser;
 import com.example.subjecthub.repository.SubjectCommentRepository;
 import com.example.subjecthub.repository.SubjectHubUserRepository;
+
 import com.example.subjecthub.repository.SubjectRepository;
+import com.example.subjecthub.repository.TagRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
+
+import com.example.subjecthub.utils.SubjectNotFoundException;
+import com.example.subjecthub.utils.TagAlreadyExistsOnSubjectException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.example.subjecthub.utils.SubjectHubException;
 import com.example.subjecthub.utils.SubjectHubUnexpectedException;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +37,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,10 +51,51 @@ public class SubjectServiceController implements SubjectServiceApi {
     private SubjectRepository subjectRepository;
 
     @Autowired
+    private TagRepository tagRepository;
+
+    @Autowired
     private SubjectHubUserRepository subjectHubUserRepository;
 
     @Autowired
     private SubjectCommentRepository subjectCommentRepository;
+
+
+    @Override
+    public Subject addTagToSubject(@PathVariable Long universityId,  @PathVariable Long subjectId, @RequestBody Tag tag) {
+
+        Subject currentSubject = subjectRepository.findOne(subjectId);
+
+        if (currentSubject == null) {
+            throw new SubjectNotFoundException();
+        }
+
+        Tag existingTag = tagRepository.findByName(tag.getName());
+
+        if (existingTag != null) {
+
+            // if the subject is included on the tag then throw an error
+            if (existingTag.getSubjects().contains(currentSubject)) {
+                throw new TagAlreadyExistsOnSubjectException();
+            }
+
+            existingTag.getSubjects().add(currentSubject);
+            tagRepository.save(existingTag);
+
+            currentSubject.getTags().add(existingTag);
+            subjectRepository.save(currentSubject);
+
+            return currentSubject;
+        }
+
+        tag.getSubjects().add(currentSubject);
+        currentSubject.getTags().add(tag);
+
+        subjectRepository.save(currentSubject);
+        return currentSubject;
+
+    }
+
+
 
     @Override
     public List<Subject> getSubjects(
