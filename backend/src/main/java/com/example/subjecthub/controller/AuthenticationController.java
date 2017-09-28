@@ -20,10 +20,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +29,7 @@ import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
 public class AuthenticationController {
 
     @Autowired
@@ -68,6 +66,7 @@ public class AuthenticationController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("token", jwtTokenUtils.generateToken(authRequest.getUsername()));
+        Application.log.info("{} logged in.", authRequest.getUsername());
         return ResponseEntity.ok(response);
     }
 
@@ -78,10 +77,12 @@ public class AuthenticationController {
         // TODO: Handle usernames as case insensitive
         // I.e. usernames are still displayed with case sensitivity but are treated as case insensitive.
         validateRegisterRequest(registerRequest);
+        Application.log.info("Received register request with: {}", registerRequest);
         String hashedPassword = bCryptPasswordEncoder.encode(registerRequest.getPassword());
         SubjectHubUser subjectHubUser = new SubjectHubUser(registerRequest.getUsername(),
             hashedPassword, registerRequest.getEmail());
         subjectHubUserRepository.save(subjectHubUser);
+        Application.log.info("{} successfully registered.", registerRequest.getUsername());
         return ResponseEntity.ok(null);
     }
 
