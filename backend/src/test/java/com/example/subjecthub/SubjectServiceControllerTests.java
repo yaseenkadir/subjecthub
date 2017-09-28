@@ -1,17 +1,32 @@
 package com.example.subjecthub;
 
 import com.example.subjecthub.controller.SubjectServiceController;
+
 import com.example.subjecthub.entity.Faculty;
 import com.example.subjecthub.entity.Subject;
+import com.example.subjecthub.entity.Tag;
 import com.example.subjecthub.entity.University;
 import com.example.subjecthub.repository.FacultyRepository;
 import com.example.subjecthub.repository.SubjectRepository;
+import com.example.subjecthub.repository.TagRepository;
 import com.example.subjecthub.repository.UniversityRepository;
+import com.example.subjecthub.testutils.TestUtils;
+
+
+import com.example.subjecthub.dto.AddCommentRequest;
+import com.example.subjecthub.entity.*;
+import com.example.subjecthub.repository.*;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -19,9 +34,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Optional;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -40,10 +58,19 @@ public class SubjectServiceControllerTests {
     SubjectRepository subjectRepository;
 
     @Autowired
+    TagRepository tagRepository;
+
+    @Autowired
     FacultyRepository facultyRepository;
 
     @Autowired
     UniversityRepository universityRepository;
+
+    @Autowired
+    SubjectCommentRepository subjectCommentRepository;
+
+    @Autowired
+    SubjectHubUserRepository subjectHubUserRepository;
 
     private MockMvc mockMvc;
 
@@ -58,6 +85,81 @@ public class SubjectServiceControllerTests {
 
         this.university = universityRepository.findAll().get(0);
         this.faculty = facultyRepository.findByUniversityId(university.getId()).get(0);
+    }
+    @Test
+    public void testAddNewTagToSubjectThatExists() throws Exception {
+        Tag tag = new Tag("Test Tag");
+
+        String requestJson = TestUtils.asJson(tag);
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void testAddNewTagToSubjectThatDoesNotExist() throws Exception {
+        Tag tag = new Tag("Test Tag");
+
+        String requestJson = TestUtils.asJson(tag);
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/400/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testAddExistingTagToSubjectThatExists() throws Exception {
+        Tag tag = new Tag("Test Tag");
+
+        String requestJson = TestUtils.asJson(tag);
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isOk());
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/2/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testAddExistingTagToSubjectThatDoesNotExist() throws Exception {
+        Tag tag = new Tag("Test Tag");
+
+        String requestJson = TestUtils.asJson(tag);
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isOk());
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/400/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testAddExistingTagToSubjectThatAlreadyHasTag() throws Exception {
+        Tag tag = new Tag("Test Tag");
+
+        String requestJson = TestUtils.asJson(tag);
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isOk());
+        mockMvc
+            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isNotAcceptable());
     }
 
     @Test
@@ -136,6 +238,144 @@ public class SubjectServiceControllerTests {
             .andExpect(jsonPath("$", hasSize(0)))
             .andReturn();
     }
+/*
+    @Test
+    public void testAddComment() throws Exception {
+        // creates dud subject then adds a comment
+        Subject s = createSubject("test", "ABCDEF");
+        Long s_id = s.getId();
+        String m = "tasty";
+
+        AddCommentRequest addCommentRequest = new AddCommentRequest(m);
+
+        // Checks that new subject appears in list
+        mockMvc.perform(post("/api/universities/university/1/subjects/subject/"+s_id+"/comments/comment/add")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"comment\":\""+addCommentRequest.getComment()+"\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.subject.name", is(s.getName())))
+            .andExpect(jsonPath("$.post", is(m)))
+            .andExpect(jsonPath("$.thumbsUp", is(0)))
+            .andExpect(jsonPath("$.thumbsDown", is(0)))
+            .andReturn();
+    }
+*/
+
+    @Test
+    public void testGetComments() throws Exception {
+        //test that a list of comments can be pulled for a subject
+        Subject s = createSubject("test", "ABC");
+        Long u_id = Long.parseLong("1");
+        SubjectComment c1 = createComment(u_id, s.getId(), "yumyum1");
+        SubjectComment c2 = createComment(u_id, s.getId(), "yumyum2");
+        SubjectComment c3 = createComment(u_id, s.getId(), "yumyum3");
+        SubjectComment c4 = createComment(u_id, s.getId(), "yumyum4");
+        SubjectComment c5 = createComment(u_id, s.getId(), "yumyum5");
+
+        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+"/comments"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$..post", hasSize(5)))
+            .andReturn();
+    }
+
+    @Test
+    public void testGetSingleComment() throws Exception {
+        //creates subject with comment
+        Subject s = createSubject("test", "ABC");
+        Long u_id = Long.parseLong("1");
+        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+
+        //checks it can be grabbed
+        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
+            "/comments/comment/"+c.getId()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.user.id", is(1)))
+            .andExpect(jsonPath("$.subject.name", is(s.getName())))
+            .andExpect(jsonPath("$.post",is("yumyum")))
+            .andExpect(jsonPath("$.thumbsUp", is(0)))
+            .andExpect(jsonPath("$.thumbsDown", is(0)))
+            .andReturn();
+    }
+
+    @Test
+    public void thumbUpComment() throws Exception {
+        //creates subject with comment
+        Subject s = createSubject("test", "ABC");
+        Long u_id = Long.parseLong("1");
+        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+
+        //checks it can be thumbed up
+        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
+            "/comments/comment/"+c.getId()+"/thumbUp"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.user.id", is(1)))
+            .andExpect(jsonPath("$.subject.name", is(s.getName())))
+            .andExpect(jsonPath("$.post",is("yumyum")))
+            .andExpect(jsonPath("$.thumbsUp", is(1)))
+            .andExpect(jsonPath("$.thumbsDown", is(0)))
+            .andReturn();
+    }
+
+    @Test
+    public void thumbDownComment() throws Exception {
+        //creates subject with comment
+        Subject s = createSubject("test", "ABC");
+        Long u_id = Long.parseLong("1");
+        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+
+        //checks it can be thumbed down
+        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
+            "/comments/comment/"+c.getId()+"/thumbDown"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.user.id", is(1)))
+            .andExpect(jsonPath("$.subject.name", is(s.getName())))
+            .andExpect(jsonPath("$.post",is("yumyum")))
+            .andExpect(jsonPath("$.thumbsUp", is(0)))
+            .andExpect(jsonPath("$.thumbsDown", is(1)))
+            .andReturn();
+    }
+
+    @Test
+    public void flagComment() throws Exception {
+        //creates subject with comment
+        Subject s = createSubject("test", "ABC");
+        Long u_id = Long.parseLong("1");
+        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+
+        //checks it can be flagged
+        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
+            "/comments/comment/"+c.getId()+"/flag"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.user.id", is(1)))
+            .andExpect(jsonPath("$.subject.name", is(s.getName())))
+            .andExpect(jsonPath("$.post",is("yumyum")))
+            .andExpect(jsonPath("$.thumbsUp", is(0)))
+            .andExpect(jsonPath("$.thumbsDown", is(0)))
+            .andExpect(jsonPath("$.flagged", is(true)))
+            .andReturn();
+    }
+
+    @Test
+    public void unflagComment() throws Exception {
+        //creates subject with comment
+        Subject s = createSubject("test", "ABC");
+        Long u_id = Long.parseLong("1");
+        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+
+        //checks it can be unflagged
+        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
+            "/comments/comment/"+c.getId()+"/unflag"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.user.id", is(1)))
+            .andExpect(jsonPath("$.subject.name", is(s.getName())))
+            .andExpect(jsonPath("$.post",is("yumyum")))
+            .andExpect(jsonPath("$.thumbsUp", is(0)))
+            .andExpect(jsonPath("$.thumbsDown", is(0)))
+            .andExpect(jsonPath("$.flagged", is(false)))
+            .andReturn();
+    }
+
+
 
     /**
      * Util test method that handles extraneous params for creating subject objects.
@@ -156,5 +396,17 @@ public class SubjectServiceControllerTests {
         testSubject.setUndergrad(true);
         testSubject.setPostgrad(true);
         return subjectRepository.save(testSubject);
+    }
+
+    /**
+     * Util test method that handles extraneous params for creating comment objects.
+     */
+    private SubjectComment createComment(Long userid, Long subjectid, String message){
+        SubjectComment newComment = new SubjectComment();
+        newComment.setPostTimeNow();
+        newComment.setUser(subjectHubUserRepository.findOne(userid));
+        newComment.setSubject(subjectRepository.findOne(subjectid));
+        newComment.setPost(message);
+        return subjectCommentRepository.save(newComment);
     }
 }

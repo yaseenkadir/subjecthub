@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/share';
-import { SubjectResult } from './subject-result';
+import { SubjectResult } from '../models/subject-result';
 
 @Injectable()
 export class SubjectSearchService {

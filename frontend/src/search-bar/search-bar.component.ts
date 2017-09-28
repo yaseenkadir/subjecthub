@@ -9,8 +9,8 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import { SubjectSearchService } from '../app/subject-search.service';
-import { SubjectResult } from '../app/subject-result';
+import { SubjectSearchService } from '../app/services/subject-search.service';
+import { SubjectResult } from '../app/models/subject-result';
 
 class Option {
   name: string;

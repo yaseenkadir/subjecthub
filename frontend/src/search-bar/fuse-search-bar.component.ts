@@ -8,8 +8,8 @@ import "rxjs/add/observable/of";
 import "rxjs/add/operator/switchMap";
 import "rxjs/add/operator/toPromise";
 
-import { SubjectSearchService } from "../app/subject-search.service";
-import { SubjectResult } from "../app/subject-result";
+import { SubjectSearchService } from "../app/services/subject-search.service";
+import { SubjectResult } from "../app/models/subject-result";
 
 @Component({
   selector: "fuse-search-bar",
