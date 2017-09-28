@@ -149,7 +149,11 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long subjectId
     ){
-        return subjectCommentRepository.findBySubject_Id(subjectId);
+        List<SubjectComment> results = subjectCommentRepository.findBySubject_Id(subjectId);
+        if(results.isEmpty()){
+            throw new SubjectHubException(String.format("No comments found for subject id: %s", subjectId));
+        }
+        return results;
     }
 
     @Override
@@ -158,7 +162,12 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        return subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        SubjectComment result = subjectCommentRepository.findOne(commentId);
+        if(result == null){
+            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject" +
+                " id: %s", commentId, subjectId));
+        }
+        return result;
     }
 
     @Override
@@ -177,36 +186,48 @@ public class SubjectServiceController implements SubjectServiceApi {
     }
 
     @Override
-    public SubjectComment commentThumbUp(
+    public SubjectComment commentAddThumbUp(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        comment.addThumbUp();
-        return subjectCommentRepository.save(comment);
+        SubjectComment result = subjectCommentRepository.findOne(commentId);
+        if(result == null){
+            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject id: %s. " +
+                "Unable to add thumb up.", commentId,subjectId));
+        }
+        result.addThumbUp();
+        return subjectCommentRepository.save(result);
     }
 
     @Override
-    public SubjectComment commentThumbDown(
+    public SubjectComment commentAddThumbDown(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        comment.addThumbDown();
-        return subjectCommentRepository.save(comment);
+        SubjectComment result = subjectCommentRepository.findOne(commentId);
+        if(result == null){
+            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject id: %s. " +
+                "Unable to add thumb down.", commentId,subjectId));
+        }
+        result.addThumbDown();
+        return subjectCommentRepository.save(result);
     }
 
-    @Override
+    @Override //flagged comment body should be hidden with placeholder text from frontend view
     public SubjectComment commentFlag(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        comment.setFlagged(true);
-        return subjectCommentRepository.save(comment);
+        SubjectComment result = subjectCommentRepository.findOne(commentId);
+        if(result == null){
+            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject id: %s. " +
+                "Unable to flag.", commentId,subjectId));
+        }
+        result.setFlagged(true);
+        return subjectCommentRepository.save(result);
     }
 
     @Override
@@ -215,9 +236,13 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        comment.setFlagged(false);
-        return subjectCommentRepository.save(comment);
+        SubjectComment result = subjectCommentRepository.findOne(commentId);
+        if(result == null){
+            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject id: %s. " +
+                "Unable to unflag.", commentId,subjectId));
+        }
+        result.setFlagged(false);
+        return subjectCommentRepository.save(result);
     }
 
     /**
