@@ -69,6 +69,7 @@ public class Subject {
     @JoinColumn(name = "subject_id")
     private List<Assessment> assessments;
 
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
         name = "tags_subjects",
@@ -76,6 +77,12 @@ public class Subject {
         inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
     )
     private List<Tag> tags = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "subject_id")
+    @JsonIgnoreProperties(value = {"subject"})
+    private List<SubjectComment> comments;
+
 
     public Subject() {
     }
@@ -202,12 +209,22 @@ public class Subject {
     }
 
 
+
     public List<Tag> getTags() {
         return tags;
     }
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public List<SubjectComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<SubjectComment> comments) {
+        this.comments = comments;
+
     }
 
     @Override

@@ -10,4 +10,8 @@ public interface SubjectHubUserRepository extends CrudRepository<SubjectHubUser,
     Optional<SubjectHubUser> findByUsername(String username);
 
     Optional<SubjectHubUser> findByEmail(String email);
+
+    Boolean existsByUsername(String username);
+
+    Boolean existsByEmail(String email);
 }

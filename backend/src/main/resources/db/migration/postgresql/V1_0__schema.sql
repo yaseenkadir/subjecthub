@@ -1,11 +1,18 @@
+CREATE SEQUENCE universities_seq;
+CREATE SEQUENCE faculties_seq;
+CREATE SEQUENCE subjects_seq;
+CREATE SEQUENCE assessments_seq;
+CREATE SEQUENCE comments_seq;
+CREATE SEQUENCE users_seq;
+
 CREATE TABLE universities (
-    university_id BIGINT IDENTITY PRIMARY KEY,
+    university_id BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('universities_seq'),
     name          VARCHAR(100) NOT NULL,
     abbreviation  VARCHAR(5)   NOT NULL
 );
 
 CREATE TABLE faculties (
-    faculty_id    BIGINT IDENTITY PRIMARY KEY,
+    faculty_id    BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('faculties_seq'),
     name          VARCHAR(100) NOT NULL,
     code          VARCHAR(5)   DEFAULT NULL,
     university_id BIGINT       NOT NULL,
@@ -13,7 +20,7 @@ CREATE TABLE faculties (
 );
 
 CREATE TABLE subjects (
-    subject_id       BIGINT IDENTITY PRIMARY KEY,
+    subject_id       BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('subjects_seq'),
     code             VARCHAR(10)    NOT NULL,
     name             VARCHAR(100)   NOT NULL,
     credit_points    INT            NOT NULL,
@@ -31,7 +38,7 @@ CREATE TABLE subjects (
 );
 
 CREATE TABLE assessments (
-    assessment_id BIGINT IDENTITY PRIMARY KEY,
+    assessment_id BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('assessments_seq'),
     name          VARCHAR(100) NOT NULL,
     description   VARCHAR(100) NOT NULL,
     weighting     INT          NOT NULL,
@@ -43,28 +50,11 @@ CREATE TABLE assessments (
 );
 
 CREATE TABLE users (
-    user_id BIGINT IDENTITY PRIMARY KEY,
+    user_id BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('users_seq'),
     username VARCHAR(20) UNIQUE NOT NULL,
     password VARCHAR(60) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL
 );
-
-
-CREATE TABLE tags (
-    tag_id BIGINT IDENTITY PRIMARY KEY,
-    name VARCHAR (200) NOT NULL UNIQUE,
-);
-
-CREATE TABLE tags_subjects (
-    tag_id BIGINT NOT NULL,
-    subject_id BIGINT NOT NULL,
-    FOREIGN KEY (tag_id) REFERENCES tags (tag_id),
-    FOREIGN KEY (subject_id) REFERENCES subjects (subject_id),
-    PRIMARY KEY(tag_id, subject_id)
-);
-
-
-
 
 CREATE TABLE comments (
     comment_id      BIGINT IDENTITY PRIMARY KEY,
@@ -78,4 +68,3 @@ CREATE TABLE comments (
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (subject_id) REFERENCES subjects (subject_id)
 );
-
