@@ -2,26 +2,43 @@ package com.example.subjecthub.controller;
 
 import com.example.subjecthub.Application;
 import com.example.subjecthub.api.SubjectServiceApi;
+import com.example.subjecthub.dto.AddCommentRequest;
+import com.example.subjecthub.dto.SubjectHubUserResponse;
 import com.example.subjecthub.entity.Subject;
+import com.example.subjecthub.entity.SubjectComment;
+import com.example.subjecthub.entity.SubjectHubUser;
+import com.example.subjecthub.repository.SubjectCommentRepository;
+import com.example.subjecthub.repository.SubjectHubUserRepository;
 import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
+import com.example.subjecthub.utils.SubjectHubException;
+import com.example.subjecthub.utils.SubjectHubUnexpectedException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @ParametersAreNonnullByDefault
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class SubjectServiceController implements SubjectServiceApi {
 
     @Autowired
     private SubjectRepository subjectRepository;
+
+    @Autowired
+    private SubjectHubUserRepository subjectHubUserRepository;
+
+    @Autowired
+    private SubjectCommentRepository subjectCommentRepository;
 
     @Override
     public List<Subject> getSubjects(
@@ -68,5 +85,103 @@ public class SubjectServiceController implements SubjectServiceApi {
         // TODO: Return null or throw exception if no subject is found
         // TODO: Don't allow cross university fetching
         return subjectRepository.findOne(subjectId);
+    }
+
+    @Override
+    public List<SubjectComment> getComments(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId
+    ){
+        return subjectCommentRepository.findBySubject_Id(subjectId);
+    }
+
+    @Override
+    public SubjectComment getComment(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    ){
+        return subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+    }
+
+    @Override
+    public SubjectComment commentAdd(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @RequestBody AddCommentRequest addCommentRequest
+    ){
+        SubjectHubUser requester = getRequestingUser();
+        SubjectComment newComment = new SubjectComment();
+        newComment.setPost(addCommentRequest.getComment());
+        newComment.setUser(requester);
+        newComment.setSubject(subjectRepository.findOne(subjectId));
+        newComment.setPostTimeNow();
+        return subjectCommentRepository.save(newComment);
+    }
+
+    @Override
+    public SubjectComment commentThumbUp(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    ){
+        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        comment.addThumbUp();
+        return subjectCommentRepository.save(comment);
+    }
+
+    @Override
+    public SubjectComment commentThumbDown(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    ){
+        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        comment.addThumbDown();
+        return subjectCommentRepository.save(comment);
+    }
+
+    @Override
+    public SubjectComment commentFlag(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    ){
+        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        comment.setFlagged(true);
+        return subjectCommentRepository.save(comment);
+    }
+
+    @Override
+    public SubjectComment commentUnflag(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long commentId
+    ){
+        SubjectComment comment = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
+        comment.setFlagged(false);
+        return subjectCommentRepository.save(comment);
+    }
+
+    /**
+     * Util method for POST methods
+     */
+    private SubjectHubUser getRequestingUser(){
+        UserDetails userDetails;
+        try {
+            userDetails =
+                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (NullPointerException|ClassCastException e) {
+            throw new SubjectHubException("Not logged in.");
+        }
+
+        Optional<SubjectHubUser> user = subjectHubUserRepository.findByUsername(
+            userDetails.getUsername());
+
+        if (!user.isPresent()) {
+            throw new SubjectHubUnexpectedException(String.format("User %s is authenticated but " +
+            "was not found in database", userDetails.getUsername()));
+        }
+        return user.get();
     }
 }

@@ -75,6 +75,11 @@ public class Subject {
     @JoinColumn(name = "subject_id")
     private List<Assessment> assessments;
 
+    @OneToMany
+    @JoinColumn(name = "subject_id")
+    @JsonIgnoreProperties(value = {"subject"})
+    private List<SubjectComment> comments;
+
     public Subject() {
     }
 
@@ -197,6 +202,14 @@ public class Subject {
 
     public void setAssessments(List<Assessment> assessments) {
         this.assessments = assessments;
+    }
+
+    public List<SubjectComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<SubjectComment> comments) {
+        this.comments = comments;
     }
 
     @Override

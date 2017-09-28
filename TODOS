@@ -17,15 +17,22 @@ Later
 TODO: Add commenting
 1. Add Comment to database schema
 2. Add Comment entity
-3. Add comments field to Subjects
+3. Add comments field to Subjects (list)
+3.3 Add comments field to SubjectHubUsers (list)
+3.6 Add some subject comments data in data.sql
 4. Add api method to SubjectServiceApi allowing comments
 5. Add implementation for comments to SubjectServiceController
-6. Add comments component to subjects page
-7. Add comments input field on the subject details page
+5.5 Add comments service to frontend TODO
+6. Add comments component to subjects page TODO
+7. Add comments input field on the subject details page TODO
 
 Later
 8. Add flagging
 9. Add thumbs up options
+
+Need To Confirm
+1. How many thumbs can one user give/can they revoke/how is it controlled
+2. I am suspicious that flagged attribute in comments table (schema) defaults to null as opposed to false?
 
 TODO: Add home page which lets users select their university
 
