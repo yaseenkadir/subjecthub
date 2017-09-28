@@ -92,11 +92,9 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long subjectId
     ){
-        List<SubjectComment> results;
-        try {
-            results = subjectCommentRepository.findBySubject_Id(subjectId);
-        }catch(NullPointerException|ClassCastException e){
-            throw new SubjectHubException("No comments found for subject id: "+subjectId);
+        List<SubjectComment> results = subjectCommentRepository.findBySubject_Id(subjectId);
+        if(results.isEmpty()){
+            throw new SubjectHubException(String.format("No comments found for subject id: %s", subjectId));
         }
         return results;
     }
@@ -107,11 +105,10 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment result;
-        try {
-            result = subjectCommentRepository.findBySubject_IdAndId(subjectId, commentId);
-        }catch(NullPointerException|ClassCastException e){
-            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId);
+        SubjectComment result = subjectCommentRepository.findOne(commentId);
+        if(result == null){
+            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject" +
+                " id: %s", commentId, subjectId));
         }
         return result;
     }
@@ -137,12 +134,10 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment result;
-        try{
-            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        }catch(NullPointerException|ClassCastException e){
-            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
-                ". Unable to add thumb up.");
+        SubjectComment result = subjectCommentRepository.findOne(commentId);
+        if(result == null){
+            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject id: %s. " +
+                "Unable to add thumb up.", commentId,subjectId));
         }
         result.addThumbUp();
         return subjectCommentRepository.save(result);
@@ -154,12 +149,10 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment result;
-        try{
-            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        }catch(NullPointerException|ClassCastException e){
-            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
-                ". Unable to add thumb down.");
+        SubjectComment result = subjectCommentRepository.findOne(commentId);
+        if(result == null){
+            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject id: %s. " +
+                "Unable to add thumb down.", commentId,subjectId));
         }
         result.addThumbDown();
         return subjectCommentRepository.save(result);
@@ -171,12 +164,10 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment result;
-        try{
-            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        }catch(NullPointerException|ClassCastException e){
-            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
-                ". Unable to flag.");
+        SubjectComment result = subjectCommentRepository.findOne(commentId);
+        if(result == null){
+            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject id: %s. " +
+                "Unable to flag.", commentId,subjectId));
         }
         result.setFlagged(true);
         return subjectCommentRepository.save(result);
@@ -188,12 +179,10 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ){
-        SubjectComment result;
-        try{
-            result = subjectCommentRepository.findBySubject_IdAndId(subjectId,commentId);
-        }catch(NullPointerException|ClassCastException e){
-            throw new SubjectHubException("Specified comment id: "+commentId+", not found for subject id: "+subjectId+
-                ". Unable to unflag.");
+        SubjectComment result = subjectCommentRepository.findOne(commentId);
+        if(result == null){
+            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject id: %s. " +
+                "Unable to unflag.", commentId,subjectId));
         }
         result.setFlagged(false);
         return subjectCommentRepository.save(result);
