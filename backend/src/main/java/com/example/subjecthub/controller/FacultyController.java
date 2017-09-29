@@ -27,7 +27,7 @@ public class FacultyController {
     ) {
         return facultyRepository.findByUniversityId(universityId).stream()
             .filter(s -> (name == null||s.getName().equalsIgnoreCase(name)))
-            .filter(s -> (code == null||s.getCode().equalsIgnoreCase(code)))
+            .filter(s -> (code == null||code.equalsIgnoreCase(s.getCode())))
             .collect(Collectors.toList());
     }
 

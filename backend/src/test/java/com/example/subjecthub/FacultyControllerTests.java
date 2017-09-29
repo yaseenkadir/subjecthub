@@ -42,7 +42,6 @@ public class FacultyControllerTests {
     private MockMvc mockMvc;
     private University university;
 
-
     @Before
     public void setUp() throws Exception {
         mockMvc = MockMvcBuilders
@@ -50,31 +49,52 @@ public class FacultyControllerTests {
             .build();
 
         this.university = universityRepository.findAll().get(0);
+
     }
     @Test
-    public void testGetFaculties() throws Exception {
+    public void testGetFacultiesWithoutParams() throws Exception {
         // test getFaculties when no params are provided
-        mockMvc.perform(get("/api/universities/university/1/faculties"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(3)))
-            .andReturn();
+        makeTestUniversity();
 
+        mockMvc.perform(get("/api/universities/university/"
+            + makeTestUniversity().getId() + "/faculties"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(2)))
+            .andReturn();
+    }
+    @Test
+    public void testGetFacultiesWithName() throws Exception {
         // test getFaculties when name param is provided
-        mockMvc.perform(get("/api/universities/university/1/faculties?name=" +
-            "faculty of engineering and information technology"))
+            mockMvc.perform(get("/api/universities/university/1/faculties?name=" +
+            "faculty of testing"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andReturn();
+    }
+    @Test
+    public void testGetFacultiesWithNullCode() throws Exception {
+        // test getFaculties when faculty has a code that is null
+       makeTestUniversity();
 
+        mockMvc.perform(get("/api/universities/university/" + makeTestUniversity().getId() + "/faculties"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(2)))
+            .andReturn();
+    }
+
+    @Test
+    public void testGetFacultiesWithCode() throws Exception {
         // test getFaculties when code param is provided
-        mockMvc.perform(get("/api/universities/university/1/faculties?code=feit"))
+        mockMvc.perform(get("/api/universities/university/1/faculties?code=FoT"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andReturn();
-
+    }
+    @Test
+    public void testGetFacultiesWithNameAndCode() throws Exception {
         // test getFaculties when both params are provided
-        mockMvc.perform(get("/api/universities/university/1/faculties?code=feit&name=" +
-            "faculty of engineering and Information Technology"))
+        mockMvc.perform(get("/api/universities/university/1/faculties?code=FoT&name=" +
+            "faculty of testing"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andReturn();
@@ -89,6 +109,19 @@ public class FacultyControllerTests {
             .andExpect(jsonPath("$.name", Matchers.is("Faculty of SpringKings")))
             .andExpect(jsonPath("$.code", Matchers.is("spr")))
             .andReturn();
+    }
+
+    private University makeTestUniversity() {
+        University testUniversity = new University("University of No Codes", "NoCo");
+        testUniversity = universityRepository.save(testUniversity);
+
+        Faculty facultyWithoutACode = new Faculty("Faculty without a code", null, testUniversity);
+        facultyWithoutACode = facultyRepository.save(facultyWithoutACode);
+
+        Faculty facultyWithACode = new Faculty("Faculty with a code", "yes", testUniversity);
+        facultyWithACode = facultyRepository.save(facultyWithACode);
+
+        return testUniversity;
     }
 
     private Faculty createFaculty(String name, String code) {
