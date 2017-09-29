@@ -1,5 +1,7 @@
 package com.example.subjecthub.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.Column;
@@ -30,6 +32,7 @@ public class Faculty {
 
     @ManyToOne
     @JoinColumn(name = "university_id")
+    @JsonIgnore
     private University university;
 
     public Faculty() {
