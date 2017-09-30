@@ -23,8 +23,6 @@ public class UniversityController implements UniversityServiceApi {
         @RequestParam(required = false) String abbreviation,
         @RequestParam(required = false) String name
     ) {
-        if (abbreviation != null && name != null)
-            return universityRepository.findByAbbreviationLikeIgnoreCaseOrNameLikeIgnoreCase(abbreviation, name);
         return universityRepository.findAll();
     }
 
