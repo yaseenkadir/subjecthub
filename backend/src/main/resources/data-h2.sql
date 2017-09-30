@@ -1,3 +1,19 @@
+INSERT INTO users (user_id, username, password, email)
+VALUES(
+    1,
+    'UserOne',
+    'PassOne',
+    'UserOne@email.com'
+);
+
+INSERT INTO users (user_id, username, password, email)
+VALUES(
+    2,
+    'UserTwo',
+    'PassTwo',
+    'UserTwo@email.com'
+);
+
 /*
   _   _   _____   ____
  | | | | |_   _| / ___|
@@ -74,6 +90,24 @@ VALUES (
     'There is no word limit.',
     1,
     1
+);
+
+INSERT INTO comments (comment_id, user_id, subject_id, post, post_time)
+VALUES (
+    1,
+    1,
+    1,
+    'I like this subject!',
+    TIMESTAMP '2017-09-19 20:43:37'
+);
+
+INSERT INTO comments (comment_id, user_id, subject_id, post, post_time)
+VALUES (
+    2,
+    2,
+    1,
+    'I learnt alot o.O',
+    TIMESTAMP '2017-09-19 20:47:28'
 );
 
 /* Applications Programming */

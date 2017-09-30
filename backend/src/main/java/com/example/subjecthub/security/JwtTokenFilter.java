@@ -46,10 +46,12 @@ public class JwtTokenFilter extends UsernamePasswordAuthenticationFilter {
             UserDetails userDetails = subjectHubUserService.loadUserByUsername(username);
             if (userDetails != null && jwtTokenUtils.validateToken(authToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(userDetails, null,
-                        userDetails.getAuthorities());
+                    new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+
                 authentication.setDetails(
                     new WebAuthenticationDetailsSource().buildDetails(httpRequest));
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

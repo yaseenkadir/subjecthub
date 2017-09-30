@@ -7,9 +7,11 @@ import com.example.subjecthub.dto.SubjectHubUserResponse;
 import com.example.subjecthub.entity.SubjectHubUser;
 import com.example.subjecthub.repository.SubjectHubUserRepository;
 import com.example.subjecthub.security.JwtTokenUtils;
+import com.example.subjecthub.utils.SubjectHubException;
+import com.example.subjecthub.utils.SubjectHubUnexpectedException;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,18 +20,16 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
 public class AuthenticationController {
 
     @Autowired
@@ -43,6 +43,9 @@ public class AuthenticationController {
 
     @Autowired
     private SubjectHubUserRepository subjectHubUserRepository;
+
+    // Username must start with a letter and can be followed by letters or numbers. Between 5-20 characters.
+    private static final Pattern usernamePattern = Pattern.compile("^[a-zA-Z]{1}[a-zA-Z0-9]{4,19}");
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> authenticate(
@@ -58,12 +61,12 @@ public class AuthenticationController {
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (AuthenticationException ae) {
-            return ResponseEntity.badRequest().body(
-                Collections.singletonMap("error", "Invalid credentials"));
+            throw new SubjectHubException("Invalid credentials.");
         }
 
         Map<String, Object> response = new HashMap<>();
         response.put("token", jwtTokenUtils.generateToken(authRequest.getUsername()));
+        Application.log.info("{} logged in.", authRequest.getUsername());
         return ResponseEntity.ok(response);
     }
 
@@ -71,10 +74,15 @@ public class AuthenticationController {
     public ResponseEntity register(
         @RequestBody RegisterRequest registerRequest
     ) {
+        // TODO: Handle usernames as case insensitive
+        // I.e. usernames are still displayed with case sensitivity but are treated as case insensitive.
+        validateRegisterRequest(registerRequest);
+        Application.log.info("Received register request with: {}", registerRequest);
         String hashedPassword = bCryptPasswordEncoder.encode(registerRequest.getPassword());
         SubjectHubUser subjectHubUser = new SubjectHubUser(registerRequest.getUsername(),
             hashedPassword, registerRequest.getEmail());
         subjectHubUserRepository.save(subjectHubUser);
+        Application.log.info("{} successfully registered.", registerRequest.getUsername());
         return ResponseEntity.ok(null);
     }
 
@@ -90,22 +98,42 @@ public class AuthenticationController {
             userDetails =
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         } catch (NullPointerException|ClassCastException e) {
-            // TODO: Throw appropriate exception
-            Application.log.error("No user found");
-            return ResponseEntity.badRequest().body(Collections.singletonMap("error",
-                "Not logged in"));
+            throw new SubjectHubException("Not logged in.");
         }
 
         Optional<SubjectHubUser> user = subjectHubUserRepository.findByUsername(
             userDetails.getUsername());
-        if (user.isPresent()) {
-            SubjectHubUserResponse response = new SubjectHubUserResponse();
-            BeanUtils.copyProperties(user.get(), response);
-            return ResponseEntity.ok(response);
-        } else {
-            Application.log.error("User is authenticated but is not found in database!");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                Collections.singletonMap("error", "Unexpected error"));
+
+        if (!user.isPresent()) {
+            throw new SubjectHubUnexpectedException(String.format("User %s is authenticated but " +
+                "was not found in database", userDetails.getUsername()));
+        }
+
+        SubjectHubUserResponse response = new SubjectHubUserResponse();
+        BeanUtils.copyProperties(user.get(), response);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Validates register request by checking email and username fields.
+     * @param registerRequest
+     */
+    private void validateRegisterRequest(RegisterRequest registerRequest) {
+        if (!EmailValidator.getInstance().isValid(registerRequest.getEmail())) {
+            throw new SubjectHubException("Invalid email address.");
+        }
+
+        if (subjectHubUserRepository.existsByUsername(registerRequest.getUsername())) {
+            throw new SubjectHubException("Username already exists.");
+        }
+
+        if (subjectHubUserRepository.existsByEmail(registerRequest.getEmail())) {
+            throw new SubjectHubException("Email already exists.");
+        }
+
+        if (!usernamePattern.matcher(registerRequest.getUsername()).matches()) {
+            throw new SubjectHubException(
+                "Username is invalid. Must start with letters and be between 5 and 20 characters.");
         }
     }
 }
