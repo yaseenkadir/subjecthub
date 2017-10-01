@@ -1,0 +1,29 @@
+<div>
+    <h2>Comments</h2>
+    <p *ngIf="fatalMessage" class="error">{{fatalMessage}}</p>
+    <p *ngIf="message" class="error">{{message}}</p>
+    <div *ngIf="!fatalMessage">
+        <table *ngFor="i in comments">
+            <tbody><tr>
+                <td><button class="btn btn-default" onclick="this.thumbUp(i.id)" style="color:green">{{i.thumbsUp}}</button>
+                    <br/>
+                    <button class="btn btn-default" onclick="this.thumbDown(i.id)" style="color:red">{{i.thumbsDown}}</button>
+                </td>
+                <td *ngIf="i.isFlagged" style="color: darkgrey">{{i.post}}
+                    <br/>posted at: {{i.postTime}}, by:{{i.user.name}}
+                        <button class="btn btn-default" onclick="this.unflag(i.id)" style="color:green">!</button></td>
+                <td *ngIf="!i.isFlagged">{{i.post}}
+                    <br/>posted at: {{i.postTime}}, by:{{i.user.name}}
+                        <button class="btn btn-default" onclick="this.flag(i.id)" style="color:red">!</button></td>
+            </tr></tbody>
+        </table>
+    </div>
+    <form *ngIf="canAddComment" [formGroup]="newCommentForm" (submit)="addNew(newCommentForm.value)">
+        <p>Posting as: bob</p><!--need to get username from auth somehow-->
+        <input formControlName="message" type="text" placeholder="Comment" class="form-control">
+        <button class="btn btn-default">Post!</button>
+    </form>
+    <p *ngIf="!canAddComment">
+        Need to login to post a comment!
+    </p>
+</div>
