@@ -15,6 +15,7 @@ import { RegisterComponent } from './register/register.component';
 import {AlertModule} from "ngx-bootstrap";
 import { LoginComponent } from './login/login.component';
 import { AddTagComponent } from './add-tag/add-tag.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { AddTagComponent } from './add-tag/add-tag.component';
     FuseSearchBarComponent,
     RegisterComponent,
     LoginComponent,
-    AddTagComponent
+    AddTagComponent,
+    SpinnerComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

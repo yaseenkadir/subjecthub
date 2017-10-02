@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import {AddTagService} from '../services/add-tag.service';
 import {Tag} from "../models/Tag";
@@ -9,14 +9,52 @@ import {Tag} from "../models/Tag";
   styleUrls: ['./add-tag.component.css'],
     providers:[AddTagService]
 })
-export class AddTagComponent implements OnInit {
+export class AddTagComponent {
+  @Input()
+  universityId: number;
 
-  constructor(private tagService: AddTagService) { }
+  @Input()
+  subjectId: number;
 
-  ngOnInit() {
-      this.tagService.createTag(1, 1, new Tag("Test"))
-          .then(t => console.log(t))
-          .catch(err => console.log(err));
+  error: string;
+  success: string;
+  tag: Tag;
+  isLoading: boolean;
+
+  constructor(private tagService: AddTagService) {
+    this.tag = new Tag('');
+    this.isLoading = false;
   }
+  clearMessages() {
+
+      this.error = '';
+      this.success = '';
+  }
+
+  clearField() {
+      this.isLoading = false;
+      this.tag.name = '';
+  }
+
+  submit() {
+      this.clearMessages();
+      if (!this.tag.name) this.error = "A Tag Name must be supplied";
+      else {
+          this.isLoading = true;
+          setTimeout(() => {
+            this.tagService.createTag(this.universityId, this.subjectId, this.tag)
+              .then(subject => {
+                  this.success = "Tag added successfully";
+                  this.clearField();
+              })
+              .catch(err => {
+                  this.error = err.json().message;
+                  this.clearField();
+              })
+          }, 1000);
+
+      }
+  }
+
 
 }
