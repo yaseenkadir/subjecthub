@@ -159,7 +159,7 @@ public class SubjectServiceControllerTests {
             .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
-            .andExpect(status().isNotAcceptable());
+            .andExpect(status().isNotFound());
     }
 
     @Test

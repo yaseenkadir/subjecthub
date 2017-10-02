@@ -3,7 +3,6 @@ package com.example.subjecthub.controller;
 import com.example.subjecthub.Application;
 import com.example.subjecthub.api.SubjectServiceApi;
 import com.example.subjecthub.dto.AddCommentRequest;
-import com.example.subjecthub.dto.SubjectHubUserResponse;
 import com.example.subjecthub.entity.Subject;
 
 import com.example.subjecthub.entity.Tag;
@@ -18,25 +17,15 @@ import com.example.subjecthub.repository.TagRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
 
 import com.example.subjecthub.utils.SubjectNotFoundException;
-import com.example.subjecthub.utils.TagAlreadyExistsOnSubjectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.example.subjecthub.utils.SubjectHubException;
 import com.example.subjecthub.utils.SubjectHubUnexpectedException;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collections;
 
 import java.util.List;
 import java.util.Optional;
