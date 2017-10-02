@@ -1,0 +1,15 @@
+.btn, thumbUp{
+    color: green;
+}
+
+.btn, thumbDown{
+    color: red;
+}
+
+.btn, flagged{
+    color: green;
+}
+
+.btn, notFlagged{
+    color: red;
+}
