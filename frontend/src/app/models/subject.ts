@@ -1,4 +1,4 @@
-export class SubjectResult {
+export class Subject {
   assessments: Array<{}>;
   availability: boolean;
   description: string;

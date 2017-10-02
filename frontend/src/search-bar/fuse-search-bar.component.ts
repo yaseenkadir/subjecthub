@@ -1,7 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 
-import { Observable } from "rxjs/Observable";
-import { Subject } from "rxjs/Subject";
 import * as Fuse from "fuse.js";
 
 import "rxjs/add/observable/of";
@@ -9,7 +7,6 @@ import "rxjs/add/operator/switchMap";
 import "rxjs/add/operator/toPromise";
 
 import { SubjectSearchService } from "../app/services/subject-search.service";
-import { SubjectResult } from "../app/models/subject-result";
 
 @Component({
   selector: "fuse-search-bar",

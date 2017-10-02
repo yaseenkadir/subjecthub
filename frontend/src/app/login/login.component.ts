@@ -75,9 +75,8 @@ export class LoginComponent implements OnInit {
                 .then(result => {
                     if (result.isSuccessful()) {
                         console.log("Successfully authenticated user.");
-                        console.log()
                     } else {
-                        this.authError = result.response['message'];
+                        this.authError = result.message;
                     }
                 });
         } else {
