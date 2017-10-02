@@ -1,7 +1,15 @@
-.happy{
+.btn, thumbUp{
     color: green;
 }
 
-.sad{
+.btn, thumbDown{
+    color: red;
+}
+
+.btn, flagged{
+    color: green;
+}
+
+.btn, notFlagged{
     color: red;
 }

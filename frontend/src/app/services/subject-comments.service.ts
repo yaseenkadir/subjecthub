@@ -57,11 +57,12 @@ export class SubjectCommentsService {
             .get(environment.API_URL + url)
             .toPromise()
             .then(response => {
-                if(response.status == 200){
-                    return new SubjectHubApiResponse(true, response.json() as SubjectComment[]);
+                const wasSuccessful = response.status == 200;
+                if(wasSuccessful){
+                    return new SubjectHubApiResponse(wasSuccessful, response.json() as SubjectComment[]);
                 } else {
                     console.log(errorMessageApi);
-                    return new SubjectHubApiResponse(false, response.json());
+                    return new SubjectHubApiResponse(!wasSuccessful, response.json());
                 }
             })
             .catch(e => {
@@ -82,11 +83,12 @@ export class SubjectCommentsService {
             .get(environment.API_URL + url)
             .toPromise()
             .then(response => {
-                if(response.status == 200){
-                    return new SubjectHubApiResponse(true, response.json() as SubjectComment);
+                const wasSuccessful = response.status == 200;
+                if(wasSuccessful){
+                    return new SubjectHubApiResponse(wasSuccessful, response.json() as SubjectComment);
                 } else {
                     console.log(errorMessageApi);
-                    return new SubjectHubApiResponse(false, response.json());
+                    return new SubjectHubApiResponse(!wasSuccessful, response.json());
                 }
             })
             .catch(e => {
@@ -108,11 +110,12 @@ export class SubjectCommentsService {
             .post(environment.API_URL + url, requestBody)
             .toPromise()
             .then(response => {
-                if(response.status == 200){
-                    return new SubjectHubApiResponse(true, response.json() as SubjectComment);
+                const wasSuccessful = response.status == 200;
+                if(wasSuccessful){
+                    return new SubjectHubApiResponse(wasSuccessful, response.json() as SubjectComment);
                 } else {
                     console.log(errorMessageApi);
-                    return new SubjectHubApiResponse(false, response.json());
+                    return new SubjectHubApiResponse(!wasSuccessful, response.json());
                 }
             })
             .catch(e => {

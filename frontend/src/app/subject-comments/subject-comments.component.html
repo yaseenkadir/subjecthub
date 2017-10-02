@@ -3,18 +3,18 @@
     <p *ngIf="fatalMessage" class="error">{{fatalMessage}}</p>
     <p *ngIf="message" class="error">{{message}}</p>
     <div *ngIf="!fatalMessage">
-        <table *ngFor="i in comments">
+        <table *ngFor="let comment of comments">
             <tbody><tr>
-                <td><button class="btn btn-default happy" onclick="this.thumbUp(i.id)">{{i.thumbsUp}}</button>
+                <td><button class="btn btn-default thumbUp" onclick="this.thumbUp(comment.id)">{{comment.thumbsUp}}</button>
                     <br/>
-                    <button class="btn btn-default sad" onclick="this.thumbDown(i.id)">{{i.thumbsDown}}</button>
+                    <button class="btn btn-default thumbDown" onclick="this.thumbDown(comment.id)">{{comment.thumbsDown}}</button>
                 </td>
-                <td *ngIf="i.isFlagged" style="color: darkgrey">{{i.post}}
-                    <br/>posted at: {{i.postTime}}, by:{{i.user.name}}
-                        <button class="btn btn-default happy" onclick="this.unflag(i.id)">!</button></td>
-                <td *ngIf="!i.isFlagged">{{i.post}}
-                    <br/>posted at: {{i.postTime}}, by:{{i.user.name}}
-                        <button class="btn btn-default sad" onclick="this.flag(i.id)">!</button></td>
+                <td *ngIf="comment.isFlagged" style="color: darkgrey">{{comment.post}}
+                    <br/>posted at: {{comment.postTime}}, by:{{comment.user.name}}
+                        <button class="btn btn-default flagged" onclick="this.unflag(comment.id)">!</button></td>
+                <td *ngIf="!comment.isFlagged">{{comment.post}}
+                    <br/>posted at: {{comment.postTime}}, by:{{comment.user.name}}
+                        <button class="btn btn-default notFlagged" onclick="this.flag(comment.id)">!</button></td>
             </tr></tbody>
         </table>
     </div>

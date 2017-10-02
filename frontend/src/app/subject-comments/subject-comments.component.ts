@@ -22,7 +22,8 @@ export class SubjectCommentsComponent implements OnInit {
   subjectId: number = 1; //to be provided by parent in the future
 
   constructor(private subjectCommentsService: SubjectCommentsService) {
-
+      this.fatalMessage = null;
+      this.canAddComment = false;
   }
 
   ngOnInit() {
@@ -30,8 +31,6 @@ export class SubjectCommentsComponent implements OnInit {
   }
 
   fetch(){
-      this.fatalMessage = null;
-      this.canAddComment = false;
       this.subjectCommentsService.fetch(this.universityId, this.subjectId)
           .then(result => {
               if(result.isSuccessful()){
