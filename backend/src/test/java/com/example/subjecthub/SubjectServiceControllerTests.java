@@ -6,6 +6,7 @@ import com.example.subjecthub.entity.Faculty;
 import com.example.subjecthub.entity.Subject;
 import com.example.subjecthub.entity.Tag;
 import com.example.subjecthub.entity.University;
+import com.example.subjecthub.exception.ExceptionAdvice;
 import com.example.subjecthub.repository.FacultyRepository;
 import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.repository.TagRepository;
@@ -81,6 +82,7 @@ public class SubjectServiceControllerTests {
     public void setUp() throws Exception {
         mockMvc = MockMvcBuilders
             .standaloneSetup(controller)
+            .setControllerAdvice(new ExceptionAdvice())
             .build();
 
         this.university = universityRepository.findAll().get(0);
@@ -159,7 +161,8 @@ public class SubjectServiceControllerTests {
             .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
-            .andExpect(status().isNotAcceptable());
+            .andExpect(status().is4xxClientError())
+            .andExpect(jsonPath("$.message", is("Tag already exists for subject.")));
     }
 
     @Test

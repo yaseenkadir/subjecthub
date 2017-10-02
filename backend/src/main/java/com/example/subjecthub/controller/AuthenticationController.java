@@ -7,8 +7,8 @@ import com.example.subjecthub.dto.SubjectHubUserResponse;
 import com.example.subjecthub.entity.SubjectHubUser;
 import com.example.subjecthub.repository.SubjectHubUserRepository;
 import com.example.subjecthub.security.JwtTokenUtils;
-import com.example.subjecthub.utils.SubjectHubException;
-import com.example.subjecthub.utils.SubjectHubUnexpectedException;
+import com.example.subjecthub.exception.SubjectHubException;
+import com.example.subjecthub.exception.SubjectHubUnexpectedException;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,8 @@ public class AuthenticationController {
     @Autowired
     private SubjectHubUserRepository subjectHubUserRepository;
 
-    // Username must start with a letter and can be followed by letters or numbers. Between 5-20 characters.
+    // Username must start with a letter and can be followed by letters or numbers. Between 5-20
+    // characters.
     private static final Pattern usernamePattern = Pattern.compile("^[a-zA-Z]{1}[a-zA-Z0-9]{4,19}");
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
@@ -75,7 +76,8 @@ public class AuthenticationController {
         @RequestBody RegisterRequest registerRequest
     ) {
         // TODO: Handle usernames as case insensitive
-        // I.e. usernames are still displayed with case sensitivity but are treated as case insensitive.
+        // I.e. usernames are still displayed with case sensitivity but are treated as case
+        // insensitive.
         validateRegisterRequest(registerRequest);
         Application.log.info("Received register request with: {}", registerRequest);
         String hashedPassword = bCryptPasswordEncoder.encode(registerRequest.getPassword());

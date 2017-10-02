@@ -1,8 +1,9 @@
-package com.example.subjecthub.utils;
+package com.example.subjecthub.exception;
 
 import com.example.subjecthub.Application;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,11 +27,13 @@ public class ExceptionAdvice {
 
     @ResponseBody
     @Order(1)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(SubjectHubException.class)
-    public ExceptionResponse handleSubjectHubException(SubjectHubException she) {
+    public ResponseEntity<ExceptionResponse> handleSubjectHubException(SubjectHubException she) {
         Application.log.info(she.getMessage());
-        return ExceptionResponse.badRequest(she.getMessage());
+
+        return ResponseEntity
+            .status(she.getStatus())
+            .body(new ExceptionResponse(she.getStatus(), she.getMessage()));
     }
 
     @Order(Integer.MAX_VALUE)
