@@ -4,28 +4,26 @@ import com.example.subjecthub.Application;
 import com.example.subjecthub.api.SubjectServiceApi;
 import com.example.subjecthub.dto.AddCommentRequest;
 import com.example.subjecthub.entity.Subject;
-
-import com.example.subjecthub.entity.Tag;
-
 import com.example.subjecthub.entity.SubjectComment;
 import com.example.subjecthub.entity.SubjectHubUser;
+import com.example.subjecthub.entity.Tag;
+import com.example.subjecthub.exception.SubjectHubException;
+import com.example.subjecthub.exception.SubjectHubUnexpectedException;
 import com.example.subjecthub.repository.SubjectCommentRepository;
 import com.example.subjecthub.repository.SubjectHubUserRepository;
-
 import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.repository.TagRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
 
-import com.example.subjecthub.utils.SubjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.example.subjecthub.utils.SubjectHubException;
-import com.example.subjecthub.utils.SubjectHubUnexpectedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,12 +48,18 @@ public class SubjectServiceController implements SubjectServiceApi {
 
 
     @Override
-    public Subject addTagToSubject(@PathVariable Long universityId,  @PathVariable Long subjectId, @RequestBody Tag tag) {
+    public Subject addTagToSubject(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @RequestBody Tag tag
+    ) {
 
+        // TODO: call getSubject() here instead of manually null checking
         Subject currentSubject = subjectRepository.findOne(subjectId);
 
         if (currentSubject == null) {
-            throw new SubjectNotFoundException();
+            throw new SubjectHubException(HttpStatus.NOT_FOUND,
+                "Subject not found. Unable to add tag.");
         }
 
         Tag existingTag = tagRepository.findByName(tag.getName());
@@ -64,7 +68,7 @@ public class SubjectServiceController implements SubjectServiceApi {
 
             // if the subject is included on the tag then throw an error
             if (existingTag.getSubjects().contains(currentSubject)) {
-                throw new SubjectHubException("That Tag Already Exists");
+                throw new SubjectHubException("Tag already exists for subject.");
             }
 
             existingTag.getSubjects().add(currentSubject);
@@ -83,7 +87,6 @@ public class SubjectServiceController implements SubjectServiceApi {
         return currentSubject;
 
     }
-
 
 
     @Override
@@ -137,9 +140,9 @@ public class SubjectServiceController implements SubjectServiceApi {
     public List<SubjectComment> getComments(
         @PathVariable Long universityId,
         @PathVariable Long subjectId
-    ){
+    ) {
         List<SubjectComment> results = subjectCommentRepository.findBySubject_Id(subjectId);
-        if(results.isEmpty()){
+        if (results.isEmpty()) {
             throw new SubjectHubException(String.format("No comments found for subject id: %s", subjectId));
         }
         return results;
@@ -150,9 +153,9 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
-    ){
+    ) {
         SubjectComment result = subjectCommentRepository.findOne(commentId);
-        if(result == null){
+        if (result == null) {
             throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject" +
                 " id: %s", commentId, subjectId));
         }
@@ -164,7 +167,7 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @RequestBody AddCommentRequest addCommentRequest
-    ){
+    ) {
         SubjectHubUser requester = getRequestingUser();
         SubjectComment newComment = new SubjectComment();
         newComment.setPost(addCommentRequest.getComment());
@@ -179,11 +182,12 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
-    ){
+    ) {
         SubjectComment result = subjectCommentRepository.findOne(commentId);
-        if(result == null){
-            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject id: %s. " +
-                "Unable to add thumb up.", commentId,subjectId));
+        if (result == null) {
+            throw new SubjectHubException(String.format(
+                "Specified comment id: %s, not found for subject id: %s. Unable to add thumb up.",
+                commentId, subjectId));
         }
         result.addThumbUp();
         return subjectCommentRepository.save(result);
@@ -194,11 +198,12 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
-    ){
+    ) {
         SubjectComment result = subjectCommentRepository.findOne(commentId);
-        if(result == null){
-            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject id: %s. " +
-                "Unable to add thumb down.", commentId,subjectId));
+        if (result == null) {
+            throw new SubjectHubException(String.format(
+                "Specified comment id: %s, not found for subject id: %s. Unable to add thumb down.",
+                commentId, subjectId));
         }
         result.addThumbDown();
         return subjectCommentRepository.save(result);
@@ -209,11 +214,12 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
-    ){
+    ) {
         SubjectComment result = subjectCommentRepository.findOne(commentId);
-        if(result == null){
-            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject id: %s. " +
-                "Unable to flag.", commentId,subjectId));
+        if (result == null) {
+            throw new SubjectHubException(String.format(
+                "Specified comment id: %s, not found for subject id: %s. Unable to flag.",
+                commentId, subjectId));
         }
         result.setFlagged(true);
         return subjectCommentRepository.save(result);
@@ -224,11 +230,12 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
-    ){
+    ) {
         SubjectComment result = subjectCommentRepository.findOne(commentId);
-        if(result == null){
-            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject id: %s. " +
-                "Unable to unflag.", commentId,subjectId));
+        if (result == null) {
+            throw new SubjectHubException(String.format(
+                "Specified comment id: %s, not found for subject id: %s. Unable to unflag.",
+                commentId, subjectId));
         }
         result.setFlagged(false);
         return subjectCommentRepository.save(result);
@@ -237,12 +244,12 @@ public class SubjectServiceController implements SubjectServiceApi {
     /**
      * Util method for POST methods
      */
-    private SubjectHubUser getRequestingUser(){
+    private SubjectHubUser getRequestingUser() {
         UserDetails userDetails;
         try {
             userDetails =
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        } catch (NullPointerException|ClassCastException e) {
+        } catch (NullPointerException | ClassCastException e) {
             throw new SubjectHubException("Not logged in.");
         }
 
@@ -250,8 +257,9 @@ public class SubjectServiceController implements SubjectServiceApi {
             userDetails.getUsername());
 
         if (!user.isPresent()) {
-            throw new SubjectHubUnexpectedException(String.format("User %s is authenticated but " +
-            "was not found in database", userDetails.getUsername()));
+            throw new SubjectHubUnexpectedException(String.format(
+                "User %s is authenticated but was not found in database",
+                userDetails.getUsername()));
         }
         return user.get();
     }

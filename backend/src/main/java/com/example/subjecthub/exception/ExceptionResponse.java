@@ -1,4 +1,4 @@
-package com.example.subjecthub.utils;
+package com.example.subjecthub.exception;
 
 import org.springframework.http.HttpStatus;
 
@@ -10,6 +10,10 @@ public class ExceptionResponse {
     public ExceptionResponse(int status, String message) {
         this.status = status;
         this.message = message;
+    }
+
+    public ExceptionResponse(HttpStatus status, String message) {
+        this(status.value(), message);
     }
 
     public static ExceptionResponse serverError(String message) {
