@@ -16,6 +16,7 @@ import {AlertModule} from "ngx-bootstrap";
 import { LoginComponent } from './login/login.component';
 import { AddTagComponent } from './add-tag/add-tag.component';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { SubjectCommentsComponent } from './subject-comments/subject-comments.component';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
     LoginComponent,
     AddTagComponent,
     SpinnerComponent
+    SubjectCommentsComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

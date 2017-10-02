@@ -59,15 +59,15 @@ public interface SubjectServiceApi {
         @RequestBody AddCommentRequest addCommentRequest
     );
 
-    @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/thumbUp", method = RequestMethod.GET)
-    public SubjectComment commentThumbUp(
+    @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/addThumbUp", method = RequestMethod.GET)
+    public SubjectComment commentAddThumbUp(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     );
 
-    @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/thumbDown", method = RequestMethod.GET)
-    public SubjectComment commentThumbDown(
+    @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/addThumbDown", method = RequestMethod.GET)
+    public SubjectComment commentAddThumbDown(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId

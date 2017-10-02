@@ -1,3 +1,4 @@
+/* THIS FILE IS CLOSED FOR EDITING. YOU SHOULD MAKE CHANGES IN A NEW SQL FILE */
 CREATE SEQUENCE universities_seq;
 CREATE SEQUENCE faculties_seq;
 CREATE SEQUENCE subjects_seq;
@@ -57,7 +58,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE comments (
-    comment_id      BIGINT IDENTITY PRIMARY KEY,
+    comment_id      BIGINT PRIMARY KEY DEFAULT nextval('comments_seq'),
     user_id         BIGINT          NOT NULL,
     subject_id      BIGINT          NOT NULL,
     post            VARCHAR(200)    NOT NULL,
@@ -68,3 +69,4 @@ CREATE TABLE comments (
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (subject_id) REFERENCES subjects (subject_id)
 );
+/* THIS FILE IS CLOSED FOR EDITING. YOU SHOULD MAKE CHANGES IN A NEW SQL FILE */

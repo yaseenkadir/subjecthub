@@ -298,7 +298,7 @@ public class SubjectServiceControllerTests {
     }
 
     @Test
-    public void thumbUpComment() throws Exception {
+    public void testAddThumbUpComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
         Long u_id = Long.parseLong("1");
@@ -306,7 +306,7 @@ public class SubjectServiceControllerTests {
 
         //checks it can be thumbed up
         mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
-            "/comments/comment/"+c.getId()+"/thumbUp"))
+            "/comments/comment/"+c.getId()+"/addThumbUp"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.user.id", is(1)))
             .andExpect(jsonPath("$.subject.name", is(s.getName())))
@@ -317,7 +317,7 @@ public class SubjectServiceControllerTests {
     }
 
     @Test
-    public void thumbDownComment() throws Exception {
+    public void testAddThumbDownComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
         Long u_id = Long.parseLong("1");
@@ -325,7 +325,7 @@ public class SubjectServiceControllerTests {
 
         //checks it can be thumbed down
         mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
-            "/comments/comment/"+c.getId()+"/thumbDown"))
+            "/comments/comment/"+c.getId()+"/addThumbDown"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.user.id", is(1)))
             .andExpect(jsonPath("$.subject.name", is(s.getName())))
@@ -336,7 +336,7 @@ public class SubjectServiceControllerTests {
     }
 
     @Test
-    public void flagComment() throws Exception {
+    public void testFlagComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
         Long u_id = Long.parseLong("1");
@@ -356,7 +356,7 @@ public class SubjectServiceControllerTests {
     }
 
     @Test
-    public void unflagComment() throws Exception {
+    public void testUnflagComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
         Long u_id = Long.parseLong("1");
