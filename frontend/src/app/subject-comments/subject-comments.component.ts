@@ -22,7 +22,6 @@ export class SubjectCommentsComponent implements OnInit {
   subjectId: number = 1; //to be provided by parent in the future
 
   constructor(private subjectCommentsService: SubjectCommentsService) {
-      this.fatalMessage = null;
       this.canAddComment = false;
   }
 
@@ -30,7 +29,13 @@ export class SubjectCommentsComponent implements OnInit {
       this.fetch();
   }
 
+  cleanMessages(){
+      this.fatalMessage = null;
+      this.message = null;
+  }
+
   fetch(){
+      this.cleanMessages();
       this.subjectCommentsService.fetch(this.universityId, this.subjectId)
           .then(result => {
               if(result.isSuccessful()){
@@ -55,7 +60,7 @@ export class SubjectCommentsComponent implements OnInit {
   }
 
   thumbUp(commentId: number){
-      this.message = null;
+      this.cleanMessages();
       this.subjectCommentsService.addThumbUp(this.universityId, this.subjectId, commentId)
           .then(result => {
               if(result.isSuccessful()){
@@ -71,7 +76,7 @@ export class SubjectCommentsComponent implements OnInit {
   }
 
     thumbDown(commentId: number){
-        this.message = null;
+        this.cleanMessages();
         this.subjectCommentsService.addThumbDown(this.universityId, this.subjectId, commentId)
             .then(result => {
                 if(result.isSuccessful()){
@@ -86,7 +91,7 @@ export class SubjectCommentsComponent implements OnInit {
     }
 
     flag(commentId: number){
-        this.message = null;
+        this.cleanMessages();
         this.subjectCommentsService.flag(this.universityId, this.subjectId, commentId)
             .then(result => {
                 if(result.isSuccessful()){
@@ -101,7 +106,7 @@ export class SubjectCommentsComponent implements OnInit {
     }
 
     unflag(commentId: number){
-        this.message = null;
+        this.cleanMessages();
         this.subjectCommentsService.unFlag(this.universityId, this.subjectId, commentId)
             .then(result => {
                 if(result.isSuccessful()){
@@ -116,7 +121,7 @@ export class SubjectCommentsComponent implements OnInit {
     }
 
     addComment(message: string){
-        this.message = null;
+        this.cleanMessages();
         //need auth? or is spring enough
         if(this.canAddComment){
             this.subjectCommentsService.add(this.universityId, this.subjectId, message)
