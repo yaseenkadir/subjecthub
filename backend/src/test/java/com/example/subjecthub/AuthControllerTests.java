@@ -6,7 +6,7 @@ import com.example.subjecthub.dto.RegisterRequest;
 import com.example.subjecthub.security.JwtTokenFilter;
 import com.example.subjecthub.security.JwtTokenUtils;
 import com.example.subjecthub.testutils.TestUtils;
-import com.example.subjecthub.utils.ExceptionAdvice;
+import com.example.subjecthub.exception.ExceptionAdvice;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.JsonPath;
 import io.jsonwebtoken.Claims;
