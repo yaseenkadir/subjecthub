@@ -106,10 +106,32 @@ public class UniversityControllerTests {
 
     @Test
     public void testGetNoUniversitiesWithNameAndAbbreviation() throws Exception {
-        mockMvc.perform(get("/api/universities?name=NonExistent&abbreviation=NonEx"))
+        String universityName = "NonExistent";
+        String universityAbbreviation = "NonEx";
+
+        mockMvc.perform(get("/api/universities?name=" + universityName + "&abbreviation=" + universityAbbreviation))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)))
             .andReturn();
+    }
+
+
+    @Test
+    public void testGetSingleUniversityWithName() throws Exception {
+        // case-insensitive test
+        String universityName = "UnIveRsiTY of teStiNg";
+
+        MvcResult result = testSizeAndOtherProperty("/api/universities?name=" + universityName, "$", 1,
+            "$[0].name", "University of Testing");
+    }
+
+
+    @Test
+    public void testGetSingleUniversityWithAbbreviation() throws Exception {
+        String universityAbbreviation = "CoT";
+
+        MvcResult result = testSizeAndOtherProperty("/api/universities?abbreviation=" + universityAbbreviation, "$", 1,
+            "$[0].name", "College of Testing");
     }
 
     /**
@@ -126,11 +148,11 @@ public class UniversityControllerTests {
     /**
      * Util method that tests size and name of university
      */
-    private MvcResult testSizeAndOtherProperty(String urlTemplate, String sizeExpr, int expectedSize, String otherPropertyExpr, String expectedName) throws Exception {
+    private MvcResult testSizeAndOtherProperty(String urlTemplate, String sizeExpr, int expectedSize, String otherPropertyExpr, String expectedValue) throws Exception {
         MvcResult result = mockMvc.perform(get(urlTemplate))
             .andExpect(status().isOk())
             .andExpect(jsonPath(sizeExpr, hasSize(expectedSize)))
-            .andExpect(jsonPath(otherPropertyExpr, is(expectedName)))
+            .andExpect(jsonPath(otherPropertyExpr, is(expectedValue)))
             .andReturn();
         return result;
     }
