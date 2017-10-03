@@ -14,6 +14,8 @@ import { FuseSearchBarComponent } from "../search-bar/fuse-search-bar.component"
 import { RegisterComponent } from './register/register.component';
 import {AlertModule} from "ngx-bootstrap";
 import { LoginComponent } from './login/login.component';
+import { AddTagComponent } from './add-tag/add-tag.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 import { SubjectCommentsComponent } from './subject-comments/subject-comments.component';
 
 @NgModule({
@@ -32,6 +34,8 @@ import { SubjectCommentsComponent } from './subject-comments/subject-comments.co
     FuseSearchBarComponent,
     RegisterComponent,
     LoginComponent,
+    AddTagComponent,
+    SpinnerComponent
     SubjectCommentsComponent
   ],
   providers: [],
