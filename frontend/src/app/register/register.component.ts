@@ -79,7 +79,7 @@ export class RegisterComponent implements OnInit {
                     if (result.isSuccessful()) {
                         console.log("Successfully registered user.");
                     } else {
-                        this.authError = result.response['message'];
+                        this.authError = result.message;
                     }
                 });
         } else {
