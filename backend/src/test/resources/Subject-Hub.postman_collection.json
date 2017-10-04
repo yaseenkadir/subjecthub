@@ -182,6 +182,101 @@
 				}
 			]
 		},
+        {
+            "name": "Assessments",
+            "description": "",
+            "item": [
+                {
+                    "name": "Get Assessments",
+                    "request": {
+                        "url": "{{domain}}/api/universities/university/1/subjects/subject/1/assessments",
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": ""
+                        },
+                        "description": "Fetches all assessments for a subjects"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Assessments (w GET params)",
+                    "request": {
+                        "url": {
+                            "raw": "{{domain}}/api/universities/university/1/subjects/subject/1/assessments?",
+                            "host": [
+                                "{{domain}}"
+                            ],
+                            "path": [
+                                "api",
+                                "universities",
+                                "university",
+                                "1",
+                                "subjects",
+                                "subject",
+                                "1",
+                                "assessments"
+                            ],
+                            "query": [
+                                {
+                                    "key": "name",
+                                    "value": "Assessment task 1",
+                                    "equals": true,
+                                    "description": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "weighting",
+                                    "value": "30",
+                                    "equals": true,
+                                    "description": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "type",
+                                    "value": "PROJECT",
+                                    "equals": true,
+                                    "description": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "groupWork",
+                                    "value": "TRUE",
+                                    "equals": true,
+                                    "description": "",
+                                    "disabled": true
+                                }
+                            ],
+                            "variable": []
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": ""
+                        },
+                        "description": "Fetches all assessments for a subject with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
+                    },
+                    "response": []
+                },
+               
+                {
+                    "name": "Get Assessment",
+                    "request": {
+                        "url": "{{domain}}/api/universities/university/1/subjects/subject/1/assessments/assessment/1",
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": ""
+                        },
+                        "description": "Fetches a specific assessment for a subject."
+                    },
+                    "response": []
+                }
+            ]
+        },
 		{
 			"name": "Auth",
 			"description": "",
