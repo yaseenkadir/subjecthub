@@ -12,27 +12,35 @@ addons:
   ssh_known_hosts:
     - 35.189.9.179
 
-script:
-# Stupidly long build command. Tried using matrices but deploys were triggered after each sub-build.
-  - mvn clean install -Ptest && mvn clean package -DskipTests && cd frontend npm install && ng build
+matrix:
+  include:
+    - language: node_js
+      node_js:
+        - 6.11.2
+      before_script:
+        - cd frontend && npm install
+      script: ng build
+    - language: java
+      script:
+        - mvn clean install -Ptest && mvn clean package -DskipTests
 
-before_deploy:
-  - openssl aes-256-cbc -K $encrypted_9cd0dacd6660_key -iv $encrypted_9cd0dacd6660_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
-  - eval "$(ssh-agent -s)"
-  - chmod 600 /tmp/deploy_rsa
-  - ssh-add /tmp/deploy_rsa
+      before_deploy:
+        - openssl aes-256-cbc -K $encrypted_9cd0dacd6660_key -iv $encrypted_9cd0dacd6660_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
+        - eval "$(ssh-agent -s)"
+        - chmod 600 /tmp/deploy_rsa
+        - ssh-add /tmp/deploy_rsa
 
-after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker build -t subjecthub/backend .;
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker tag subjecthub/backend yaseenk/subjecthub:latest;
-    docker push yaseenk/subjecthub:latest;
-    fi
+      after_success:
+        - if [ "$TRAVIS_BRANCH" == "master" ]; then
+          docker build -t subjecthub/backend .;
+          docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+          docker tag subjecthub/backend yaseenk/subjecthub:latest;
+          docker push yaseenk/subjecthub:latest;
+          fi
 
-deploy:
-  provider: script
-  skip_cleanup: true
-  script: ssh spring@$SERVER 'bash -s' < run-new-version.sh
-  on:
-    branch: master
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: ssh spring@$SERVER 'bash -s' < run-new-version.sh
+        on:
+          branch: master
