@@ -3,9 +3,6 @@ import { NgModule } from "@angular/core";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { HttpModule } from "@angular/http";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-// Imports for loading & configuring the in-memory web api
-import { InMemoryWebApiModule } from "angular-in-memory-web-api";
-import { InMemoryDataService } from "./utils/in-memory-data.service";
 
 import { AppComponent } from "./app.component";
 import { NavigationComponent } from "../navigation/navigation.component";
@@ -42,7 +39,7 @@ import {ApiErrorHandler} from "./utils/api-error-handler";
     SubjectCommentsComponent,
     UniversitiesComponent,
   ],
-  providers: [UserService, ApiErrorHandler],
+  providers: [ApiErrorHandler],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
