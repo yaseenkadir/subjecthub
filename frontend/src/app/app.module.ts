@@ -17,6 +17,8 @@ import { LoginComponent } from './login/login.component';
 import { AddTagComponent } from './add-tag/add-tag.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SubjectCommentsComponent } from './subject-comments/subject-comments.component';
+import {UserService} from "./services/user.service";
+import {ApiErrorHandler} from "./utils/api-error-handler";
 
 @NgModule({
   imports: [
@@ -38,7 +40,7 @@ import { SubjectCommentsComponent } from './subject-comments/subject-comments.co
     SpinnerComponent,
     SubjectCommentsComponent
   ],
-  providers: [],
+  providers: [UserService, ApiErrorHandler],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
