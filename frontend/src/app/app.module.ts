@@ -35,7 +35,7 @@ import { SubjectCommentsComponent } from './subject-comments/subject-comments.co
     RegisterComponent,
     LoginComponent,
     AddTagComponent,
-    SpinnerComponent
+    SpinnerComponent,
     SubjectCommentsComponent
   ],
   providers: [],
