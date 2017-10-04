@@ -12,17 +12,8 @@ addons:
   ssh_known_hosts:
     - 35.189.9.179
 
-matrix:
-  include:
-    - language: java
-      script:
-        - mvn clean install -Ptest && mvn clean package -DskipTests
-    - language: node_js
-      node_js:
-        - 6.11.2
-      before_script:
-        - cd frontend && npm install
-      script: ng build
+script:
+  - mvn clean install -Ptest && mvn clean package -DskipTests
 
 before_deploy:
   - openssl aes-256-cbc -K $encrypted_9cd0dacd6660_key -iv $encrypted_9cd0dacd6660_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
