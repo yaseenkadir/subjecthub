@@ -260,66 +260,7 @@
                     },
                     "response": []
                 },
-                {
-                    "name": "Get Assessments (w GET params and Fuzzy examples)",
-                    "request": {
-                        "url": {
-                            "raw": "{{domain}}/api/universities/university/1/subjects/subject/1/assessments?name=aplicatins rpogammmming",
-                            "host": [
-                                "{{domain}}"
-                            ],
-                            "path": [
-                                "api",
-                                "universities",
-                                "university",
-                                "1",
-                                "subjects",
-                                "subject",
-                                "1",
-                                "assessments"
-                            ],
-                            "query": [
-                                {
-                                    "key": "name",
-                                    "value": "Assessment task 1",
-                                    "equals": true,
-                                    "description": "",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "weighting",
-                                    "value": "30",
-                                    "equals": true,
-                                    "description": "",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "type",
-                                    "value": "PROJECT",
-                                    "equals": true,
-                                    "description": "",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "groupWork",
-                                    "value": "TRUE",
-                                    "equals": true,
-                                    "description": "",
-                                    "disabled": true
-                                }
-                            ],
-                            "variable": []
-                        },
-                        "method": "GET",
-                        "header": [],
-                        "body": {
-                            "mode": "raw",
-                            "raw": ""
-                        },
-                        "description": "Fetches all assessments for a subject with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
-                    },
-                    "response": []
-                },
+               
                 {
                     "name": "Get Assessment",
                     "request": {
