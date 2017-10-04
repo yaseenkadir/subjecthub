@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { HttpParams } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/share';
@@ -9,33 +10,25 @@ import {SubjectHubApiResponse} from "../models/subject-hub-api-response";
 
 @Injectable()
 export class UniversitySearchService {
+
     constructor(private http: Http) {}
 
-    fetch(): Promise<SubjectHubApiResponse<University[]>> {
-        return this.universitiesAction(`/universities`,
+    getUniversities(name?: string, abbreviation?: string): Promise<SubjectHubApiResponse<University[]>> {
+        let httpParams = new HttpParams();
+        let paramPairs = {'name': name, 'abbreviation': abbreviation};
+        for (let key in paramPairs) {
+            if (paramPairs[key] != null) {
+                httpParams = httpParams.append(key, paramPairs[key]);
+            }
+        }
+        return this.universitiesAction(`/universities?${httpParams}`,
             `No universities found`, `Universities request failed`);
-    }
-
-    searchByNameAndAbbreviation(name: string, abbreviation: string): Promise<SubjectHubApiResponse<University[]>> {
-        return this.universitiesAction(`/universities?name=${name}&abbreviation=${abbreviation}`,
-            `No universities found for name: ${name} and abbreviation: ${abbreviation}`, `Universities request failed`);
-    }
-
-    searchByName(name: string): Promise<SubjectHubApiResponse<University[]>> {
-        return this.universitiesAction(`/universities?name=${name}`,
-            `No universities found for name: ${name}`, `Universities request failed`);
-    }
-
-    searchByAbbreviation(abbreviation: string): Promise<SubjectHubApiResponse<University[]>> {
-        return this.universitiesAction(`/universities?abbreviation=${abbreviation}`,
-            `No universities found for abbreviation: ${abbreviation}`, `Universities request failed`);
     }
 
     searchById(id: number): Promise<SubjectHubApiResponse<University>> {
         return this.universityAction(`/universities/university/${id}`,
             `No university found for id: ${id}`, `University request failed`);
     }
-
 
     /**
      * UTIL method - returns university list

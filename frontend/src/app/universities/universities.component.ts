@@ -31,12 +31,12 @@ export class UniversitiesComponent implements OnInit {
 
     fetch(){
         this.cleanMessages();
-        this.universitySearchService.fetch()
+        this.universitySearchService.getUniversities()
             .then(result => {
                 if(result.isSuccessful()){
                     this.universities = result.response;
                 } else {
-                    this.fatalMessage = result.response['message'];
+                    this.fatalMessage = result.response[result.message];
                 }
             })
             .catch(e => {
@@ -44,5 +44,4 @@ export class UniversitiesComponent implements OnInit {
                 console.log(e)
             });
     }
-
 }
