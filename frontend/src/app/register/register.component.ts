@@ -1,14 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../services/auth.service";
+import {UserService} from "../services/user.service";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Consts} from "../config/consts";
 import {Utils} from "../utils/utils";
+import {ApiErrorHandler} from "../utils/api-error-handler";
 
 @Component({
     selector: 'app-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.css'],
-    providers: [AuthService],
+    providers: [UserService, ApiErrorHandler],
 })
 
 export class RegisterComponent implements OnInit {
@@ -23,7 +24,7 @@ export class RegisterComponent implements OnInit {
     // authError is used to display error message. If not null display.
     authError?: string = null;
 
-    constructor(private authService: AuthService, fb: FormBuilder) {
+    constructor(private authService: UserService, fb: FormBuilder) {
 
         this.registerForm = fb.group({
             "username": [

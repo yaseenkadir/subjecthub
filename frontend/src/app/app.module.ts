@@ -3,9 +3,6 @@ import { NgModule } from "@angular/core";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { HttpModule } from "@angular/http";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-// Imports for loading & configuring the in-memory web api
-import { InMemoryWebApiModule } from "angular-in-memory-web-api";
-import { InMemoryDataService } from "./utils/in-memory-data.service";
 
 import { AppComponent } from "./app.component";
 import { NavigationComponent } from "../navigation/navigation.component";
@@ -17,6 +14,7 @@ import { LoginComponent } from './login/login.component';
 import { AddTagComponent } from './add-tag/add-tag.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SubjectCommentsComponent } from './subject-comments/subject-comments.component';
+import {ApiErrorHandler} from "./utils/api-error-handler";
 
 @NgModule({
   imports: [
@@ -38,7 +36,7 @@ import { SubjectCommentsComponent } from './subject-comments/subject-comments.co
     SpinnerComponent,
     SubjectCommentsComponent
   ],
-  providers: [],
+  providers: [ApiErrorHandler],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
