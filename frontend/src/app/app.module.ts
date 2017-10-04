@@ -17,6 +17,7 @@ import { LoginComponent } from './login/login.component';
 import { AddTagComponent } from './add-tag/add-tag.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SubjectCommentsComponent } from './subject-comments/subject-comments.component';
+import { UniversitiesComponent} from './universities/universities.component';
 
 @NgModule({
   imports: [
@@ -35,8 +36,8 @@ import { SubjectCommentsComponent } from './subject-comments/subject-comments.co
     RegisterComponent,
     LoginComponent,
     AddTagComponent,
-    SpinnerComponent
-    SubjectCommentsComponent
+    SpinnerComponent,
+    SubjectCommentsComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

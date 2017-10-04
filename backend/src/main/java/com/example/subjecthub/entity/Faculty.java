@@ -22,7 +22,6 @@ public class Faculty {
     @Column
     private String code;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "university_id")
     @JsonIgnore
