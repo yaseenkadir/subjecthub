@@ -90,11 +90,7 @@ export class UserService {
      * Gets user details from the server. Assumes user is already logged in.
      * @returns {Promise<SubjectHubApiResponse<User>>}
      */
-    getUser(): Promise<SubjectHubApiResponse<User>> {
-
-        if (!this.isLoggedIn()) {
-            throw new Error("Must be logged in to get user.");
-        }
+    private getUser(): Promise<SubjectHubApiResponse<User>> {
 
         let headers = new Headers();
         headers.append('Authorization', this.tokenString);
