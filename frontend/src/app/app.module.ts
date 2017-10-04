@@ -38,6 +38,7 @@ import { UniversitiesComponent} from './universities/universities.component';
     AddTagComponent,
     SpinnerComponent,
     SubjectCommentsComponent,
+    UniversitiesComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

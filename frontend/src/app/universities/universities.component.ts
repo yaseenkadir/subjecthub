@@ -13,7 +13,7 @@ export class UniversitiesComponent implements OnInit {
 
     universities: University[];
     fatalMessage: string = null;
-    sysErrorMessageTemplate: string = "Universities system has encountered an error, please refresh";
+    sysErrorMessageTemplate: string = "Universities system has encountered an error, please refresh.";
     message: string = null;
 
     constructor(private universitySearchService: UniversitySearchService) {
