@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "../services/auth.service";
+import {UserService} from "../services/user.service";
 import {Consts} from "../config/consts";
 import {Utils} from "../utils/utils";
 
@@ -8,7 +8,7 @@ import {Utils} from "../utils/utils";
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css'],
-    providers: [AuthService]
+    providers: [UserService]
 })
 
 export class LoginComponent implements OnInit {
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     // Used to display network/server side errors. If not null, display an error.
     authError?: string = null;
 
-    constructor(private authService: AuthService, fb: FormBuilder) {
+    constructor(private authService: UserService, fb: FormBuilder) {
 
         this.loginForm = fb.group({
             "username": [

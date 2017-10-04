@@ -18,6 +18,8 @@ import { AddTagComponent } from './add-tag/add-tag.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SubjectCommentsComponent } from './subject-comments/subject-comments.component';
 import { UniversitiesComponent} from './universities/universities.component';
+import {UserService} from "./services/user.service";
+import {ApiErrorHandler} from "./utils/api-error-handler";
 
 @NgModule({
   imports: [
@@ -40,7 +42,7 @@ import { UniversitiesComponent} from './universities/universities.component';
     SubjectCommentsComponent,
     UniversitiesComponent,
   ],
-  providers: [],
+  providers: [UserService, ApiErrorHandler],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

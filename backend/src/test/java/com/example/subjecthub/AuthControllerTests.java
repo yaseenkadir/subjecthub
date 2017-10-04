@@ -71,7 +71,10 @@ public class AuthControllerTests {
             .perform(post("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.username", is("tester")))
+            .andExpect(jsonPath("$.password").doesNotExist())
+            .andExpect(jsonPath("$.email", is("a@test.com")));
     }
 
     @Test
