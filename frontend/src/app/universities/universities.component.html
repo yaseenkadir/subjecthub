@@ -1,0 +1,21 @@
+<div>
+    <h2>Universities</h2>
+    <p *ngIf="fatalMessage" class="error">{{fatalMessage}}</p>
+    <p *ngIf="message" class="error">{{message}}</p>
+    <div *ngIf="!fatalMessage">
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Abbreviation</th>
+            </thead>
+            <tbody *ngFor="let university of universities">
+                <tr>
+                    <td>{{university.id}}</td>
+                    <td>{{university.name}}</td>
+                    <td>{{university.abbreviation}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
