@@ -18,6 +18,7 @@ import { AddTagComponent } from './add-tag/add-tag.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SubjectCommentsComponent } from './subject-comments/subject-comments.component';
 import { UniversitiesComponent} from './universities/universities.component';
+import { SubjectDetailsComponent } from './subject-details/subject-details.component';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { UniversitiesComponent} from './universities/universities.component';
     SpinnerComponent,
     SubjectCommentsComponent,
     UniversitiesComponent,
+    SubjectDetailsComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

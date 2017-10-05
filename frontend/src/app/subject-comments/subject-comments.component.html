@@ -10,10 +10,10 @@
                     <button class="btn btn-default thumbDown" onclick="this.thumbDown(comment.id)">{{comment.thumbsDown}}</button>
                 </td>
                 <td *ngIf="comment.isFlagged" style="color: darkgrey">{{comment.post}}
-                    <br/>posted at: {{comment.postTime}}, by:{{comment.user.name}}
+                    <br/>posted at: {{comment.postTime}}, by:{{comment.user.username}}
                         <button class="btn btn-default flagged" onclick="this.unflag(comment.id)">!</button></td>
                 <td *ngIf="!comment.isFlagged">{{comment.post}}
-                    <br/>posted at: {{comment.postTime}}, by:{{comment.user.name}}
+                    <br/>posted at: {{comment.postTime}}, by:{{comment.user.username}}
                         <button class="btn btn-default notFlagged" onclick="this.flag(comment.id)">!</button></td>
             </tr></tbody>
         </table>

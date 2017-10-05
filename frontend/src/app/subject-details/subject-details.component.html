@@ -1,0 +1,46 @@
+<div *ngIf="!subject" class="spinner">
+    <app-spinner></app-spinner>
+</div>
+<div *ngIf="subject" class="container text-center">
+    <!-- Heading -->
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{subject.code}} - {{subject.name}}</h1>
+        </div>
+        <div class="col-md-12">
+            <h3><small>{{subject.faculty.code}} :: {{subject.creditPoints}} Credit Points</small></h3>
+        </div>
+    </div>
+    <hr/>
+    <!-- Description -->
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <p>{{subject.description}}</p>
+        </div>
+    </div>
+    <hr/>
+    <!-- Assignments-->
+    <div *ngFor="let assessment of subject.assessments" class="row">
+        <div class="col-md-12">
+            <h4>{{assessment.name}} <small>Weight: {{assessment.weighting}}%</small></h4>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+            <p>{{assessment.description}}</p>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <app-subject-comments></app-subject-comments>
+        </div>
+    </div>
+    <!-- Comment-->
+
+    <hr/>
+    <!-- Tag-->
+    <div class="row">
+        <div class="col-md-12">
+            <app-add-tag></app-add-tag>
+        </div>
+    </div>
+</div>
