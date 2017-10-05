@@ -2,3 +2,8 @@
 p.error {
     color: #a94442
 }
+
+#toast-container .toast {
+    margin-top: 500px;
+    opacity: 1.0;
+}

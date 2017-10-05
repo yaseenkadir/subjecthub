@@ -15,17 +15,48 @@ import { AddTagComponent } from './add-tag/add-tag.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SubjectCommentsComponent } from './subject-comments/subject-comments.component';
 import { UniversitiesComponent} from './universities/universities.component';
-import {UserService} from "./services/user.service";
 import {ApiErrorHandler} from "./utils/api-error-handler";
+import {RouterModule} from "@angular/router";
+import {ToastrModule} from "ngx-toastr";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   imports: [
+      RouterModule.forRoot([
+          {
+              path: 'login',
+              component: LoginComponent
+          },
+          {
+              path: 'register',
+              component: RegisterComponent
+          },
+          {
+              path: '',
+              redirectTo: 'home',
+              pathMatch: 'full'
+          },
+          {
+              path: 'home',
+              component: SearchBarComponent
+          },
+        ]
+      ),
       NgbModule.forRoot(),
       BrowserModule,
       FormsModule,
       HttpModule,
       ReactiveFormsModule,
-      AlertModule.forRoot()
+      AlertModule.forRoot(),
+
+      // Needed for toasts
+      BrowserAnimationsModule,
+      ToastrModule.forRoot(
+          {
+              closeButton: true,
+              toastClass: 'toast my-toast',
+              positionClass: 'toast-top-center'
+          }),
   ],
   declarations: [
     AppComponent,

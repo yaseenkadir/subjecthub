@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../services/user.service";
 import {Consts} from "../config/consts";
 import {Utils} from "../utils/utils";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
     selector: 'app-login',
@@ -23,7 +24,9 @@ export class LoginComponent implements OnInit {
     // Used to display network/server side errors. If not null, display an error.
     authError?: string = null;
 
-    constructor(private authService: UserService, fb: FormBuilder) {
+    isLoading: boolean = false;
+
+    constructor(private authService: UserService, private toastr: ToastrService, fb: FormBuilder) {
 
         this.loginForm = fb.group({
             "username": [
@@ -71,12 +74,19 @@ export class LoginComponent implements OnInit {
         this.authError = null;
         if (this.loginForm.valid) {
             console.log("Form is valid. Attempting login.");
+            this.isLoading = true;
             this.authService.authenticate(form.username, form.password)
                 .then(result => {
+                    this.isLoading = false;
                     if (result.isSuccessful()) {
                         console.log("Successfully authenticated user.");
+                        this.toastr.success('Logged in', null, {timeOut: 3000});
+
                     } else {
+                        console.log("Login failed");
+                        console.log(result.message);
                         this.authError = result.message;
+                        this.toastr.error(result.message, 'Login Failed');
                     }
                 });
         } else {

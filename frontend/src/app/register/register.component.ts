@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Consts} from "../config/consts";
 import {Utils} from "../utils/utils";
 import {ApiErrorHandler} from "../utils/api-error-handler";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
     selector: 'app-register',
@@ -23,8 +24,9 @@ export class RegisterComponent implements OnInit {
 
     // authError is used to display error message. If not null display.
     authError?: string = null;
+    isLoading: boolean = false;
 
-    constructor(private authService: UserService, fb: FormBuilder) {
+    constructor(private authService: UserService, private toastr: ToastrService, fb: FormBuilder) {
 
         this.registerForm = fb.group({
             "username": [
@@ -75,11 +77,15 @@ export class RegisterComponent implements OnInit {
 
         if (this.registerForm.valid) {
             console.log("Form is valid. Attempting registration.");
+            this.isLoading = true;
             this.authService.register(form.username, form.password, form.email)
                 .then(result => {
+                    this.isLoading = false;
                     if (result.isSuccessful()) {
                         console.log("Successfully registered user.");
+                        this.toastr.success('Successfully Registered', null, {timeOut: 3000})
                     } else {
+                        this.toastr.error(result.message, 'Registration Failed');
                         this.authError = result.message;
                     }
                 });
