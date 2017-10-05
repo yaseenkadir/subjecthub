@@ -1,39 +1,44 @@
-<div>
-    <form [formGroup]="loginForm" (submit)="login(loginForm.value)">
-        <h4>Login</h4>
-        <div class="form-group">
-            <label>Username</label>
-            <ng-container *ngIf="displayUsernameError && username.invalid && (username.dirty || username.touched)">
-                <p class="error" >
-                    <ng-container *ngIf="username.errors.required">
-                        Username is required.
-                    </ng-container>
-                    <ng-container
-                        *ngIf="(displayUsernameError && username.errors.minlength) || username.errors.maxlength">
-                        Username must be between 5-20 characters long.
-                    </ng-container>
-                </p>
-            </ng-container>
-            <input formControlName="username" type="text" placeholder="Username" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>Password</label>
-            <ng-container *ngIf="displayPasswordError && password.invalid && (password.dirty || password.touched)">
-                <p class="error" >
-                    <ng-container *ngIf="password.errors.required">
-                        Password is required.
-                    </ng-container>
-                    <ng-container *ngIf="displayPasswordError && password.errors.minlength">
-                        Password must be 6 characters or greater.
-                    </ng-container>
-                </p>
-            </ng-container>
-            <input formControlName="password" type="password" placeholder="Password" class="form-control">
-        </div>
-        <!--Resetting authError so that if the user resubmits and it's unsuccessful, the alert appears again.-->
-        <ngx-alert *ngIf="authError" type="danger" [dismissible]="true" (onClosed)="authError = null">
-            <p>{{authError}}</p>
-        </ngx-alert>
-        <button class="btn btn-default">Login</button>
-    </form>
+<div class="col-md-4 col-md-offset-4">
+    <div *ngIf="isLoading">
+        <app-spinner></app-spinner>
+    </div>
+    <div *ngIf="!isLoading">
+        <form [formGroup]="loginForm" (submit)="login(loginForm.value)">
+            <h3>Login</h3>
+            <div class="form-group">
+                <label>Username</label>
+                <ng-container *ngIf="displayUsernameError && username.invalid && (username.dirty || username.touched)">
+                    <p class="error" >
+                        <ng-container *ngIf="username.errors.required">
+                            Username is required.
+                        </ng-container>
+                        <ng-container
+                            *ngIf="(displayUsernameError && username.errors.minlength) || username.errors.maxlength">
+                            Username must be between 5-20 characters long.
+                        </ng-container>
+                    </p>
+                </ng-container>
+                <input formControlName="username" type="text" placeholder="Username" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <ng-container *ngIf="displayPasswordError && password.invalid && (password.dirty || password.touched)">
+                    <p class="error" >
+                        <ng-container *ngIf="password.errors.required">
+                            Password is required.
+                        </ng-container>
+                        <ng-container *ngIf="displayPasswordError && password.errors.minlength">
+                            Password must be 6 characters or greater.
+                        </ng-container>
+                    </p>
+                </ng-container>
+                <input formControlName="password" type="password" placeholder="Password" class="form-control">
+            </div>
+            <!--Resetting authError so that if the user resubmits and it's unsuccessful, the alert appears again.-->
+            <ngx-alert *ngIf="authError" type="danger" [dismissible]="true" (onClosed)="authError = null">
+                <p>{{authError}}</p>
+            </ngx-alert>
+            <button class="btn btn-default">Login</button>
+        </form>
+    </div>
 </div>

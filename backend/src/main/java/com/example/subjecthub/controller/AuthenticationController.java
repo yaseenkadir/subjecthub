@@ -2,6 +2,7 @@ package com.example.subjecthub.controller;
 
 import com.example.subjecthub.Application;
 import com.example.subjecthub.dto.AuthenticationRequest;
+import com.example.subjecthub.dto.JwtResponse;
 import com.example.subjecthub.dto.RegisterRequest;
 import com.example.subjecthub.dto.SubjectHubUserResponse;
 import com.example.subjecthub.entity.SubjectHubUser;
@@ -12,7 +13,6 @@ import com.example.subjecthub.exception.SubjectHubUnexpectedException;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,8 +22,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -49,7 +47,7 @@ public class AuthenticationController {
     private static final Pattern usernamePattern = Pattern.compile("^[a-zA-Z]{1}[a-zA-Z0-9]{4,19}");
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> authenticate(
+    public JwtResponse authenticate(
         @RequestBody AuthenticationRequest authRequest
     ) {
         Application.log.info("Attempting authentication for {}", authRequest.getUsername());
@@ -65,14 +63,12 @@ public class AuthenticationController {
             throw new SubjectHubException("Invalid credentials.");
         }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("token", jwtTokenUtils.generateToken(authRequest.getUsername()));
         Application.log.info("{} logged in.", authRequest.getUsername());
-        return ResponseEntity.ok(response);
+        return new JwtResponse(jwtTokenUtils.generateToken(authRequest.getUsername()));
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity register(
+    public SubjectHubUserResponse register(
         @RequestBody RegisterRequest registerRequest
     ) {
         // TODO: Handle usernames as case insensitive
@@ -85,7 +81,7 @@ public class AuthenticationController {
             hashedPassword, registerRequest.getEmail());
         subjectHubUserRepository.save(subjectHubUser);
         Application.log.info("{} successfully registered.", registerRequest.getUsername());
-        return ResponseEntity.ok(null);
+        return userResponse(subjectHubUser);
     }
 
     /**
@@ -94,7 +90,7 @@ public class AuthenticationController {
      * Might remove this if not needed.
      */
     @RequestMapping(value = "/self", method = RequestMethod.GET)
-    public ResponseEntity self() {
+    public SubjectHubUserResponse getUser() {
         UserDetails userDetails;
         try {
             userDetails =
@@ -110,10 +106,7 @@ public class AuthenticationController {
             throw new SubjectHubUnexpectedException(String.format("User %s is authenticated but " +
                 "was not found in database", userDetails.getUsername()));
         }
-
-        SubjectHubUserResponse response = new SubjectHubUserResponse();
-        BeanUtils.copyProperties(user.get(), response);
-        return ResponseEntity.ok(response);
+        return userResponse(user.get());
     }
 
     /**
@@ -137,5 +130,14 @@ public class AuthenticationController {
             throw new SubjectHubException(
                 "Username is invalid. Must start with letters and be between 5 and 20 characters.");
         }
+    }
+
+    /**
+     * Converts a SubjectHubUser to a SubjectHubUserResponse object for return to a user.
+     */
+    private SubjectHubUserResponse userResponse(SubjectHubUser user) {
+        SubjectHubUserResponse response = new SubjectHubUserResponse();
+        BeanUtils.copyProperties(user, response);
+        return response;
     }
 }

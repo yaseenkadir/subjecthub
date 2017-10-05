@@ -18,11 +18,11 @@
             </tr></tbody>
         </table>
     </div>
-    <form *ngIf="canAddComment" [formGroup]="addCommentForm" (submit)="addComment(addCommentForm.value)">
-        <p>Posting as: bob</p><!--need to get username from auth somehow-->
-        <input formControlName="message" type="text" placeholder="Comment" class="form-control">
-        <button class="btn btn-default">Post!</button>
-    </form>
+    <!--<form *ngIf="canAddComment" [formGroup]="addCommentForm" (submit)="addComment(addCommentForm.value)">-->
+        <!--<p>Posting as: bob</p>&lt;!&ndash;need to get username from auth somehow&ndash;&gt;-->
+        <!--<input formControlName="message" type="text" placeholder="Comment" class="form-control">-->
+        <!--<button class="btn btn-default">Post!</button>-->
+    <!--</form>-->
     <p *ngIf="!canAddComment">
         Need to login to post a comment!
     </p>
