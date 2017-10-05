@@ -1,0 +1,107 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Universities",
+		"_postman_id": "cfd64ac7-a9e1-a2f5-9e6e-fdd6399ac612",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Universities",
+			"request": {
+				"url": "{{domain}}/api/universities",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Fetches all universities."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Universities (w GET params)",
+			"request": {
+				"url": {
+					"raw": "{{domain}}/api/universities",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"api",
+						"universities"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "University of Technology Sydney",
+							"equals": true,
+							"description": "",
+							"disabled": true
+						},
+						{
+							"key": "abbreviation",
+							"value": "UTS",
+							"equals": true,
+							"description": "",
+							"disabled": true
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Fetches all universities with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Universities (w GET params and Fuzzy examples)",
+			"request": {
+				"url": {
+					"raw": "{{domain}}/api/universities",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"api",
+						"universities"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "unniversTYI oF TerhNoLOGy suDnEY",
+							"equals": true,
+							"description": "",
+							"disabled": true
+						},
+						{
+							"key": "abbreviation",
+							"value": "uTs",
+							"equals": true,
+							"description": "",
+							"disabled": true
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Fetches all universities with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
+			},
+			"response": []
+		},
+		{
+			"name": "Get University",
+			"request": {
+				"url": "{{domain}}/api/universities/university/1",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Fetches a specific university."
+			},
+			"response": []
+		}
+	]
+}
