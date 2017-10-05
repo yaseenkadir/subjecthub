@@ -169,7 +169,7 @@
 				{
 					"name": "Get Subject",
 					"request": {
-						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/comments",
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/",
 						"method": "GET",
 						"header": [],
 						"body": {
