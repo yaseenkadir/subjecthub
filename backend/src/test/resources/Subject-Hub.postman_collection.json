@@ -2,11 +2,113 @@
 	"variables": [],
 	"info": {
 		"name": "Subject-Hub",
-		"_postman_id": "4497f870-657e-08dc-3603-049c376914e2",
+		"_postman_id": "a60746b8-3d93-90d9-673a-b18655ea0167",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Universities",
+			"description": "",
+			"item": [
+				{
+					"name": "Get Universities",
+					"request": {
+						"url": "{{domain}}/api/universities",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetches all universities."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Universities (w GET params)",
+					"request": {
+						"url": {
+							"raw": "{{domain}}/api/universities",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"universities"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "University of Technology Sydney",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "abbreviation",
+									"value": "UTS",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetches all universities with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Universities (w GET params and Fuzzy examples)",
+					"request": {
+						"url": {
+							"raw": "{{domain}}/api/universities",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"universities"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "unniversTYI oF TerhNoLOGy suDnEY",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "abbreviation",
+									"value": "uTs",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetches all universities with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
+					},
+					"response": []
+				},
+				{
+					"name": "Get University",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetches a specific university."
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Subjects",
 			"description": "",
@@ -182,101 +284,100 @@
 				}
 			]
 		},
-        {
-            "name": "Assessments",
-            "description": "",
-            "item": [
-                {
-                    "name": "Get Assessments",
-                    "request": {
-                        "url": "{{domain}}/api/universities/university/1/subjects/subject/1/assessments",
-                        "method": "GET",
-                        "header": [],
-                        "body": {
-                            "mode": "raw",
-                            "raw": ""
-                        },
-                        "description": "Fetches all assessments for a subjects"
-                    },
-                    "response": []
-                },
-                {
-                    "name": "Get Assessments (w GET params)",
-                    "request": {
-                        "url": {
-                            "raw": "{{domain}}/api/universities/university/1/subjects/subject/1/assessments?",
-                            "host": [
-                                "{{domain}}"
-                            ],
-                            "path": [
-                                "api",
-                                "universities",
-                                "university",
-                                "1",
-                                "subjects",
-                                "subject",
-                                "1",
-                                "assessments"
-                            ],
-                            "query": [
-                                {
-                                    "key": "name",
-                                    "value": "Assessment task 1",
-                                    "equals": true,
-                                    "description": "",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "weighting",
-                                    "value": "30",
-                                    "equals": true,
-                                    "description": "",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "type",
-                                    "value": "PROJECT",
-                                    "equals": true,
-                                    "description": "",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "groupWork",
-                                    "value": "TRUE",
-                                    "equals": true,
-                                    "description": "",
-                                    "disabled": true
-                                }
-                            ],
-                            "variable": []
-                        },
-                        "method": "GET",
-                        "header": [],
-                        "body": {
-                            "mode": "raw",
-                            "raw": ""
-                        },
-                        "description": "Fetches all assessments for a subject with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
-                    },
-                    "response": []
-                },
-               
-                {
-                    "name": "Get Assessment",
-                    "request": {
-                        "url": "{{domain}}/api/universities/university/1/subjects/subject/1/assessments/assessment/1",
-                        "method": "GET",
-                        "header": [],
-                        "body": {
-                            "mode": "raw",
-                            "raw": ""
-                        },
-                        "description": "Fetches a specific assessment for a subject."
-                    },
-                    "response": []
-                }
-            ]
-        },
+		{
+			"name": "Assessments",
+			"description": "",
+			"item": [
+				{
+					"name": "Get Assessments",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/assessments",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Fetches all assessments for a subjects"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Assessments (w GET params)",
+					"request": {
+						"url": {
+							"raw": "{{domain}}/api/universities/university/1/subjects/subject/1/assessments?",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"universities",
+								"university",
+								"1",
+								"subjects",
+								"subject",
+								"1",
+								"assessments"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Assessment task 1",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "weighting",
+									"value": "30",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "PROJECT",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "groupWork",
+									"value": "TRUE",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Fetches all assessments for a subject with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Assessment",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/assessments/assessment/1",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Fetches a specific assessment for a subject."
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Auth",
 			"description": "",
@@ -327,7 +428,10 @@
 						"url": "{{domain}}/api/auth/self",
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -344,8 +448,126 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Copy the token from Authenticate into the Authorization Header field."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SubjectComments",
+			"description": "Manage comments of a subject",
+			"item": [
+				{
+					"name": "Get Comments for Subject in University",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/comments",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Fetches a list of comments for a subject in a university."
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Comment for Subject in University",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/comments/comment/1",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Fetches a specific comment from a subject in a university."
+					},
+					"response": []
+				},
+				{
+					"name": "ThumbUp a Comment for Subject in University",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/comments/comment/1/addThumbUp",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Increases Thumb Up count by one for a specific comment from a subject in a university."
+					},
+					"response": []
+				},
+				{
+					"name": "ThumbDown a Comment for Subject in University",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/comments/comment/1/addThumbDown",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Increases Thumb Down count by one for a specific comment from a subject in a university."
+					},
+					"response": []
+				},
+				{
+					"name": "Flag a Comment for Subject in University",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/comments/comment/1/flag",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Flags a specific comment from a subject in a university."
+					},
+					"response": []
+				},
+				{
+					"name": "Unflag a Comment for Subject in University",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/comments/comment/1/unflag",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Unflags a specific comment from a subject in a university."
+					},
+					"response": []
+				},
+				{
+					"name": "Add a Comment for Subject in University",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/comments/comment/add",
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\":\"1\",\n\t\"comment\":\"test comment\"\n}"
+						},
+						"description": "Adds a comment to a subject in a university."
 					},
 					"response": []
 				}
