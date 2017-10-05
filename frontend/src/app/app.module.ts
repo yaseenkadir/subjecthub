@@ -15,7 +15,6 @@ import { AddTagComponent } from './add-tag/add-tag.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SubjectCommentsComponent } from './subject-comments/subject-comments.component';
 import { UniversitiesComponent} from './universities/universities.component';
-import {ApiErrorHandler} from "./utils/api-error-handler";
 import {RouterModule} from "@angular/router";
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -73,7 +72,6 @@ import { SubjectDetailsComponent } from './subject-details/subject-details.compo
     UniversitiesComponent,
     SubjectDetailsComponent,
   ],
-  providers: [ApiErrorHandler],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
