@@ -57,6 +57,8 @@ public class SubjectServiceController implements SubjectServiceApi {
         // TODO: call getSubject() here instead of manually null checking
         Subject currentSubject = subjectRepository.findOne(subjectId);
 
+
+
         if (currentSubject == null) {
             throw new SubjectHubException(HttpStatus.NOT_FOUND,
                 "Subject not found. Unable to add tag.");
