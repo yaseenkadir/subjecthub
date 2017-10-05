@@ -4,21 +4,13 @@ import {Headers, Http} from '@angular/http';
 import {environment} from '../../environments/environment';
 import {SubjectHubApiResponse} from '../models/subject-hub-api-response';
 import {LoginResponse} from '../models/login-response';
-import {JwtHelper} from 'angular2-jwt';
 import {User} from '../models/user';
+import {UserService} from "./user.service";
 
 @Injectable()
 export class AuthService {
-    user: User;
-    private jwtHelper: JwtHelper;
-    private tokenString: string;
-    private token: any;
-    private expiry: Date;
 
-    constructor(private http: Http) {
-        this.jwtHelper = new JwtHelper();
-        this.user = null;
-        this.token = null;
+    constructor(private http: Http, private userService: UserService) {
     }
 
     /**
@@ -55,39 +47,17 @@ export class AuthService {
     }
 
     /**
-     * Gets user details from the server. Assumes user is already logged in.
-     * @returns {Promise<SubjectHubApiResponse<User>>}
+     * Gets user details from the server.
+     * @param {string} token
+     * @returns {Promise<User>}
      */
-    private getUser(): Promise<SubjectHubApiResponse<User>> {
-
+    getUser(token: string): Promise<User> {
         let headers = new Headers();
-        headers.append('Authorization', this.tokenString);
+        headers.append('Authorization', token);
 
         return this.http.get(`${environment.API_URL}/auth/self`, {headers: headers})
             .toPromise()
-            .then(response => {
-                let user = response.json() as User;
-                console.log('User successfully fetched');
-                return new SubjectHubApiResponse<User>(true, user, null);
-            });
-    }
-
-    private fetchUser() {
-        this.getUser()
-            .then((response) => this.user = response.response as User)
-            .catch((e) => {
-                throw new Error('Successfully logged in but unable to retrieve user.')
-            })
-    }
-
-    /**
-     * Returns true if the user is logged in. This should always be checked before accessing the
-     * user field.
-     * @returns {boolean}
-     */
-    isLoggedIn(): boolean {
-        // Not sure how javascript compares date objects
-        return this.user != null && this.expiry != null && new Date() < this.expiry;
+            .then(response => {return response.json() as User;});
     }
 
     private loginSuccess(response: any): LoginResponse {
@@ -96,11 +66,17 @@ export class AuthService {
 
         let loginResponse = response.json() as LoginResponse;
         let token = loginResponse.token;
-        this.tokenString = token;
-        this.token = this.jwtHelper.decodeToken(token);
-        this.expiry = new Date(this.token.exp * 1000);
-
-        this.fetchUser();
+        this.userService.setToken(token);
+        this.getUser(token)
+            .then(u => {
+                console.log(`fetched User{username=${u.username}, email=${u.email}}`);
+                this.userService.setUser(u);
+            })
+            .catch((e) => {
+                console.log('Unable to fetch u');
+                console.log(e);
+                throw new Error('Really unexpected error occurred when fetching user!')
+            });
         return loginResponse;
     }
 }

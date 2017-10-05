@@ -19,6 +19,7 @@ import {RouterModule} from "@angular/router";
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { SubjectDetailsComponent } from './subject-details/subject-details.component';
+import {UserService} from "./services/user.service";
 
 
 @NgModule({
@@ -72,6 +73,7 @@ import { SubjectDetailsComponent } from './subject-details/subject-details.compo
     UniversitiesComponent,
     SubjectDetailsComponent,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [UserService]
 })
 export class AppModule {}
