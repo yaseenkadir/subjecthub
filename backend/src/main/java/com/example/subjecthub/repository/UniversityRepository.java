@@ -9,6 +9,4 @@ public interface UniversityRepository extends CrudRepository<University, Long> {
 
     public List<University> findAll();
 
-    public List<University> findByAbbreviationLikeIgnoreCaseOrNameLikeIgnoreCase(String abbreviation,
-        String name);
 }
