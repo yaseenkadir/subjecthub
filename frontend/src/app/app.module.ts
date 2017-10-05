@@ -19,6 +19,8 @@ import {ApiErrorHandler} from "./utils/api-error-handler";
 import {RouterModule} from "@angular/router";
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { SubjectDetailsComponent } from './subject-details/subject-details.component';
+
 
 @NgModule({
   imports: [
@@ -69,6 +71,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     SpinnerComponent,
     SubjectCommentsComponent,
     UniversitiesComponent,
+    SubjectDetailsComponent,
   ],
   providers: [ApiErrorHandler],
   bootstrap: [AppComponent]
