@@ -2,11 +2,113 @@
 	"variables": [],
 	"info": {
 		"name": "Subject-Hub",
-		"_postman_id": "6ea80bcf-17a4-e079-5441-bd2ade883803",
+		"_postman_id": "a60746b8-3d93-90d9-673a-b18655ea0167",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Universities",
+			"description": "",
+			"item": [
+				{
+					"name": "Get Universities",
+					"request": {
+						"url": "{{domain}}/api/universities",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetches all universities."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Universities (w GET params)",
+					"request": {
+						"url": {
+							"raw": "{{domain}}/api/universities",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"universities"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "University of Technology Sydney",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "abbreviation",
+									"value": "UTS",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetches all universities with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Universities (w GET params and Fuzzy examples)",
+					"request": {
+						"url": {
+							"raw": "{{domain}}/api/universities",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"universities"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "unniversTYI oF TerhNoLOGy suDnEY",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								},
+								{
+									"key": "abbreviation",
+									"value": "uTs",
+									"equals": true,
+									"description": "",
+									"disabled": true
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetches all universities with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
+					},
+					"response": []
+				},
+				{
+					"name": "Get University",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetches a specific university."
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Subjects",
 			"description": "",
