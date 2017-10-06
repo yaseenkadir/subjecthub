@@ -7,7 +7,6 @@ import com.example.subjecthub.security.JwtTokenFilter;
 import com.example.subjecthub.security.JwtTokenUtils;
 import com.example.subjecthub.testutils.TestUtils;
 import com.example.subjecthub.exception.ExceptionAdvice;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.JsonPath;
 import io.jsonwebtoken.Claims;
 import org.junit.Assert;
@@ -158,13 +157,7 @@ public class AuthControllerTests {
     @Test
     public void testAuthenticate() throws Exception {
         // Authenticates and checks that the token is valid and expires in seven days.
-        MvcResult result = authenticate()
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.token").exists())
-            .andReturn();
-
-        JsonNode n = TestUtils.fromString(result.getResponse().getContentAsString());
-        String token = n.get("token").textValue();
+        String token = getTokenFor("testuser", "testpassword");
         Claims c = jwtTokenUtils.getClaimsFromToken(token);
 
         // THIS TEST MIGHT BREAK
@@ -188,10 +181,8 @@ public class AuthControllerTests {
     }
 
     @Test
-    public void testSelfWithToken() throws Exception {
-        MvcResult result = authenticate().andReturn();
-        String jwt = JsonPath.read(result.getResponse().getContentAsString(), "$.token");
-        Assert.assertNotNull(jwt);
+    public void testSelfWithTokenAsStudent() throws Exception {
+        String jwt = getTokenFor("testuser", "testpassword");
 
         mockMvc
             .perform(get("/api/auth/self")
@@ -201,6 +192,21 @@ public class AuthControllerTests {
             .andExpect(jsonPath("$.email", is("test@example.com")))
             // Password should never be returned to user!
             .andExpect(jsonPath("$.password").doesNotExist())
+            .andReturn();
+    }
+
+    @Test
+    public void testSelfWithTokenAsAdmin() throws Exception {
+        String jwt = getTokenForAdmin();
+
+        mockMvc
+            .perform(get("/api/auth/self")
+                .header(JwtTokenFilter.AUTHORIZATION_HEADER, jwt))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.username", is("admin")))
+            .andExpect(jsonPath("$.email", is("admin@example.com")))
+            .andExpect(jsonPath("$.password").doesNotExist())
+            .andExpect(jsonPath("$.admin", is(true)))
             .andReturn();
     }
 
@@ -228,18 +234,26 @@ public class AuthControllerTests {
             .andReturn();
     }
 
-    /**
-     * Util method used by both testAuthenticate and testSelfWithToken.
-     */
-    private ResultActions authenticate() throws Exception {
-        return authenticate(new AuthenticationRequest("testuser", "testpassword"));
-    }
-
     private ResultActions authenticate(AuthenticationRequest authRequest) throws Exception {
         String authRequestJson = TestUtils.asJson(authRequest);
         return mockMvc
             .perform(post("/api/auth/authenticate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(authRequestJson));
+    }
+
+    private String getTokenForAdmin() throws Exception {
+        return getTokenFor("admin", "adminpassword");
+    }
+
+    private String getTokenFor(String username, String password) throws Exception {
+        AuthenticationRequest request = new AuthenticationRequest(username, password);
+        String authRequestJson = TestUtils.asJson(request);
+        MvcResult result =  mockMvc
+            .perform(post("/api/auth/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(authRequestJson))
+            .andReturn();
+        return JsonPath.read(result.getResponse().getContentAsString(), "$.token");
     }
 }

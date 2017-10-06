@@ -1,9 +1,11 @@
 package com.example.subjecthub.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -19,10 +21,13 @@ public class SubjectHubUser {
     private String username;
 
     @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
-    private String password;
+    private Boolean admin;
 
     @OneToMany
     @JoinColumn(name = "user_id")
@@ -34,9 +39,14 @@ public class SubjectHubUser {
     }
 
     public SubjectHubUser(String username, String password, String email) {
+        this(username, password, email, false);
+    }
+
+    public SubjectHubUser(String username, String password, String email, Boolean admin) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.admin = admin;
     }
 
     public Long getId() {
@@ -71,6 +81,14 @@ public class SubjectHubUser {
         this.password = password;
     }
 
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+    }
+
     public List<SubjectComment> getComments() {
         return comments;
     }
@@ -85,6 +103,7 @@ public class SubjectHubUser {
             "id=" + id +
             ", username='" + username + '\'' +
             ", email='" + email + '\'' +
+            ", admin=" + admin +
             '}';
     }
 }

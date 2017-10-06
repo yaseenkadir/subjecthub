@@ -65,8 +65,7 @@ public class Subject {
     @Column
     private int numRatings;
 
-    @OneToMany
-    @JoinColumn(name = "subject_id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subject", orphanRemoval = true)
     private List<Assessment> assessments;
 
 
@@ -78,8 +77,7 @@ public class Subject {
     )
     private List<Tag> tags = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "subject_id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subject", orphanRemoval = true)
     @JsonIgnoreProperties(value = {"subject"})
     private List<SubjectComment> comments;
 
