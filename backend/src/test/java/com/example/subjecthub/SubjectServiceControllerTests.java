@@ -14,7 +14,6 @@ import com.example.subjecthub.repository.UniversityRepository;
 import com.example.subjecthub.testutils.TestUtils;
 
 
-import com.example.subjecthub.dto.AddCommentRequest;
 import com.example.subjecthub.entity.*;
 import com.example.subjecthub.repository.*;
 
@@ -25,20 +24,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -378,7 +373,45 @@ public class SubjectServiceControllerTests {
             .andReturn();
     }
 
+    // TODO: Move these subject controller tests to SubjectServiceControllerTests
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    public void testAdminCanDeleteSubject() throws Exception {
+        Subject s = createSubject("Subject To Delete", "S2D");
 
+        String subjectsUrl = String.format("/api/universities/university/%s/subjects",
+            university.getId());
+
+        mockMvc.perform(get(subjectsUrl))
+            .andExpect(jsonPath("$", hasSize(3)))
+            .andExpect(jsonPath("$[2].name", is("Subject To Delete")))
+            .andReturn();
+
+        mockMvc
+            .perform(delete(subjectsUrl + "/subject/" + s.getId()))
+            .andExpect(status().isOk());
+
+        mockMvc.perform(get(subjectsUrl))
+            .andExpect(jsonPath("$", hasSize(2)));
+    }
+
+    @Test
+    @WithMockUser
+    public void testStudentCantDeleteSubject() throws Exception {
+        University u = universityRepository.findAll().get(0);
+        Subject s = createSubject("Subject To Delete", "S2D");
+
+        String subjectsUrl = String.format("/api/universities/university/%s/subjects", u.getId());
+        mockMvc.perform(get(subjectsUrl))
+            .andExpect(jsonPath("$", hasSize(3)))
+            .andExpect(jsonPath("$[2].name", is("Subject To Delete")))
+            .andReturn();
+
+        mockMvc
+            .perform(delete(subjectsUrl + "/subject/" + s.getId()))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message", is("Access is denied")));
+    }
 
     /**
      * Util test method that handles extraneous params for creating subject objects.

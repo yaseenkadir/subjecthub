@@ -1,17 +1,28 @@
-INSERT INTO users (user_id, username, password, email)
+INSERT INTO users (user_id, username, password, email, admin)
 VALUES(
     1,
     'UserOne',
-    'PassOne',
-    'UserOne@email.com'
+    '$2a$10$nZ4rwkQfzd51jBmorrZDceaJq2BJ2LI9Ap58VuoHNeTBDPHCLxvba', /* password is "password" */
+    'UserOne@email.com',
+    FALSE
 );
 
-INSERT INTO users (user_id, username, password, email)
+INSERT INTO users (user_id, username, password, email, admin)
 VALUES(
     2,
     'UserTwo',
-    'PassTwo',
-    'UserTwo@email.com'
+    '$2a$10$nZ4rwkQfzd51jBmorrZDceaJq2BJ2LI9Ap58VuoHNeTBDPHCLxvba', /* password is "password" */
+    'UserTwo@email.com',
+    FALSE
+);
+
+INSERT INTO users (user_id, username, password, email, admin)
+VALUES(
+    3,
+    'admin',
+    '$2a$10$nZ4rwkQfzd51jBmorrZDceaJq2BJ2LI9Ap58VuoHNeTBDPHCLxvba', /* password is "password" */
+    'admin@example.com',
+    TRUE
 );
 
 /*

@@ -90,7 +90,6 @@ public class SubjectServiceController implements SubjectServiceApi {
 
     }
 
-
     @Override
     public List<Subject> getSubjects(
         @PathVariable Long universityId,
@@ -136,6 +135,14 @@ public class SubjectServiceController implements SubjectServiceApi {
         // TODO: Return null or throw exception if no subject is found
         // TODO: Don't allow cross university fetching
         return subjectRepository.findOne(subjectId);
+    }
+
+    @Override
+    public void deleteSubject(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId
+    ) {
+        subjectRepository.delete(subjectId);
     }
 
     @Override

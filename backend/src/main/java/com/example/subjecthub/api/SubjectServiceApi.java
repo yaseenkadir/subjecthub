@@ -8,6 +8,7 @@ import com.example.subjecthub.entity.Tag;
 import com.example.subjecthub.entity.SubjectComment;
 import org.bouncycastle.cert.ocsp.Req;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -35,6 +36,13 @@ public interface SubjectServiceApi {
 
     @RequestMapping(value = "/subject/{subjectId}", method = RequestMethod.GET)
     public Subject getSubject(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId
+    );
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value = "/subject/{subjectId}", method = RequestMethod.DELETE)
+    public void deleteSubject(
         @PathVariable Long universityId,
         @PathVariable Long subjectId
     );
