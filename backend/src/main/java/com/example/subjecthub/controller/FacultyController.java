@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequestMapping(value="/api/universities/university/{universityId}/faculties")
+@CrossOrigin(origins = "*")
 @RestController
 public class FacultyController {
 

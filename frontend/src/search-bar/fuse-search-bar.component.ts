@@ -6,30 +6,34 @@ import * as Fuse from "fuse.js";
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/switchMap";
 import "rxjs/add/operator/toPromise";
+import Promise from 'bluebird';
 
-
-
+import {FacultySearchService} from "../app/services/faculty-search.service";
 import { SubjectSearchService } from "../app/services/subject-search.service";
-
+import {Faculty} from "../app/models/faculty";
 import { University } from '../app/models/university';
+import { Subject } from '../app/models/subject';
 
 @Component({
   selector: "fuse-search-bar",
   templateUrl: "./fuse-search-bar.component.html",
   styleUrls: ["./search-bar.component.css"],
-  providers: [SubjectSearchService]
+  providers: [SubjectSearchService, FacultySearchService]
 })
 export class FuseSearchBarComponent implements OnInit {
   @Input ()
   university: University;
+  faculties: Faculty[];
+  selectedFaculty: Faculty;
+  subjects: Subject[];
+  displaySubjects: Subject[];
 
-  subjects: {}[];
   fuse: Fuse;
+
+  term: string
+
   options = {
     shouldSort: true,
-    // tokenize: true,
-    // matchAllTokens: true,
-
     threshold: 0.4,
     location: 0,
     distance: 10000,
@@ -45,33 +49,58 @@ export class FuseSearchBarComponent implements OnInit {
       "description"
     ]
   };
-  constructor(private router: Router,private subjectSearchService: SubjectSearchService) {
-    this.subjects = [];
+  constructor(private router: Router, private facultySearchService: FacultySearchService, private subjectSearchService: SubjectSearchService) {
+    this.displaySubjects = [];
   }
 
   search(term: string): void {
     if (!term) return;
-    this.subjects = this.fuse.search(term);
+    this.displaySubjects = this.fuse.search(term) as Subject[];
   }
+
+  fetchSubjects(): Promise<Subject[]> {
+    return this.subjectSearchService
+        .fetch(this.university.id.toString())
+  }
+
+  fetchFaculties(): Promise<Faculty[]> {
+    return this.facultySearchService.fetch(this.university.id.toString())
+  }
+
+  createFuse(subjects): void {
+    this.fuse = new Fuse(subjects, this.options);
+  }
+
+  filterSubjects(): void {
+    const selected = this.selectedFaculty;
+
+    if (!selected) {
+        this.createFuse(this.subjects);
+        this.displaySubjects = this.subjects;
+        this.search(this.term);
+    }
+    else {
+        this.displaySubjects = this.subjects.filter(subject => subject.faculty['id'] === selected.id);
+        this.createFuse(this.displaySubjects);
+        this.search(this.term);
+    }
+  }
+
 
   ngOnInit(): void {
-    this.subjectSearchService
-      .fetch(this.university.id.toString())
-      .then(subjects => {
+    Promise.all([
+        this.fetchFaculties(),
+        this.fetchSubjects()
+    ]).spread((faculties, subjects) => {
+        this.faculties = faculties;
         this.subjects = subjects;
-        return subjects
-      })
-      .then(subjects => {
-
-        this.fuse = new Fuse(subjects, this.options);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+        this.displaySubjects = subjects.map(s => s);
+        this.createFuse(subjects);
+        this.search(this.term);
+    });
   }
 
-  goToSubjectDetails(subject) {
-      console.log(subject);
+  goToSubjectDetails(subject: Subject): void {
       this.router.navigate([`/university/${this.university.id}/subject/${subject.id}`]);
   }
 }

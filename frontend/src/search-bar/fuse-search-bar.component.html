@@ -5,9 +5,17 @@
         </div>
         <div class=" col-xs-8 col-xs-offset-2">
             <div class="input-group">
+                <div class="input-group-btn">
+                    <select (change)="filterSubjects()" [(ngModel)]="selectedFaculty" style="width: 137px;" class="form-control">
+                        <option [ngValue]=""></option>
+                            <option  [ngValue]="faculty" *ngFor="let faculty of faculties" >
+                                {{faculty.code}}
+                            </option>
+                </select>
+                </div>
                 <input type="hidden" name="search_param" value="all" id="search_param">
-                <input #searchForm id='search-form' class="search-query form-control" (keyup)="search(searchForm.value)" placeholder="Search"
-                />
+                <input #searchForm id='search-form' class="search-query form-control" [(ngModel)]='term' (keyup)="search(searchForm.value)"
+                    placeholder="Search" />
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
@@ -20,9 +28,9 @@
 
 <div class="container">
     <div class="col-md-12 ">
-        <p class="search-results-count">About {{subjects.length}} results</p>
+        <p class="search-results-count">About {{displaySubjects.length}} results</p>
         <div>
-            <section (click)="goToSubjectDetails(subject)" *ngFor="let subject of subjects" class="search-result-item">
+            <section (click)="goToSubjectDetails(subject)" *ngFor="let subject of displaySubjects " class="search-result-item">
                 <div>
                     <div class="row">
                         <div class="col-sm-9">
@@ -60,7 +68,7 @@
 
 
 
-            <section *ngIf='this.subjects.length === 0' class="empty-search-result">
+            <section *ngIf='displaySubjects.length === 0' class="empty-search-result">
                 <div class="search-result-item-body">
 
                     <div class="row">
