@@ -54,11 +54,12 @@ public class SubjectComment {
     public SubjectComment() {
     }
 
-    public SubjectComment(SubjectHubUser user, Subject subjectId, String post){
+    public SubjectComment(SubjectHubUser user, Subject subject, String post){
         this.user = user;
         this.subject = subject;
         this.post = post;
         setPostTimeNow();
+        isFlagged = false;
     }
 
     public Long getId() {
