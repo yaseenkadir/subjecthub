@@ -55,7 +55,7 @@ import { SearchPageComponent } from './search-page/search-page.component';
     AddTagComponent,
     SpinnerComponent,
     SubjectCommentsComponent,
-    FacultyComponent,
+
     UniversitiesComponent,
     SubjectDetailsComponent,
     DashboardComponent,
