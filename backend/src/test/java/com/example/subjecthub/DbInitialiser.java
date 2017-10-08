@@ -111,5 +111,10 @@ public class DbInitialiser implements ApplicationRunner {
         String hashedPassword = passwordEncoder.encode("testpassword");
         SubjectHubUser user = new SubjectHubUser("testuser", hashedPassword, "test@example.com");
         user = subjectHubUserRepository.save(user);
+
+        String adminPassword = passwordEncoder.encode("adminpassword");
+        SubjectHubUser admin = new SubjectHubUser("admin", adminPassword, "admin@example.com",
+            true);
+        admin = subjectHubUserRepository.save(admin);
     }
 }

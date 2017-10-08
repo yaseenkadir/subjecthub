@@ -4,6 +4,7 @@ import com.example.subjecthub.Application;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,6 +35,13 @@ public class ExceptionAdvice {
         return ResponseEntity
             .status(she.getStatus())
             .body(new ExceptionResponse(she.getStatus(), she.getMessage()));
+    }
+
+    @ResponseBody
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionResponse> handleAccessDeniedException(AccessDeniedException ade) {
+        SubjectHubException she = new SubjectHubException(HttpStatus.UNAUTHORIZED, ade.getMessage());
+        return handleSubjectHubException(she);
     }
 
     @Order(Integer.MAX_VALUE)

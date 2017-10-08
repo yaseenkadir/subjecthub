@@ -14,13 +14,14 @@ import { LoginComponent } from './login/login.component';
 import { AddTagComponent } from './add-tag/add-tag.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SubjectCommentsComponent } from './subject-comments/subject-comments.component';
+
+import { FacultyComponent } from './faculty/faculty.component';
 import { UniversitiesComponent} from './universities/universities.component';
 import {RouterModule} from "@angular/router";
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { SubjectDetailsComponent } from './subject-details/subject-details.component';
 import {UserService} from "./services/user.service";
-
 
 @NgModule({
   imports: [
@@ -70,6 +71,7 @@ import {UserService} from "./services/user.service";
     AddTagComponent,
     SpinnerComponent,
     SubjectCommentsComponent,
+    FacultyComponent,
     UniversitiesComponent,
     SubjectDetailsComponent,
   ],

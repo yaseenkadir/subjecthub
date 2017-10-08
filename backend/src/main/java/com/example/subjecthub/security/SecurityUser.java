@@ -14,14 +14,21 @@ public class SecurityUser implements UserDetails {
 
     private String username;
     private String password;
+    private Collection<? extends GrantedAuthority> authorities;
 
     public SecurityUser() {
 
     }
 
     public SecurityUser(String username, String password) {
+        this(username, password, Collections.emptyList());
+    }
+
+    public SecurityUser(String username, String password, 
+                        Collection<? extends GrantedAuthority>authorities) {
         this.username = username;
         this.password = password;
+        this.authorities = authorities;
     }
 
     @Override
@@ -44,7 +51,11 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return authorities;
+    }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 
     @Override
