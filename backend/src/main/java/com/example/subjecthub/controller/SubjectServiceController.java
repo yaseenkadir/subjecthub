@@ -15,15 +15,15 @@ import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.repository.TagRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
 
+import com.example.subjecthub.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,14 +55,7 @@ public class SubjectServiceController implements SubjectServiceApi {
     ) {
 
         // TODO: call getSubject() here instead of manually null checking
-        Subject currentSubject = subjectRepository.findOne(subjectId);
-
-
-
-        if (currentSubject == null) {
-            throw new SubjectHubException(HttpStatus.NOT_FOUND,
-                "Subject not found. Unable to add tag.");
-        }
+        Subject currentSubject = getSubject(universityId, subjectId);
 
         Tag existingTag = tagRepository.findByName(tag.getName());
 
@@ -109,6 +102,7 @@ public class SubjectServiceController implements SubjectServiceApi {
             universityId
         );
 
+        // TODO: Revisit this behaviour. Is this what we want?
         // If subjectCode is supplied we don't check other GET params
         if (subjectCode != null) {
             return subjectRepository.findByCodeContainingIgnoreCase(subjectCode);
@@ -127,14 +121,15 @@ public class SubjectServiceController implements SubjectServiceApi {
     }
 
     @Override
+    @Nonnull
     public Subject getSubject(
         @PathVariable Long universityId,
         @PathVariable Long subjectId
     ) {
         // TODO: Move annotations from Service interface to implementation
-        // TODO: Return null or throw exception if no subject is found
-        // TODO: Don't allow cross university fetching
-        return subjectRepository.findOne(subjectId);
+        Subject s = subjectRepository.findOne(subjectId);
+        Utils.ifNull404(s, "Subject not found.");
+        return s;
     }
 
     @Override
@@ -142,7 +137,9 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long subjectId
     ) {
-        subjectRepository.delete(subjectId);
+        // getSubject handles not found exception.
+        Subject s = getSubject(universityId, subjectId);
+        subjectRepository.delete(s);
     }
 
     @Override
@@ -150,25 +147,20 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long universityId,
         @PathVariable Long subjectId
     ) {
-        List<SubjectComment> results = subjectCommentRepository.findBySubject_Id(subjectId);
-        if (results.isEmpty()) {
-            throw new SubjectHubException(String.format("No comments found for subject id: %s", subjectId));
-        }
-        return results;
+        // Using getSubject() because it handles 404 check
+        return getSubject(universityId, subjectId).getComments();
     }
 
     @Override
+    @Nonnull
     public SubjectComment getComment(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ) {
-        SubjectComment result = subjectCommentRepository.findOne(commentId);
-        if (result == null) {
-            throw new SubjectHubException(String.format("Specified comment id: %s, not found for subject" +
-                " id: %s", commentId, subjectId));
-        }
-        return result;
+        SubjectComment comment = subjectCommentRepository.findOne(commentId);
+        Utils.ifNull404(comment, "Comment not found.");
+        return comment;
     }
 
     @Override
@@ -192,12 +184,7 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ) {
-        SubjectComment result = subjectCommentRepository.findOne(commentId);
-        if (result == null) {
-            throw new SubjectHubException(String.format(
-                "Specified comment id: %s, not found for subject id: %s. Unable to add thumb up.",
-                commentId, subjectId));
-        }
+        SubjectComment result = getComment(universityId, subjectId, commentId);
         result.addThumbUp();
         return subjectCommentRepository.save(result);
     }
@@ -208,12 +195,7 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ) {
-        SubjectComment result = subjectCommentRepository.findOne(commentId);
-        if (result == null) {
-            throw new SubjectHubException(String.format(
-                "Specified comment id: %s, not found for subject id: %s. Unable to add thumb down.",
-                commentId, subjectId));
-        }
+        SubjectComment result = getComment(universityId, subjectId, commentId);
         result.addThumbDown();
         return subjectCommentRepository.save(result);
     }
@@ -224,12 +206,7 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ) {
-        SubjectComment result = subjectCommentRepository.findOne(commentId);
-        if (result == null) {
-            throw new SubjectHubException(String.format(
-                "Specified comment id: %s, not found for subject id: %s. Unable to flag.",
-                commentId, subjectId));
-        }
+        SubjectComment result = getComment(universityId, subjectId, commentId);
         result.setFlagged(true);
         return subjectCommentRepository.save(result);
     }
@@ -240,12 +217,7 @@ public class SubjectServiceController implements SubjectServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long commentId
     ) {
-        SubjectComment result = subjectCommentRepository.findOne(commentId);
-        if (result == null) {
-            throw new SubjectHubException(String.format(
-                "Specified comment id: %s, not found for subject id: %s. Unable to unflag.",
-                commentId, subjectId));
-        }
+        SubjectComment result = getComment(universityId, subjectId, commentId);
         result.setFlagged(false);
         return subjectCommentRepository.save(result);
     }

@@ -31,6 +31,7 @@ public interface SubjectServiceApi {
         @RequestParam(required = false) String instructor
     );
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/subject/{subjectId}/addTag", method = RequestMethod.POST)
     public Subject addTagToSubject(@PathVariable Long universityId, @PathVariable Long subjectId, @RequestBody Tag tag);
 
@@ -60,6 +61,7 @@ public interface SubjectServiceApi {
         @PathVariable Long commentId
     );
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/subject/{subjectId}/comments/comment/add", method = RequestMethod.POST)
     public SubjectComment commentAdd(
         @PathVariable Long universityId,
@@ -67,6 +69,7 @@ public interface SubjectServiceApi {
         @RequestBody AddCommentRequest addCommentRequest
     );
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/addThumbUp", method = RequestMethod.GET)
     public SubjectComment commentAddThumbUp(
         @PathVariable Long universityId,
@@ -74,6 +77,7 @@ public interface SubjectServiceApi {
         @PathVariable Long commentId
     );
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/addThumbDown", method = RequestMethod.GET)
     public SubjectComment commentAddThumbDown(
         @PathVariable Long universityId,
@@ -81,6 +85,7 @@ public interface SubjectServiceApi {
         @PathVariable Long commentId
     );
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/flag", method = RequestMethod.GET)
     public SubjectComment commentFlag(
         @PathVariable Long universityId,
@@ -88,6 +93,7 @@ public interface SubjectServiceApi {
         @PathVariable Long commentId
     );
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/subject/{subjectId}/comments/comment/{commentId}/unflag", method = RequestMethod.GET)
     public SubjectComment commentUnflag(
         @PathVariable Long universityId,

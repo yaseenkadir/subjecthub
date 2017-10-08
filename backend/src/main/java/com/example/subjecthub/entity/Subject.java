@@ -81,8 +81,10 @@ public class Subject {
     @JsonIgnoreProperties(value = {"subject"})
     private List<SubjectComment> comments;
 
-
     public Subject() {
+        this.comments = new ArrayList<>();
+        this.assessments = new ArrayList<>();
+        this.tags = new ArrayList<>();
     }
 
     public Long getId() {
@@ -205,8 +207,6 @@ public class Subject {
     public void setAssessments(List<Assessment> assessments) {
         this.assessments = assessments;
     }
-
-
 
     public List<Tag> getTags() {
         return tags;

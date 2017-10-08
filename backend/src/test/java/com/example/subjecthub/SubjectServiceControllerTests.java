@@ -27,10 +27,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.example.subjecthub.testutils.UrlUtils.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -38,6 +38,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 
 /**
  * Data needed for tests is initialised in {@link DbInitialiser#run}
@@ -70,8 +71,8 @@ public class SubjectServiceControllerTests {
 
     private MockMvc mockMvc;
 
-    private University university;
-    private Faculty faculty;
+    private University testUniversity;
+    private Faculty testFaculty;
 
     @Before
     public void setUp() throws Exception {
@@ -80,80 +81,101 @@ public class SubjectServiceControllerTests {
             .setControllerAdvice(new ExceptionAdvice())
             .build();
 
-        this.university = universityRepository.findAll().get(0);
-        this.faculty = facultyRepository.findByUniversityId(university.getId()).get(0);
+        this.testUniversity = universityRepository.findOne(1L);
+        this.testFaculty = facultyRepository.findByUniversityId(testUniversity.getId()).get(0);
     }
+
     @Test
+    @WithMockUser(authorities = {"USER"})
     public void testAddNewTagToSubjectThatExists() throws Exception {
         Tag tag = new Tag("Test Tag");
 
         String requestJson = TestUtils.asJson(tag);
         mockMvc
-            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
+            .perform(
+                post(buildSubjectApiUrl(1L, 1L) + "/addTag")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestJson))
             .andExpect(status().isOk());
-
     }
 
     @Test
+    @WithMockUser(authorities = {"BAD_AUTHORITY"})
+    public void testAddNewTagWithoutAuthority() throws Exception {
+        Tag tag = new Tag("Test Tag");
+
+        String requestJson = TestUtils.asJson(tag);
+        mockMvc
+            .perform(
+                post(buildSubjectApiUrl(1L, 1L) + "/addTag")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestJson))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message", is("Access is denied")));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"USER"})
     public void testAddNewTagToSubjectThatDoesNotExist() throws Exception {
         Tag tag = new Tag("Test Tag");
 
         String requestJson = TestUtils.asJson(tag);
         mockMvc
-            .perform(post("/api/universities/university/1/subjects/subject/400/addTag" )
+            .perform(post(buildSubjectApiUrl(1L, 10000L) + "/addTag")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser(authorities = {"USER"})
     public void testAddExistingTagToSubjectThatExists() throws Exception {
         Tag tag = new Tag("Test Tag");
 
         String requestJson = TestUtils.asJson(tag);
         mockMvc
-            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+            .perform(post(buildSubjectApiUrl(1L, 1L) + "/addTag")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().isOk());
         mockMvc
-            .perform(post("/api/universities/university/1/subjects/subject/2/addTag" )
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
-            .andExpect(status().isOk());
+            .perform(get(buildSubjectApiUrl(1L, 1L)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.tags[0].name", is("Test Tag")));
     }
 
     @Test
+    @WithMockUser(authorities = {"USER"})
     public void testAddExistingTagToSubjectThatDoesNotExist() throws Exception {
         Tag tag = new Tag("Test Tag");
 
         String requestJson = TestUtils.asJson(tag);
         mockMvc
-            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+            .perform(post(buildSubjectApiUrl(1L, 1L) +"/addTag" )
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().isOk());
         mockMvc
-            .perform(post("/api/universities/university/1/subjects/subject/400/addTag" )
+            .perform(post(buildSubjectApiUrl(1L, 10000L) +"/addTag")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser(authorities = {"USER"})
     public void testAddExistingTagToSubjectThatAlreadyHasTag() throws Exception {
         Tag tag = new Tag("Test Tag");
 
+        String subjectUrl = buildSubjectApiUrl(1L, 1L);
         String requestJson = TestUtils.asJson(tag);
         mockMvc
-            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+            .perform(post(subjectUrl + "/addTag" )
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().isOk());
         mockMvc
-            .perform(post("/api/universities/university/1/subjects/subject/1/addTag" )
+            .perform(post(subjectUrl + "/addTag" )
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().is4xxClientError())
@@ -162,7 +184,8 @@ public class SubjectServiceControllerTests {
 
     @Test
     public void testAddSubject() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/universities/university/1/subjects"))
+        String subjectsUrl = buildSubjectsApiUrl(1L);
+        mockMvc.perform(get(subjectsUrl))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(2)))
             .andReturn();
@@ -170,7 +193,7 @@ public class SubjectServiceControllerTests {
         createSubject("Test", "abcxyz");
 
         // Checks that new subject appears in list
-        mockMvc.perform(get("/api/universities/university/1/subjects"))
+        mockMvc.perform(get(subjectsUrl))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(3)))
             .andExpect(jsonPath("$[2].name", is("Test")))
@@ -180,7 +203,7 @@ public class SubjectServiceControllerTests {
     @Test
     public void testOtherUni() throws Exception {
         // Tests that data for university2 exists.
-        mockMvc.perform(get("/api/universities/university/2/subjects"))
+        mockMvc.perform(get(buildSubjectsApiUrl(2L)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].name", is("Accounting or something")))
@@ -193,8 +216,7 @@ public class SubjectServiceControllerTests {
         // Creates a subject and checks that it can be fetched.
         Subject s = createSubject("test", "ABCDEF");
 
-        String subjectUri = "/api/universities/university/1/subjects/subject/" + s.getId();
-        MvcResult result = mockMvc.perform(get(subjectUri))
+        mockMvc.perform(get(buildSubjectApiUrl(1L, s.getId())))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name", is("test")))
             .andExpect(jsonPath("$.code", is("ABCDEF")))
@@ -221,8 +243,9 @@ public class SubjectServiceControllerTests {
             "engineering"
         };
 
+        String subjectsUrl = buildSubjectsApiUrl(1L);
         for(String name : names) {
-            mockMvc.perform(get("/api/universities/university/1/subjects?name=" + name))
+            mockMvc.perform(get(subjectsUrl + "?name=" + name))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name", is(s1Name)))
@@ -231,7 +254,7 @@ public class SubjectServiceControllerTests {
         }
 
         // Check that a non existent subject doesn't match.
-        mockMvc.perform(get("/api/universities/university/1/subjects?name=samsepiol"))
+        mockMvc.perform(get(subjectsUrl + "?name=samsepiol"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)))
             .andReturn();
@@ -263,16 +286,19 @@ public class SubjectServiceControllerTests {
     public void testGetComments() throws Exception {
         //test that a list of comments can be pulled for a subject
         Subject s = createSubject("test", "ABC");
-        Long u_id = Long.parseLong("1");
-        SubjectComment c1 = createComment(u_id, s.getId(), "yumyum1");
-        SubjectComment c2 = createComment(u_id, s.getId(), "yumyum2");
-        SubjectComment c3 = createComment(u_id, s.getId(), "yumyum3");
-        SubjectComment c4 = createComment(u_id, s.getId(), "yumyum4");
-        SubjectComment c5 = createComment(u_id, s.getId(), "yumyum5");
+        Long userId = 1L;
+        createComment(userId, s.getId(), "yumyum1");
+        createComment(userId, s.getId(), "yumyum2");
+        createComment(userId, s.getId(), "yumyum3");
+        createComment(userId, s.getId(), "yumyum4");
+        createComment(userId, s.getId(), "yumyum5");
 
-        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+"/comments"))
+
+        mockMvc.perform(get(buildCommentsApiUrl(1L, s.getId())))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$..post", hasSize(5)))
+            .andExpect(jsonPath("$", hasSize(5)))
+            .andExpect(jsonPath("$[0].post", is("yumyum1")))
+            .andExpect(jsonPath("$[4].post", is("yumyum5")))
             .andReturn();
     }
 
@@ -280,12 +306,10 @@ public class SubjectServiceControllerTests {
     public void testGetSingleComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
-        Long u_id = Long.parseLong("1");
-        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+        SubjectComment c = createComment(1L, s.getId(), "yumyum");
 
-        //checks it can be grabbed
-        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
-            "/comments/comment/"+c.getId()))
+        //checks it can grabbed
+        mockMvc.perform(get(buildCommentApiUrl(1L, s.getId(), c.getId())))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.user.id", is(1)))
             .andExpect(jsonPath("$.subject.name", is(s.getName())))
@@ -296,15 +320,14 @@ public class SubjectServiceControllerTests {
     }
 
     @Test
+    @WithMockUser(authorities = {"USER"})
     public void testAddThumbUpComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
-        Long u_id = Long.parseLong("1");
-        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+        SubjectComment c = createComment(1L, s.getId(), "yumyum");
 
         //checks it can be thumbed up
-        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
-            "/comments/comment/"+c.getId()+"/addThumbUp"))
+        mockMvc.perform(get(buildCommentApiUrl(1L, s.getId(), c.getId()) + "/addThumbUp"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.user.id", is(1)))
             .andExpect(jsonPath("$.subject.name", is(s.getName())))
@@ -315,15 +338,14 @@ public class SubjectServiceControllerTests {
     }
 
     @Test
+    @WithMockUser(authorities = {"USER"})
     public void testAddThumbDownComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
-        Long u_id = Long.parseLong("1");
-        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+        SubjectComment c = createComment(1L, s.getId(), "yumyum");
 
         //checks it can be thumbed down
-        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
-            "/comments/comment/"+c.getId()+"/addThumbDown"))
+        mockMvc.perform(get( buildCommentApiUrl(1L, s.getId(), c.getId()) + "/addThumbDown"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.user.id", is(1)))
             .andExpect(jsonPath("$.subject.name", is(s.getName())))
@@ -334,15 +356,15 @@ public class SubjectServiceControllerTests {
     }
 
     @Test
+    @WithMockUser(authorities = {"USER"})
     public void testFlagComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
-        Long u_id = Long.parseLong("1");
-        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+        SubjectComment c = createComment(1L, s.getId(), "yumyum");
 
         //checks it can be flagged
-        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
-            "/comments/comment/"+c.getId()+"/flag"))
+        String flagUrl = buildCommentApiUrl(1L, s.getId(), c.getId()) + "/flag";
+        mockMvc.perform(get(flagUrl))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.user.id", is(1)))
             .andExpect(jsonPath("$.subject.name", is(s.getName())))
@@ -354,15 +376,15 @@ public class SubjectServiceControllerTests {
     }
 
     @Test
+    @WithMockUser(authorities = {"USER"})
     public void testUnflagComment() throws Exception {
         //creates subject with comment
         Subject s = createSubject("test", "ABC");
-        Long u_id = Long.parseLong("1");
-        SubjectComment c = createComment(u_id, s.getId(), "yumyum");
+        SubjectComment c = createComment(1L, s.getId(), "yumyum");
 
+        String unflagUrl = buildCommentApiUrl(1L, s.getId(), c.getId()) + "/unflag";
         //checks it can be unflagged
-        mockMvc.perform(get("/api/universities/university/1/subjects/subject/"+s.getId()+
-            "/comments/comment/"+c.getId()+"/unflag"))
+        mockMvc.perform(get(unflagUrl))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.user.id", is(1)))
             .andExpect(jsonPath("$.subject.name", is(s.getName())))
@@ -373,14 +395,11 @@ public class SubjectServiceControllerTests {
             .andReturn();
     }
 
-    // TODO: Move these subject controller tests to SubjectServiceControllerTests
     @Test
     @WithMockUser(authorities = {"ADMIN"})
     public void testAdminCanDeleteSubject() throws Exception {
         Subject s = createSubject("Subject To Delete", "S2D");
-
-        String subjectsUrl = String.format("/api/universities/university/%s/subjects",
-            university.getId());
+        String subjectsUrl = buildSubjectsApiUrl(testUniversity.getId());
 
         mockMvc.perform(get(subjectsUrl))
             .andExpect(jsonPath("$", hasSize(3)))
@@ -388,7 +407,7 @@ public class SubjectServiceControllerTests {
             .andReturn();
 
         mockMvc
-            .perform(delete(subjectsUrl + "/subject/" + s.getId()))
+            .perform(delete(buildSubjectApiUrl(testUniversity.getId(), s.getId())))
             .andExpect(status().isOk());
 
         mockMvc.perform(get(subjectsUrl))
@@ -398,10 +417,9 @@ public class SubjectServiceControllerTests {
     @Test
     @WithMockUser
     public void testStudentCantDeleteSubject() throws Exception {
-        University u = universityRepository.findAll().get(0);
+        String subjectsUrl = buildSubjectsApiUrl(testUniversity.getId());
         Subject s = createSubject("Subject To Delete", "S2D");
 
-        String subjectsUrl = String.format("/api/universities/university/%s/subjects", u.getId());
         mockMvc.perform(get(subjectsUrl))
             .andExpect(jsonPath("$", hasSize(3)))
             .andExpect(jsonPath("$[2].name", is("Subject To Delete")))
@@ -413,6 +431,22 @@ public class SubjectServiceControllerTests {
             .andExpect(jsonPath("$.message", is("Access is denied")));
     }
 
+    @Test
+    public void testGetSubject404() throws Exception {
+        mockMvc.perform(get(buildSubjectApiUrl(1L, 10000L)))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.message", is("Subject not found.")))
+            .andReturn();
+    }
+
+    @Test
+    public void testGetComments404() throws Exception {
+        mockMvc.perform(get(buildCommentsApiUrl(1L, 10000L)))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.message", is("Subject not found.")))
+            .andReturn();
+    }
+
     /**
      * Util test method that handles extraneous params for creating subject objects.
      */
@@ -421,7 +455,7 @@ public class SubjectServiceControllerTests {
         testSubject.setName(name);
         testSubject.setCode(code);
         testSubject.setDescription("desc");
-        testSubject.setFaculty(faculty);
+        testSubject.setFaculty(testFaculty);
         testSubject.setSummer(true);
         testSubject.setSpring(false);
         testSubject.setAutumn(true);
@@ -437,12 +471,19 @@ public class SubjectServiceControllerTests {
     /**
      * Util test method that handles extraneous params for creating comment objects.
      */
-    private SubjectComment createComment(Long userid, Long subjectid, String message){
+    private SubjectComment createComment(Long userId, Long subjectId, String message){
+        Subject s = subjectRepository.findOne(subjectId);
+
         SubjectComment newComment = new SubjectComment();
         newComment.setPostTimeNow();
-        newComment.setUser(subjectHubUserRepository.findOne(userid));
-        newComment.setSubject(subjectRepository.findOne(subjectid));
+        newComment.setUser(subjectHubUserRepository.findOne(userId));
+        newComment.setSubject(s);
         newComment.setPost(message);
-        return subjectCommentRepository.save(newComment);
+        newComment = subjectCommentRepository.save(newComment);
+
+        // Have to save comment via parent as well for some strange reason...
+        s.getComments().add(newComment);
+        subjectRepository.save(s);
+        return newComment;
     }
 }
