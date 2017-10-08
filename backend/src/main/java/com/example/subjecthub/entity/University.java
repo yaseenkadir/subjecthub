@@ -1,12 +1,15 @@
 package com.example.subjecthub.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
@@ -29,8 +32,8 @@ public class University {
     @Column(nullable = false)
     private String abbreviation;
 
-    @OneToMany
-    @JoinColumn(name = "university_id")
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "university", orphanRemoval = true)
     private List<Faculty> faculties;
 
     public University() {
@@ -38,9 +41,9 @@ public class University {
     }
 
     public University(String name, String abbreviation) {
+        this();
         this.name = name;
         this.abbreviation = abbreviation;
-        this.faculties = new ArrayList<>();
     }
 
     public Long getId() {

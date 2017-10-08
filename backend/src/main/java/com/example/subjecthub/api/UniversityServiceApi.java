@@ -9,12 +9,16 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 public interface UniversityServiceApi {
 
-    public List<University> getUniversities(
+    List<University> getUniversities(
         @Nullable String abbreviation,
         @Nullable String name
     );
 
-    public University getUniversity(
+    University getUniversity(
+        Long universityId
+    );
+
+    void deleteUniversity(
         Long universityId
     );
 }

@@ -32,7 +32,7 @@ public class Subject {
     @ManyToOne
     @JoinColumn(name = "faculty_id")
     // Ignoring the university field inside faculty. Unnecessary details since uni is known.
-    @JsonIgnoreProperties(value = {"university"})
+    @JsonIgnoreProperties(value = {"university", "subjects"})
     private Faculty faculty;
 
     @Column(nullable = false)

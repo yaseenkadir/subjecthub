@@ -1,7 +1,5 @@
 package com.example.subjecthub;
 
-import com.example.subjecthub.api.UniversityServiceApi;
-import com.example.subjecthub.controller.FacultyController;
 import com.example.subjecthub.entity.Faculty;
 import com.example.subjecthub.entity.University;
 import com.example.subjecthub.repository.FacultyRepository;
@@ -16,8 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,14 +27,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FacultyControllerTests {
 
     @Autowired
-    private FacultyController controller;
-
-    @Autowired
     private FacultyRepository facultyRepository;
 
     @Autowired
     private UniversityRepository universityRepository;
 
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
     private University university;
@@ -45,7 +41,7 @@ public class FacultyControllerTests {
     @Before
     public void setUp() throws Exception {
         mockMvc = MockMvcBuilders
-            .standaloneSetup(controller)
+            .webAppContextSetup(webApplicationContext)
             .build();
 
         this.university = universityRepository.findAll().get(0);
