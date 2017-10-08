@@ -1,10 +1,12 @@
 package com.example.subjecthub.controller;
 
+import com.example.subjecthub.Application;
 import com.example.subjecthub.api.FacultyServiceApi;
 import com.example.subjecthub.entity.Faculty;
 import com.example.subjecthub.repository.FacultyRepository;
 import com.example.subjecthub.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nonnull;
@@ -44,5 +46,17 @@ public class FacultyServiceController implements FacultyServiceApi {
         Faculty f = facultyRepository.findOne(facultyId);
         Utils.ifNull404(f, "Faculty not found.");
         return f;
+    }
+
+    @Override
+    @RequestMapping(value = "/faculty/{facultyId}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void deleteFaculty(
+        @PathVariable Long universityId,
+        @PathVariable Long facultyId
+    ) {
+        Faculty f = getFaculty(universityId, facultyId);
+        Application.log.info("Deleteing {}.", f);
+        facultyRepository.delete(f.getId());
     }
 }

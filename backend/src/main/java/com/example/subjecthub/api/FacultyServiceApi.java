@@ -12,4 +12,6 @@ public interface FacultyServiceApi {
     List<Faculty> getFaculties(Long universityId, @Nullable String name, @Nullable String code);
 
     Faculty getFaculty(Long universityId, Long facultyId);
+
+    void deleteFaculty(Long universityId, Long facultyId);
 }

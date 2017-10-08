@@ -5,11 +5,13 @@ import com.example.subjecthub.entity.University;
 import com.example.subjecthub.repository.FacultyRepository;
 import com.example.subjecthub.repository.UniversityRepository;
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -19,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static com.example.subjecthub.testutils.UrlUtils.buildFacultyApiUrl;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -123,6 +126,34 @@ public class FacultyServiceControllerTests {
             .andExpect(jsonPath("$.message", is("University not found.")));
     }
 
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    public void testDeleteFaculty() throws Exception {
+        Faculty f = createFaculty("delete faculty", "DF");
+
+        String facultyUrl = buildFacultyApiUrl(f.getUniversity().getId(), f.getId());
+        mockMvc.perform(get(facultyUrl))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name", is("delete faculty")))
+            .andExpect(jsonPath("$.code", is("DF")));
+
+        mockMvc.perform(delete(facultyUrl))
+            .andExpect(status().isOk());
+
+        Assert.assertNull(facultyRepository.findOne(f.getId()));
+        mockMvc.perform(get(facultyUrl))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.message", is("Faculty not found.")));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"USER"})
+    public void testStudentCantDeleteUniversity() throws Exception {
+        mockMvc.perform(delete(buildFacultyApiUrl(1L, 1L)))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message", is("Access is denied")));
+    }
+
     private University makeTestUniversity() {
         University testUniversity = new University("University of No Codes", "NoCo");
         testUniversity = universityRepository.save(testUniversity);
@@ -144,9 +175,4 @@ public class FacultyServiceControllerTests {
         testFaculty.setUniversity(this.university);
         return facultyRepository.save(testFaculty);
     }
-
-    // Test behaviour of getFaculty() and getFaculties()
-    // check different combinations of parameters to getFaculties i.e. where some might be null
-    // check that providing ids for faculties that don't exist are empty
-
 }
