@@ -1,19 +1,24 @@
 package com.example.subjecthub.controller;
 
+import com.example.subjecthub.Application;
 import com.example.subjecthub.api.UniversityServiceApi;
 import com.example.subjecthub.entity.University;
 import com.example.subjecthub.repository.UniversityRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
+import com.example.subjecthub.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @ParametersAreNonnullByDefault
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
+@RequestMapping("/api/universities")
 public class UniversityController implements UniversityServiceApi {
 
     @Autowired
@@ -22,8 +27,8 @@ public class UniversityController implements UniversityServiceApi {
     @Override
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<University> getUniversities(
-        @RequestParam(required = false) String abbreviation,
-        @RequestParam(required = false) String name
+        @RequestParam(required = false) @Nullable String abbreviation,
+        @RequestParam(required = false) @Nullable String name
     ) {
         return universityRepository.findAll().stream()
             .filter(u -> abbreviation == null || FuzzyUtils.isSimilar(abbreviation, u.getAbbreviation()))
@@ -36,6 +41,19 @@ public class UniversityController implements UniversityServiceApi {
     public University getUniversity(
         @PathVariable Long universityId
     ) {
-        return universityRepository.findOne(universityId);
+        University u = universityRepository.findOne(universityId);
+        Utils.ifNull404(u, "University not found.");
+        return u;
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value ="university/{universityId}", method = RequestMethod.DELETE)
+    public void deleteUniversity(
+        @PathVariable Long universityId
+    ) {
+        University u = getUniversity(universityId);
+        Application.log.info("Deleting {}.", u);
+        universityRepository.delete(u);
     }
 }
