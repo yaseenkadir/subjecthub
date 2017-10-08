@@ -32,7 +32,7 @@ public class FacultyController {
     }
 
     @RequestMapping(value = "/faculty/{facultyId}", method = RequestMethod.GET)
-    private Faculty getFaculty(
+    public Faculty getFaculty(
         @PathVariable Long universityId,
         @PathVariable Long facultyId
     ) {

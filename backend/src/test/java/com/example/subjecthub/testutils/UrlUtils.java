@@ -8,6 +8,16 @@ public class UrlUtils {
         return API_URL + "/universities/university/"  + uniId;
     }
 
+    public static String buildFacultiesApiUrl(Long uniId) {
+        // /api/universities/university/{uniId}/faculties
+        return buildUniApiUrl(uniId) + "/faculties";
+    }
+
+    public static String buildFacultyApiUrl(Long uniId, Long facultyId) {
+        // /api/universities/university/{uniId}/faculties/faculty/{facultyId}
+        return buildFacultiesApiUrl(uniId) + "/faculty/" + facultyId ;
+    }
+
     public static String buildSubjectsApiUrl(Long uniId) {
         // /api/universities/university/{uniId}/subjects
         return buildUniApiUrl(uniId) + "/subjects";
