@@ -29,28 +29,7 @@ import { SearchPageComponent } from './search-page/search-page.component';
 
 @NgModule({
   imports: [
-    //   RouterModule.forRoot([
-    //       {
-    //           path: 'login',
-    //           component: LoginComponent
-    //       },
-    //       {
-    //           path: 'register',
-    //           component: RegisterComponent
-    //       },
-    //       {
-    //           path: '',
-    //           redirectTo: 'home',
-    //           pathMatch: 'full'
-    //       },
-    //       {
-    //           path: 'home',
-    //           component: SearchBarComponent
-    //       },
-    //     ]
-    //   ),
-    //   NgbModule.forRoot(),
-        AppRoutingModule,
+      AppRoutingModule,
       BrowserModule,
       FormsModule,
       HttpModule,
