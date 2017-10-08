@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,12 +34,13 @@ public class University {
     private List<Faculty> faculties;
 
     public University() {
-
+        this.faculties = new ArrayList<>();
     }
 
     public University(String name, String abbreviation) {
         this.name = name;
         this.abbreviation = abbreviation;
+        this.faculties = new ArrayList<>();
     }
 
     public Long getId() {
