@@ -1,16 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from "../services/user.service";
+import {AuthService} from "../services/auth.service";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Consts} from "../config/consts";
 import {Utils} from "../utils/utils";
-import {ApiErrorHandler} from "../utils/api-error-handler";
 import {ToastrService} from "ngx-toastr";
 
 @Component({
     selector: 'app-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.css'],
-    providers: [UserService, ApiErrorHandler],
+    providers: [AuthService],
 })
 
 export class RegisterComponent implements OnInit {
@@ -26,7 +25,7 @@ export class RegisterComponent implements OnInit {
     authError?: string = null;
     isLoading: boolean = false;
 
-    constructor(private authService: UserService, private toastr: ToastrService, fb: FormBuilder) {
+    constructor(private authService: AuthService, private toastr: ToastrService, fb: FormBuilder) {
 
         this.registerForm = fb.group({
             "username": [
@@ -79,16 +78,8 @@ export class RegisterComponent implements OnInit {
             console.log("Form is valid. Attempting registration.");
             this.isLoading = true;
             this.authService.register(form.username, form.password, form.email)
-                .then(result => {
-                    this.isLoading = false;
-                    if (result.isSuccessful()) {
-                        console.log("Successfully registered user.");
-                        this.toastr.success('Successfully Registered', null, {timeOut: 3000})
-                    } else {
-                        this.toastr.error(result.message, 'Registration Failed');
-                        this.authError = result.message;
-                    }
-                });
+                .then(() => this.registerSuccess())
+                .catch((e) => this.registerError(e));
         } else {
             console.log("Register form is invalid. Displaying errors.");
             Utils.markFormAsModified(this.registerForm);
@@ -109,5 +100,18 @@ export class RegisterComponent implements OnInit {
 
     get email() {
         return this.registerForm.get('email');
+    }
+
+    private registerSuccess() {
+        this.isLoading = false;
+        console.log('Successfully registered user.');
+        this.toastr.success('Successfully Registered', null, {timeOut: 3000})
+    }
+
+    private registerError(e) {
+        this.isLoading = false;
+        let errorMessage = Utils.getApiErrorMessage(e);
+        console.log(`Registration failed due to: ${errorMessage}`);
+        this.toastr.error(errorMessage, 'Registration failed');
     }
 }

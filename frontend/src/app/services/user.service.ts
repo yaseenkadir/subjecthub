@@ -1,125 +1,36 @@
-import {Injectable} from '@angular/core';
-import {Headers, Http} from '@angular/http';
 
-import {environment} from '../../environments/environment';
-import {SubjectHubApiResponse} from '../models/subject-hub-api-response';
-import {LoginResponse} from '../models/login-response';
-import {JwtHelper} from 'angular2-jwt';
-import {User} from '../models/user';
-import {HttpStatus} from '../utils/http-status';
-import {ApiErrorHandler} from '../utils/api-error-handler';
+import {Injectable} from "@angular/core";
+import {User} from "../models/user";
+import {JwtHelper} from "angular2-jwt";
 
 @Injectable()
 export class UserService {
-    user: User;
+    private user: User;
     private jwtHelper: JwtHelper;
-    private tokenString: string;
-    private token: any;
+    private token: string;
+    private parsedToken: any;
     private expiry: Date;
 
-    constructor(private http: Http, private apiErrorHandler: ApiErrorHandler) {
+    private static JWT_STORAGE_KEY: string = 'subjecthubjwtkey';
+    private static USER_STORAGE_KEY: string = 'subjecthubuserkey';
+
+    constructor() {
         this.jwtHelper = new JwtHelper();
-        this.user = null;
-        this.token = null;
-    }
 
-    /**
-     * Authenticates a user with the backend. Input validation should be performed by caller.
-     * @param {string} username
-     * @param {string} password
-     * @returns {Promise<SubjectHubApiResponse<LoginResponse>>}
-     */
-    authenticate(username: string, password: string): Promise<SubjectHubApiResponse<LoginResponse>> {
-        let requestBody = {'username': username, 'password': password};
+        let persistedToken = localStorage.getItem(UserService.JWT_STORAGE_KEY);
+        if (persistedToken != null) {
+            console.log('Token retrieved from local storage.');
+            this.setToken(persistedToken);
+        }
 
-        return this.http.post(environment.API_URL + '/auth/authenticate', requestBody)
-            .toPromise()
-            .then(response => {
-                if (response.status == 200) {
-                    console.log(`Successfully authenticated ${username}.`);
-                    console.log(`jwt is ${response.json()['token']}`);
-
-                    let token = (response.json() as LoginResponse).token;
-                    this.tokenString = token;
-                    this.token = this.jwtHelper.decodeToken(token);
-                    this.expiry = new Date(this.token.exp * 1000);
-
-                    this.fetchUser();
-                    return new SubjectHubApiResponse<LoginResponse>(
-                        true, response.json() as LoginResponse, null);
-                } else {
-                    console.log('Login failed.');
-                    return this.apiErrorHandler.handleApiError(response);
-                }
-            })
-            .catch(e => {
-                console.log('Login failed. Caught exception: ' + e);
-                return this.apiErrorHandler.handleApiError(e);
-            });
-    }
-
-    /**
-     * Registers a user with the system. No validation is performed here, it is expected to be
-     * performed by caller.
-     * @param {string} username
-     * @param {string} password
-     * @param {string} email
-     * @returns {Promise<SubjectHubApiResponse>}
-     */
-    register(username: string, password: string, email: string): Promise<SubjectHubApiResponse<void>> {
-        let request = {'username': username, 'password': password, 'email': email};
-        console.log(`Attempting to register [${username}, ${email}, ${password}]`);
-
-        return this.http.post(environment.API_URL + '/auth/register', request)
-            .toPromise()
-            .then(response => {
-                if (response.status == HttpStatus.OK) {
-                    return new SubjectHubApiResponse(true, null, null);
-                } else {
-                    console.log('Registration attempt failed.');
-                    return this.apiErrorHandler.handleApiError(response);
-                }
-            })
-            .catch(e => {
-                console.log('Registration attempt failed.');
-                return this.apiErrorHandler.handleApiError(e);
-            });
-    }
-
-    /**
-     * Gets user details from the server. Assumes user is already logged in.
-     * @returns {Promise<SubjectHubApiResponse<User>>}
-     */
-    private getUser(): Promise<SubjectHubApiResponse<User>> {
-
-        let headers = new Headers();
-        headers.append('Authorization', this.tokenString);
-
-        return this.http.get(`${environment.API_URL}/auth/self`, {headers: headers})
-            .toPromise()
-            .then(response => {
-                if (response.status == HttpStatus.OK) {
-                    let user = response.json() as User;
-                    console.log('User successfully fetched');
-                    return new SubjectHubApiResponse<User>(true, user, null);
-                } else {
-                    return this.apiErrorHandler.handleApiError(response);
-                }
-            })
-            .catch( e => {
-                return this.apiErrorHandler.handleApiError(e);
-            });
-    }
-
-    private fetchUser() {
-        this.getUser().then(response => {
-            if (response.isSuccessful()) {
-                this.user = response.response as User;
-            } else {
-                // this shouldn't ever, ever happen
-                throw new Error('Successfully logged in but unable to retrieve user.')
-            }
-        });
+        let persistedUser = localStorage.getItem(UserService.USER_STORAGE_KEY);
+        if (persistedUser != null) {
+            console.log('Retrieved user from local storage');
+            let user = JSON.parse(persistedUser) as User;
+            // Casting `as {Class}` doesn't really do anything. We need to use a serializer or
+            // manually instantiate it, like we are doing below. TODO: Use a serializer
+            this.user = new User(user.username, user.email);
+        }
     }
 
     /**
@@ -130,5 +41,33 @@ export class UserService {
     isLoggedIn(): boolean {
         // Not sure how javascript compares date objects
         return this.user != null && this.expiry != null && new Date() < this.expiry;
+    }
+
+    setToken(token: string) {
+        console.log("Token is being set.");
+        this.token = token;
+        this.parsedToken = this.jwtHelper.decodeToken(token);
+        this.expiry = new Date(this.parsedToken.exp * 1000);
+        console.log(`Received token for subject: ${this.parsedToken.sub}`);
+        localStorage.setItem(UserService.JWT_STORAGE_KEY, token);
+    }
+
+    getToken(): string {
+        return this.token;
+    }
+
+    setUser(user: User) {
+        let castedUser = new User(user.username, user.email);
+        console.log(`Setting user: User{username=${user.username}, email=${user.email}}`);
+        if (!castedUser.equals(this.user)) {
+            // Update user locally.
+            console.log('User details are being updated in local storage.');
+            localStorage.setItem(UserService.USER_STORAGE_KEY, JSON.stringify(user));
+        }
+        this.user = user;
+    }
+
+    getUser() {
+        return this.user;
     }
 }
