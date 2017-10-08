@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { UniversitySearchService} from '../services/university-search.service';
 import { University} from '../models/university';
 
@@ -16,7 +18,7 @@ export class UniversitiesComponent implements OnInit {
     sysErrorMessageTemplate: string = "Universities system has encountered an error, please refresh.";
     message: string = null;
 
-    constructor(private universitySearchService: UniversitySearchService) {
+    constructor(private router: Router, private universitySearchService: UniversitySearchService) {
 
     }
 
@@ -28,6 +30,12 @@ export class UniversitiesComponent implements OnInit {
         this.fatalMessage = null;
         this.message = null;
     }
+
+    goToUniversitySearchpage(university) {
+        console.log(university);
+        this.router.navigate([`/university/${university.id}/search`]);
+    }
+
 
     fetch(){
         this.cleanMessages();

@@ -2,45 +2,51 @@
     <app-spinner></app-spinner>
 </div>
 <div *ngIf="subject" class="container text-center">
+    <app-navigation></app-navigation>
     <!-- Heading -->
-    <div class="row">
-        <div class="col-md-12">
-            <h1>{{subject.code}} - {{subject.name}}</h1>
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{subject.code}} - {{subject.name}}</h1>
+            </div>
+            <div class="col-md-12">
+                <span *ngFor="let tag of subject.tags">#{{tag.name}} </span>
+            </div>
+            <div class="col-md-12">
+                <h3><small>{{subject.faculty.code}} :: {{subject.creditPoints}} Credit Points</small></h3>
+            </div>
         </div>
-        <div class="col-md-12">
-            <h3><small>{{subject.faculty.code}} :: {{subject.creditPoints}} Credit Points</small></h3>
+        <hr/>
+        <!-- Description -->
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <p>{{subject.description}}</p>
+            </div>
         </div>
-    </div>
-    <hr/>
-    <!-- Description -->
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <p>{{subject.description}}</p>
+        <hr/>
+        <!-- Assignments-->
+        <div *ngFor="let assessment of subject.assessments" class="row">
+            <div class="col-md-12">
+                <h4>{{assessment.name}} <small>Weight: {{assessment.weighting}}%</small></h4>
+            </div>
+            <div class="col-md-8 col-md-offset-2">
+                <p>{{assessment.description}}</p>
+            </div>
         </div>
-    </div>
-    <hr/>
-    <!-- Assignments-->
-    <div *ngFor="let assessment of subject.assessments" class="row">
-        <div class="col-md-12">
-            <h4>{{assessment.name}} <small>Weight: {{assessment.weighting}}%</small></h4>
+        <hr/>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <app-subject-comments></app-subject-comments>
+            </div>
         </div>
-        <div class="col-md-8 col-md-offset-2">
-            <p>{{assessment.description}}</p>
-        </div>
-    </div>
-    <hr/>
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <app-subject-comments></app-subject-comments>
-        </div>
-    </div>
-    <!-- Comment-->
+        <!-- Comment-->
 
-    <hr/>
-    <!-- Tag-->
-    <div class="row">
-        <div class="col-md-12">
-            <app-add-tag></app-add-tag>
+        <hr/>
+        <!-- Tag-->
+        <div class="row">
+            <div class="col-md-12">
+                <app-add-tag [universityId]="universityId" [subjectId]="subjectId"></app-add-tag>
+            </div>
         </div>
     </div>
 </div>

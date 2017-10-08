@@ -1,6 +1,8 @@
 <div class="container">
     <div class="row">
-        <h2>Stylish Search Box</h2>
+        <div class="col-md-12 text-center">
+            <h2>{{university.abbreviation}} subjects</h2>
+        </div>
         <div class=" col-xs-8 col-xs-offset-2">
             <div class="input-group">
                 <input type="hidden" name="search_param" value="all" id="search_param">
@@ -20,8 +22,24 @@
     <div class="col-md-12 ">
         <p class="search-results-count">About {{subjects.length}} results</p>
         <div>
-            <section *ngFor="let subject of subjects" class="search-result-item">
-                <div *ngIf="subjects.indexOf(subject) === 0" class="search-result-item-body">
+            <section (click)="goToSubjectDetails(subject)" *ngFor="let subject of subjects" class="search-result-item">
+                <div>
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <h4 class="search-result-item-heading"><a href="#">{{subject.code}} - {{subject.name}}</a></h4>
+                            <p class="info">{{subject.creditPoints}} Credit Points :: {{subject.faculty.name}}</p>
+                            <p class="info"></p>
+                            <p class="description">{{subject.description}}</p>
+                            <p class="info"></p>
+                            <h4>Requirements</h4>
+                            <p *ngIf="subject.minRequirements" class="fs-mini text-muted"> {{subject.minRequirements}}</p>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- <div *ngIf="subjects.indexOf(subject) > 0" class="search-result-item-body-faded">
                     <div class="row">
                         <div class="col-sm-9">
                             <h4 class="search-result-item-heading"><a href="#">{{subject.code}} - {{subject.name}}</a></h4>
@@ -37,26 +55,7 @@
                             <p class="fs-mini text-muted"> {{subject.faculty.university.name}}</p>
                         </div>
                     </div>
-                </div>
-
-
-                <div *ngIf="subjects.indexOf(subject) > 0" class="search-result-item-body-faded">
-                    <div class="row">
-                        <div class="col-sm-9">
-                            <h4 class="search-result-item-heading"><a href="#">{{subject.code}} - {{subject.name}}</a></h4>
-                            <p class="info">{{subject.creditPoints}} Credit Points :: {{subject.faculty.name}}</p>
-                            <p class="info"></p>
-                            <p class="description">{{subject.description}}</p>
-                            <p class="info"></p>
-                            <h4>Requirements</h4>
-                            <p *ngIf="subject.minRequirements" class="fs-mini text-muted"> {{subject.minRequirements}}</p>
-                        </div>
-                        <div class="col-sm-3 text-align-center">
-                            <p class="value3 mt-sm"></p>
-                            <p class="fs-mini text-muted"> {{subject.faculty.university.name}}</p>
-                        </div>
-                    </div>
-                </div>
+                </div> -->
             </section>
 
 

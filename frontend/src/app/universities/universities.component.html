@@ -1,19 +1,27 @@
-<div>
-    <h2>Universities</h2>
-    <p *ngIf="fatalMessage" class="error">{{fatalMessage}}</p>
-    <p *ngIf="message" class="error">{{message}}</p>
-    <div *ngIf="!fatalMessage">
-        <table>
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h2>Universities</h2>
+        <p *ngIf="fatalMessage" class="error">{{fatalMessage}}</p>
+        <p *ngIf="message" class="error">{{message}}</p>
+    </div>
+    <div class="col-md-12" *ngIf="!fatalMessage">
+        <table class="table table-responsive core-table">
             <thead>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Abbreviation</th>
+                <th>Actions</th>
             </thead>
             <tbody *ngFor="let university of universities">
                 <tr>
                     <td>{{university.id}}</td>
                     <td>{{university.name}}</td>
                     <td>{{university.abbreviation}}</td>
+                    <td>
+                        <button (click)="goToUniversitySearchpage(university)" class="btn-search">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>

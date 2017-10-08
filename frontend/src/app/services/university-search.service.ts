@@ -25,7 +25,7 @@ export class UniversitySearchService {
             `No universities found`, `Universities request failed`);
     }
 
-    searchById(id: number): Promise<SubjectHubApiResponse<University>> {
+    searchById(id: string): Promise<SubjectHubApiResponse<University>> {
         return this.universityAction(`/universities/university/${id}`,
             `No university found for id: ${id}`, `University request failed`);
     }

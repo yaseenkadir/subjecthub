@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Input, Component, OnInit } from "@angular/core";
+import { Router } from '@angular/router';
 
 import * as Fuse from "fuse.js";
 
@@ -6,7 +7,11 @@ import "rxjs/add/observable/of";
 import "rxjs/add/operator/switchMap";
 import "rxjs/add/operator/toPromise";
 
+
+
 import { SubjectSearchService } from "../app/services/subject-search.service";
+
+import { University } from '../app/models/university';
 
 @Component({
   selector: "fuse-search-bar",
@@ -15,6 +20,9 @@ import { SubjectSearchService } from "../app/services/subject-search.service";
   providers: [SubjectSearchService]
 })
 export class FuseSearchBarComponent implements OnInit {
+  @Input ()
+  university: University;
+
   subjects: {}[];
   fuse: Fuse;
   options = {
@@ -34,37 +42,36 @@ export class FuseSearchBarComponent implements OnInit {
       "university.name",
       "university.abbreviation",
       "creditPoints",
-      "description	"
+      "description"
     ]
   };
-  constructor(private subjectSearchService: SubjectSearchService) {
+  constructor(private router: Router,private subjectSearchService: SubjectSearchService) {
     this.subjects = [];
   }
 
   search(term: string): void {
+    if (!term) return;
     this.subjects = this.fuse.search(term);
   }
 
   ngOnInit(): void {
     this.subjectSearchService
-      .fetch()
+      .fetch(this.university.id.toString())
       .then(subjects => {
-        return subjects.map(subject => {
-          const formatted = {};
-          Object.keys(subject).forEach(key => {
-            formatted[key] = subject[key];
-            if (key === "creditPoints")
-              formatted[key] = formatted[key].toString();
-          });
-          return formatted;
-        });
+        this.subjects = subjects;
+        return subjects
       })
       .then(subjects => {
-        console.log(subjects);
+
         this.fuse = new Fuse(subjects, this.options);
       })
       .catch(err => {
         console.log(err);
       });
+  }
+
+  goToSubjectDetails(subject) {
+      console.log(subject);
+      this.router.navigate([`/university/${this.university.id}/subject/${subject.id}`]);
   }
 }
