@@ -12,7 +12,7 @@ import { AddTagComponent } from './add-tag/add-tag.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SubjectCommentsComponent } from './subject-comments/subject-comments.component';
 
-import { FacultyComponent } from './faculty/faculty.component';
+
 import { UniversitiesComponent} from './universities/universities.component';
 import {ApiErrorHandler} from "./utils/api-error-handler";
 
