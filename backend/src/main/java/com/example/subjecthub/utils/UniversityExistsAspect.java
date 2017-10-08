@@ -26,8 +26,8 @@ public class UniversityExistsAspect {
     @Before(
         "execution(* com.example.subjecthub.controller.SubjectServiceController.getSubjects (..)) || " +
         "execution(* com.example.subjecthub.controller.SubjectServiceController.getSubject (..)) || " +
-        "execution(* com.example.subjecthub.controller.FacultyController.getFaculties (..)) || "+
-        "execution(* com.example.subjecthub.controller.FacultyController.getFaculty (..)) || "+
+        "execution(* com.example.subjecthub.controller.FacultyServiceController.getFaculties (..)) || "+
+        "execution(* com.example.subjecthub.controller.FacultyServiceController.getFaculty (..)) || "+
         "execution(* com.example.subjecthub.controller.AssessmentServiceController.getAssessment (..)) || " +
         "execution(* com.example.subjecthub.controller.AssessmentServiceController.getAssessments (..)) || " +
         "execution(* com.example.subjecthub.controller.CommentsServiceController.getComments (..)) || " +

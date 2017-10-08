@@ -16,7 +16,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import static com.example.subjecthub.testutils.UrlUtils.buildFacultyApiUrl;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-public class FacultyControllerTests {
+public class FacultyServiceControllerTests {
 
     @Autowired
     private FacultyRepository facultyRepository;
@@ -105,6 +107,20 @@ public class FacultyControllerTests {
             .andExpect(jsonPath("$.name", Matchers.is("Faculty of SpringKings")))
             .andExpect(jsonPath("$.code", Matchers.is("spr")))
             .andReturn();
+    }
+
+    @Test
+    public void testGetFaculty404() throws Exception {
+        mockMvc.perform(get(buildFacultyApiUrl(1L, 10000L)))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.message", is("Faculty not found.")));
+    }
+
+    @Test
+    public void testGetFacultyNoUniversity404() throws Exception {
+        mockMvc.perform(get(buildFacultyApiUrl(10000L, 1L)))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.message", is("University not found.")));
     }
 
     private University makeTestUniversity() {
