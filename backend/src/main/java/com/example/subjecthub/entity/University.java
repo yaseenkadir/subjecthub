@@ -33,7 +33,7 @@ public class University {
     private String abbreviation;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "university", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "university", orphanRemoval = true)
     private List<Faculty> faculties;
 
     public University() {

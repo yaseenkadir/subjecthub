@@ -65,9 +65,8 @@ public class Subject {
     @Column
     private int numRatings;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subject", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "subject", orphanRemoval = true)
     private List<Assessment> assessments;
-
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -77,7 +76,7 @@ public class Subject {
     )
     private List<Tag> tags = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subject", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "subject", orphanRemoval = true)
     @JsonIgnoreProperties(value = {"subject"})
     private List<SubjectComment> comments;
 
