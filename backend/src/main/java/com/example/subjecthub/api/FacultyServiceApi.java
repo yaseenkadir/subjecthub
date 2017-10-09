@@ -14,4 +14,8 @@ public interface FacultyServiceApi {
     Faculty getFaculty(Long universityId, Long facultyId);
 
     void deleteFaculty(Long universityId, Long facultyId);
+
+    Faculty editFaculty(Long universityId, Long facultyId, Faculty faculty);
+
+    Faculty createFaculty(Long universityId, Faculty faculty);
 }
