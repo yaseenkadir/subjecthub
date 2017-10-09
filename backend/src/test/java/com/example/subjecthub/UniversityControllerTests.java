@@ -7,16 +7,21 @@ import com.example.subjecthub.entity.University;
 import com.example.subjecthub.repository.FacultyRepository;
 import com.example.subjecthub.repository.UniversityRepository;
 import com.example.subjecthub.testutils.EntityUtils;
+import com.example.subjecthub.testutils.TestUtils;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
@@ -31,6 +36,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -221,6 +228,110 @@ public class UniversityControllerTests {
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message", is("Access is denied")));
     }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    public void testEditUniversity() throws Exception {
+        University university = new University("Edit University", "EditU");
+
+        mockMvc
+            .perform(put(buildUniApiUrl(1L))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJson(university)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id", is(1)))
+            .andExpect(jsonPath("$.name", is("Edit University")))
+            .andExpect(jsonPath("$.abbreviation", is("EditU")));
+
+        mockMvc.perform(get("/api/universities"))
+            .andExpect(jsonPath("$", hasSize(2)))
+            .andExpect(jsonPath("$[0].id", is(1)))
+            .andExpect(jsonPath("$[0].name", is("Edit University")))
+            .andExpect(jsonPath("$[0].abbreviation", is("EditU")));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    public void testEditUniversityIdsDontMatch() throws Exception {
+        University editUniversity = new University("Edit Uni", "EU");
+        editUniversity.setId(2L);
+
+        mockMvc
+            .perform(put(buildUniApiUrl(1L))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJson(editUniversity)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message",
+                is("Payload universityId and URL path universityId do not match.")));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"USER"})
+    public void testUserCantEditUniversity() throws Exception {
+        University editUniversity = new University("Edit Uni", "EU");
+
+        mockMvc
+            .perform(put(buildUniApiUrl(1L))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJson(editUniversity)))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message", is("Access is denied")));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    public void testCreateUniversity() throws Exception {
+        // Go land crabs!
+        University university = new University("University of American Samoa", "UAS");
+
+        MvcResult result = mockMvc
+            .perform(post("/api/universities/university")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJson(university)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name", is("University of American Samoa")))
+            .andExpect(jsonPath("$.abbreviation", is("UAS")))
+            .andReturn();
+
+        JsonNode jsonNode = TestUtils.fromString(result.getResponse().getContentAsString());
+        Long newId = jsonNode.get("id").asLong();
+
+        mockMvc.perform(get("/api/universities"))
+            .andExpect(jsonPath("$", hasSize(3)))
+            .andExpect(jsonPath("$[2].id", is(newId.intValue())))
+            .andExpect(jsonPath("$[2].name", is("University of American Samoa")))
+            .andExpect(jsonPath("$[2].abbreviation", is("UAS")))
+            .andReturn();
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    public void testCreateUniversityFailsWithIdSupplied() throws Exception {
+        University university = new University("Test Uni", "TU");
+        university.setId(1L);
+
+        mockMvc
+            .perform(post("/api/universities/university")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJson(university)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message",
+                is("Cannot specify id for university creation.")));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"USER"})
+    public void testUserCantCreateUniversity() throws Exception {
+        University university = new University("Test Uni", "TU");
+
+        mockMvc
+            .perform(post("/api/universities/university")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJson(university)))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message", is("Access is denied")));
+    }
+
 
     /**
      * Util test method that handles extraneous params for creating university objects.

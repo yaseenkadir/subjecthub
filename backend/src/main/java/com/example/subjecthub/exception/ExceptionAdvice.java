@@ -4,13 +4,16 @@ import com.example.subjecthub.Application;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
 
 @ControllerAdvice
 @ParametersAreNonnullByDefault
@@ -41,6 +44,25 @@ public class ExceptionAdvice {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ExceptionResponse> handleAccessDeniedException(AccessDeniedException ade) {
         SubjectHubException she = new SubjectHubException(HttpStatus.UNAUTHORIZED, ade.getMessage());
+        return handleSubjectHubException(she);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ExceptionResponse> handleHttpMessageNotReadableException(
+        HttpMessageNotReadableException hmnre) {
+        Application.log.info(hmnre.getMessage());
+        SubjectHubException she = new SubjectHubException(HttpStatus.BAD_REQUEST,
+            "Invalid request body.");
+        return handleSubjectHubException(she);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ExceptionResponse> handleHttpRequestMethodNotSupportedException(
+        HttpRequestMethodNotSupportedException hrmnse) {
+        SubjectHubException she = new SubjectHubException(HttpStatus.METHOD_NOT_ALLOWED,
+            hrmnse.getMethod() + " is not supported for that endpoint.");
         return handleSubjectHubException(she);
     }
 

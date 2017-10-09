@@ -21,4 +21,13 @@ public interface UniversityServiceApi {
     void deleteUniversity(
         Long universityId
     );
+
+    University editUniversity(
+        Long universityId,
+        University university
+    );
+
+    University createUniversity(
+        University university
+    );
 }
