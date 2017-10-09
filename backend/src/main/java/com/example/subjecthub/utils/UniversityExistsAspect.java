@@ -31,7 +31,11 @@ public class UniversityExistsAspect {
         "execution(* com.example.subjecthub.controller.AssessmentServiceController.getAssessment (..)) || " +
         "execution(* com.example.subjecthub.controller.AssessmentServiceController.getAssessments (..)) || " +
         "execution(* com.example.subjecthub.controller.CommentsServiceController.getComments (..)) || " +
-        "execution(* com.example.subjecthub.controller.CommentsServiceController.getComment (..))")
+        "execution(* com.example.subjecthub.controller.CommentsServiceController.getComment (..)) || " +
+        "execution(* com.example.subjecthub.controller.UniversityController.getUniversity (..)) || " +
+        "execution(* com.example.subjecthub.controller.UniversityController.deleteUniversity (..)) || " +
+        "execution(* com.example.subjecthub.controller.UniversityController.editUniversity (..))"
+    )
     public boolean universityExists(JoinPoint joinPoint) {
         Application.log.info("Checking if university exists.");
         Long universityId = (Long) joinPoint.getArgs()[0];
