@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -75,6 +76,7 @@ public class AssessmentServiceController implements AssessmentServiceApi {
      */
     @Override
     @RequestMapping(value = "/assessment/{assessmentId}", method = RequestMethod.GET)
+    @Nonnull
     public Assessment getAssessment(
         @PathVariable Long universityId,
         @PathVariable Long subjectId,
