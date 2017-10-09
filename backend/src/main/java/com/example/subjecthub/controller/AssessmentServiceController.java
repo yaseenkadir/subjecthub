@@ -7,6 +7,7 @@ import com.example.subjecthub.repository.AssessmentRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
 import com.example.subjecthub.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,5 +83,16 @@ public class AssessmentServiceController implements AssessmentServiceApi {
         Assessment a = assessmentRepository.findOne(assessmentId);
         Utils.ifNull404(a, "Assessment not found.");
         return assessmentRepository.findOne(assessmentId);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value = "/assessment/{assessmentId}", method = RequestMethod.DELETE)
+    public void deleteAssessment(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @PathVariable Long assessmentId
+    ) {
+        assessmentRepository.delete(getAssessment(universityId, subjectId, assessmentId));
     }
 }

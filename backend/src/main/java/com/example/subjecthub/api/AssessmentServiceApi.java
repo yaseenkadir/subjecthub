@@ -19,4 +19,6 @@ public interface AssessmentServiceApi {
     );
 
     Assessment getAssessment(Long universityId, Long subjectId, Long assessmentId);
+
+    void deleteAssessment(Long universityId, Long subjectId, Long assessmentId);
 }
