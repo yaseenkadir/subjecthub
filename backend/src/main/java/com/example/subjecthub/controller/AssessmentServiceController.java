@@ -5,6 +5,7 @@ import com.example.subjecthub.api.AssessmentServiceApi;
 import com.example.subjecthub.entity.Assessment;
 import com.example.subjecthub.repository.AssessmentRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
+import com.example.subjecthub.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,7 +79,8 @@ public class AssessmentServiceController implements AssessmentServiceApi {
         @PathVariable Long subjectId,
         @PathVariable Long assessmentId
     ) {
-        //To avoid cross university & subject fetching later
+        Assessment a = assessmentRepository.findOne(assessmentId);
+        Utils.ifNull404(a, "Assessment not found.");
         return assessmentRepository.findOne(assessmentId);
     }
 }
