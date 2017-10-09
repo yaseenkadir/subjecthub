@@ -3,9 +3,13 @@ package com.example.subjecthub.controller;
 import com.example.subjecthub.Application;
 import com.example.subjecthub.api.FacultyServiceApi;
 import com.example.subjecthub.entity.Faculty;
+import com.example.subjecthub.entity.University;
+import com.example.subjecthub.exception.SubjectHubException;
 import com.example.subjecthub.repository.FacultyRepository;
+import com.example.subjecthub.repository.UniversityRepository;
 import com.example.subjecthub.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +26,9 @@ public class FacultyServiceController implements FacultyServiceApi {
 
     @Autowired
     private FacultyRepository facultyRepository;
+
+    @Autowired
+    private UniversityRepository universityRepository;
 
     @Override
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -56,7 +63,39 @@ public class FacultyServiceController implements FacultyServiceApi {
         @PathVariable Long facultyId
     ) {
         Faculty f = getFaculty(universityId, facultyId);
-        Application.log.info("Deleteing {}.", f);
+        Application.log.info("Deleting {}.", f);
         facultyRepository.delete(f.getId());
+    }
+
+    @Override
+    @RequestMapping(value = "/faculty/{facultyId}", method = RequestMethod.PUT)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Faculty editFaculty(
+        @PathVariable Long universityId,
+        @PathVariable Long facultyId,
+        @RequestBody Faculty faculty
+    ) {
+        // TODO: Add proper validation on fields
+        if (faculty.getId() != null && !facultyId.equals(faculty.getId())) {
+            throw new SubjectHubException(HttpStatus.BAD_REQUEST,
+                "Payload facultyId and URL path facultyId do not match.");
+        }
+        University university = universityRepository.findOne(universityId);
+        faculty.setUniversity(university);
+        return facultyRepository.save(faculty);
+    }
+
+    @Override
+    @RequestMapping(value = "/faculty", method = RequestMethod.POST)
+    public Faculty createFaculty(
+        @PathVariable Long universityId,
+        @RequestBody Faculty faculty
+    ) {
+        if (faculty.getId() != null) {
+            throw new SubjectHubException(HttpStatus.BAD_REQUEST,
+                "Cannot specify id for faculty creation.");
+        }
+        faculty.setUniversity(universityRepository.findOne(universityId));
+        return facultyRepository.save(faculty);
     }
 }

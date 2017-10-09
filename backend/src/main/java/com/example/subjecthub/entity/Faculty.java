@@ -30,7 +30,7 @@ public class Faculty {
     @JsonIgnore
     private University university;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "faculty", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "faculty", orphanRemoval = true)
     @JsonIgnore
     private List<Subject> subjects;
 
