@@ -1,5 +1,6 @@
 package com.example.subjecthub.testutils;
 
+import com.example.subjecthub.entity.Assessment;
 import com.example.subjecthub.entity.Faculty;
 import com.example.subjecthub.entity.Subject;
 import com.example.subjecthub.repository.*;
@@ -43,5 +44,17 @@ public class EntityUtils {
         testSubject.setUndergrad(true);
         testSubject.setPostgrad(true);
         return subjectRepository.save(testSubject);
+    }
+
+    public Assessment createAssessment(String name, Subject subject) {
+        Assessment assessment = new Assessment();
+        assessment.setName(name);
+        assessment.setDescription("A report");
+        assessment.setGroupWork(true);
+        assessment.setLength("2000 words");
+        assessment.setSubject(subject);
+        assessment.setType(Assessment.AssessmentType.REPORT);
+        assessment.setWeighting(50);
+        return assessmentRepository.save(assessment);
     }
 }

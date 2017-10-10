@@ -2,15 +2,18 @@ package com.example.subjecthub.controller;
 
 import com.example.subjecthub.Application;
 import com.example.subjecthub.api.SubjectServiceApi;
+import com.example.subjecthub.entity.Faculty;
 import com.example.subjecthub.entity.Subject;
 import com.example.subjecthub.entity.Tag;
 import com.example.subjecthub.exception.SubjectHubException;
+import com.example.subjecthub.repository.FacultyRepository;
 import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.repository.TagRepository;
 import com.example.subjecthub.utils.FuzzyUtils;
 
 import com.example.subjecthub.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +35,9 @@ public class SubjectServiceController implements SubjectServiceApi {
 
     @Autowired
     private TagRepository tagRepository;
+
+    @Autowired
+    private FacultyRepository facultyRepository;
 
     @Override
     @PreAuthorize("hasAuthority('USER')")
@@ -130,5 +136,78 @@ public class SubjectServiceController implements SubjectServiceApi {
         // getSubject handles not found exception.
         Subject s = getSubject(universityId, subjectId);
         subjectRepository.delete(s);
+    }
+
+    @Override
+    @RequestMapping(value = "/subject/{subjectId}", method = RequestMethod.PUT)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Subject editSubject(
+        @PathVariable Long universityId,
+        @PathVariable Long subjectId,
+        @RequestBody Subject subject
+    ) {
+        if (subject.getId() != null && !subjectId.equals(subject.getId())) {
+            throw new SubjectHubException(HttpStatus.BAD_REQUEST,
+                "Payload subjectId and URL path subjectId do not match.");
+        }
+
+        validateSubjectPayload(subject);
+
+        Faculty faculty = facultyRepository.findOne(subject.getFaculty().getId());
+        Utils.ifNull404(faculty, "Faculty not found.");
+        subject.setId(subjectId);
+        subject.setFaculty(faculty);
+        Subject existing = subjectRepository.findOne(subjectId);
+
+        subject.setAssessments(existing.getAssessments());
+        subject.setTags(existing.getTags());
+        subject.setComments(existing.getComments());
+        return subjectRepository.save(subject);
+    }
+
+    @Override
+    @RequestMapping(value = "/subject", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Subject createSubject(
+        @PathVariable Long universityId,
+        @RequestBody Subject subject
+    ) {
+        if (subject.getId() != null) {
+            throw new SubjectHubException(HttpStatus.BAD_REQUEST,
+                "Cannot specify id for subject creation.");
+        }
+        validateSubjectPayload(subject);
+        Faculty f = facultyRepository.findOne(subject.getFaculty().getId());
+        subject.setFaculty(f);
+        return subjectRepository.save(subject);
+    }
+
+    private void validateSubjectPayload(Subject subject) {
+
+        // TODO: Adjust API bulk return
+        // We can't return everything in a subject response. They are monstrous and require hacks
+        // like this in order to manage everything as expected.
+        String message = null;
+        if (subject.getComments() != null && subject.getComments().size() != 0) {
+            message = "Cannot specify comments in payload.";
+        }
+
+        if (subject.getAssessments() != null && subject.getAssessments().size() != 0) {
+            message = "Cannot specify assessments in payload.";
+        }
+
+        if (subject.getTags() != null && subject.getTags().size() != 0) {
+            message = "Cannot specify tags in payload.";
+        }
+
+        // This screams poor data design. We should figure out a simpler/better way.
+        // TODO: Figure out a better solution to needing a faculty
+        if (subject.getFaculty() == null || subject.getFaculty().getId() == null) {
+            message = "Must include a nested faculty in the request with an associated facultyId.";
+        }
+
+        if (message != null) {
+            throw new SubjectHubException(HttpStatus.BAD_REQUEST, message);
+        }
     }
 }

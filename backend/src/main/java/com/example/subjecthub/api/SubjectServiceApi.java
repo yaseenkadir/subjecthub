@@ -22,19 +22,13 @@ public interface SubjectServiceApi {
         @Nullable String instructor
     );
 
-    Subject addTagToSubject(
-        Long universityId,
-        Long subjectId,
-        Tag tag
-    );
+    Subject addTagToSubject(Long universityId, Long subjectId, Tag tag);
 
-    Subject getSubject(
-        Long universityId,
-        Long subjectId
-    );
+    Subject getSubject(Long universityId, Long subjectId);
 
-    void deleteSubject(
-        Long universityId,
-        Long subjectId
-    );
+    void deleteSubject(Long universityId, Long subjectId);
+
+    Subject editSubject(Long universityId, Long subjectId, Subject subject);
+
+    Subject createSubject(Long universityId, Subject subject);
 }
