@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject as RxjsSubject } from 'rxjs/Subject';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+
 
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/switchMap';

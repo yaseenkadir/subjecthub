@@ -1,6 +1,5 @@
 export class Faculty {
-    id: number;
-    name: string;
-    code: string;
-    university: {};
+  id: number;
+  name: string;
+  code: string;
 }

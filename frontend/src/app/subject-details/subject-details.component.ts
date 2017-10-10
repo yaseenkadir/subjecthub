@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+
 import {SubjectService} from '../services/subject.service';
 import {Subject} from '../models/subject'
 @Component({
@@ -9,20 +11,30 @@ import {Subject} from '../models/subject'
 })
 export class SubjectDetailsComponent implements OnInit {
 
-  universityId: number;
-  subjectId: number;
+  universityId: string;
+  subjectId: string;
   subject: Subject;
 
-  constructor(private subjectService: SubjectService) {
-      this.universityId = 1;
-      this.subjectId = 1;
+  constructor(    private route: ActivatedRoute, private subjectService: SubjectService) {
+      this.universityId;
+      this.subjectId;
+  }
+
+  fetchSubject() {
+    return this.subjectService.fetch(this.universityId, this.subjectId)
   }
 
   ngOnInit() {
-      this.subjectService.fetch(this.universityId, this.subjectId)
-          .then(subject => {
-            this.subject = subject;
-          })
+    this.route.paramMap
+    .switchMap((params: ParamMap) => {
+       this.universityId = params.get('university');
+       this.subjectId = params.get('subject');
+
+       return this.fetchSubject();
+    })
+    .subscribe(subject =>  {
+        this.subject = subject;
+    });
   }
 
 }
