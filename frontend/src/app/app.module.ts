@@ -19,13 +19,14 @@ import { SubjectCommentsComponent } from './subject-comments/subject-comments.co
 
 
 import { UniversitiesComponent} from './universities/universities.component';
-import {ApiErrorHandler} from "./utils/api-error-handler";
 import {RouterModule} from "@angular/router";
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { SubjectDetailsComponent } from './subject-details/subject-details.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SearchPageComponent } from './search-page/search-page.component';
+import {UserService} from "./services/user.service";
+
 
 @NgModule({
   imports: [
@@ -61,7 +62,7 @@ import { SearchPageComponent } from './search-page/search-page.component';
     DashboardComponent,
     SearchPageComponent,
   ],
-  providers: [ApiErrorHandler],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [UserService]
 })
 export class AppModule {}

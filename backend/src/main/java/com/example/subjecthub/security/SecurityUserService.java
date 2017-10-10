@@ -29,6 +29,7 @@ public class SecurityUserService implements UserDetailsService {
         if (subjectHubUser.isPresent()) {
             SubjectHubUser user = subjectHubUser.get();
             Set<GrantedAuthority> authorities = new HashSet<>();
+            authorities.add(new SimpleGrantedAuthority("USER"));
             if (user.getAdmin()) {
                 authorities.add(new SimpleGrantedAuthority("ADMIN"));
             }

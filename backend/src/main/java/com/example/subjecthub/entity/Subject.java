@@ -32,7 +32,7 @@ public class Subject {
     @ManyToOne
     @JoinColumn(name = "faculty_id")
     // Ignoring the university field inside faculty. Unnecessary details since uni is known.
-    @JsonIgnoreProperties(value = {"university"})
+    @JsonIgnoreProperties(value = {"university", "subjects"})
     private Faculty faculty;
 
     @Column(nullable = false)
@@ -65,9 +65,8 @@ public class Subject {
     @Column
     private int numRatings;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subject", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "subject", orphanRemoval = true)
     private List<Assessment> assessments;
-
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -77,12 +76,14 @@ public class Subject {
     )
     private List<Tag> tags = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subject", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "subject", orphanRemoval = true)
     @JsonIgnoreProperties(value = {"subject"})
     private List<SubjectComment> comments;
 
-
     public Subject() {
+        this.comments = new ArrayList<>();
+        this.assessments = new ArrayList<>();
+        this.tags = new ArrayList<>();
     }
 
     public Long getId() {
@@ -205,8 +206,6 @@ public class Subject {
     public void setAssessments(List<Assessment> assessments) {
         this.assessments = assessments;
     }
-
-
 
     public List<Tag> getTags() {
         return tags;

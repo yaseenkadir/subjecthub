@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UniversityRepository extends CrudRepository<University, Long> {
 
-    public List<University> findAll();
+    List<University> findAll();
 
+    boolean exists(Long universityId);
 }

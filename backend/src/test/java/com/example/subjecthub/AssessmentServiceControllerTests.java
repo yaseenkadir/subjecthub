@@ -5,23 +5,29 @@ import com.example.subjecthub.entity.Assessment;
 import com.example.subjecthub.entity.Faculty;
 import com.example.subjecthub.entity.Subject;
 import com.example.subjecthub.entity.University;
+import com.example.subjecthub.exception.ExceptionAdvice;
 import com.example.subjecthub.repository.AssessmentRepository;
 import com.example.subjecthub.repository.FacultyRepository;
 import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.repository.UniversityRepository;
+import com.example.subjecthub.testutils.UrlUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.example.subjecthub.testutils.UrlUtils.buildAssessmentApiUrl;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,6 +62,7 @@ public class AssessmentServiceControllerTests {
     public void setUp() throws Exception {
         mockMvc = MockMvcBuilders
             .standaloneSetup(controller)
+            .setControllerAdvice(new ExceptionAdvice())
             .build();
 
         this.university = universityRepository.findAll().get(0);
@@ -137,6 +144,52 @@ public class AssessmentServiceControllerTests {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)))
             .andReturn();
+    }
+
+    @Test
+    public void testGetAssessment404() throws Exception {
+        mockMvc.perform(get(buildAssessmentApiUrl(1L, 1L, 10000L)))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.message", is("Assessment not found.")));
+    }
+
+    @Test
+    public void testGetAssessmentUniversityNotFound404() throws Exception {
+        mockMvc.perform(get(buildAssessmentApiUrl(10000L, 1L, 1L)))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.message", is("University not found.")));
+    }
+
+    @Test
+    public void testGetAssessmentSubjectNotFound404() throws Exception {
+        mockMvc.perform(get(buildAssessmentApiUrl(1L, 10000L, 10000L)))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.message", is("Subject not found.")));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    public void testDeleteAssessment() throws Exception {
+        Assessment a = createAssessment("Delete Assessment", subject);
+        String assessmentUrl = buildAssessmentApiUrl(university.getId(), subject.getId(), a.getId());
+        mockMvc.perform(delete(assessmentUrl))
+            .andExpect(status().isOk());
+
+        Assert.assertNull(assessmentRepository.findOne(a.getId()));
+
+        mockMvc.perform(get(assessmentUrl))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.message", is("Assessment not found.")));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"USER"})
+    public void testUserCantDeleteAssessment() throws Exception {
+        Assessment a = createAssessment("Delete Assessment", subject);
+        String assessmentUrl = buildAssessmentApiUrl(university.getId(), subject.getId(), a.getId());
+        mockMvc.perform(delete(assessmentUrl))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message", is("Access is denied")));
     }
 
 /**

@@ -10,4 +10,6 @@ public interface SubjectRepository extends CrudRepository<Subject, Long> {
     List<Subject> findByFaculty_University_Id(Long universityId);
 
     List<Subject> findByCodeContainingIgnoreCase(String code);
+
+    boolean exists(Long subjectId);
 }

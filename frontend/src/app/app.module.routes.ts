@@ -14,7 +14,7 @@ import { SubjectCommentsComponent } from './subject-comments/subject-comments.co
 
 
 import { UniversitiesComponent} from './universities/universities.component';
-import {ApiErrorHandler} from "./utils/api-error-handler";
+
 
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
