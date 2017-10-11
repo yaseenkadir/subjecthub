@@ -207,7 +207,7 @@ public class FacultyServiceControllerTests {
         Faculty editFaculty = new Faculty("Edit Uni", "EU",  null);
 
         mockMvc
-            .perform(put(buildUniApiUrl(1L))
+            .perform(put(buildFacultyApiUrl(1L, 1L))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtils.asJson(editFaculty)))
             .andExpect(status().isUnauthorized())
@@ -261,7 +261,7 @@ public class FacultyServiceControllerTests {
         Faculty faculty = new Faculty("Test Faculty", "FoT2", null);
 
         mockMvc
-            .perform(post("/api/universities/university")
+            .perform(post(buildFacultiesApiUrl(1L) + "/faculty")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtils.asJson(faculty)))
             .andExpect(status().isUnauthorized())
