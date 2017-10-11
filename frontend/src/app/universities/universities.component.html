@@ -1,8 +1,7 @@
 <div class="row">
     <div class="col-md-12 text-center">
         <h2>Universities</h2>
-        <p *ngIf="fatalMessage" class="error">{{fatalMessage}}</p>
-        <p *ngIf="message" class="error">{{message}}</p>
+        <p *ngIf="errorMessage" class="error">{{errorMessage}}</p>
     </div>
     <div class="col-md-12" *ngIf="!fatalMessage">
         <table class="table table-responsive core-table">

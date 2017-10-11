@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Consts} from "../config/consts";
 import {Utils} from "../utils/utils";
 import {ToastrService} from "ngx-toastr";
+import {Router} from "@angular/router";
+import {Location} from "@angular/common";
 
 @Component({
     selector: 'app-register',
@@ -25,7 +27,8 @@ export class RegisterComponent implements OnInit {
     authError?: string = null;
     isLoading: boolean = false;
 
-    constructor(private authService: AuthService, private toastr: ToastrService, fb: FormBuilder) {
+    constructor(private authService: AuthService, private toastr: ToastrService,
+                private location: Location, fb: FormBuilder, private router: Router) {
 
         this.registerForm = fb.group({
             "username": [
@@ -66,8 +69,6 @@ export class RegisterComponent implements OnInit {
         });
     }
 
-    ngOnInit() {
-    }
 
     register(form) {
         // Hide error message if it exists.
@@ -78,7 +79,7 @@ export class RegisterComponent implements OnInit {
             console.log("Form is valid. Attempting registration.");
             this.isLoading = true;
             this.authService.register(form.username, form.password, form.email)
-                .then(() => this.registerSuccess())
+                .then((response) => this.registerSuccess(response))
                 .catch((e) => this.registerError(e));
         } else {
             console.log("Register form is invalid. Displaying errors.");
@@ -102,10 +103,14 @@ export class RegisterComponent implements OnInit {
         return this.registerForm.get('email');
     }
 
-    private registerSuccess() {
-        this.isLoading = false;
-        console.log('Successfully registered user.');
-        this.toastr.success('Successfully Registered', null, {timeOut: 3000})
+    private registerSuccess(response) {
+      console.log(response);
+      // this.authService.saveToken(response.token);
+
+      this.isLoading = false;
+      console.log('Successfully registered user.');
+      this.toastr.success('Please login', 'Successfully Registered', {timeOut: 3000})
+      this.router.navigate([`/login`]);
     }
 
     private registerError(e) {
@@ -113,5 +118,9 @@ export class RegisterComponent implements OnInit {
         let errorMessage = Utils.getApiErrorMessage(e);
         console.log(`Registration failed due to: ${errorMessage}`);
         this.toastr.error(errorMessage, 'Registration failed');
+    }
+
+    ngOnInit() {
+      if (this.authService.isLoggedIn()) this.router.navigate(['/']);
     }
 }

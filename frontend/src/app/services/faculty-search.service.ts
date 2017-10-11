@@ -1,25 +1,21 @@
-import {Injectable} from "@angular/core";
-import {Http} from "@angular/http";
-
-
-import {SubjectHubApiResponse} from "../models/subject-hub-api-response";
-import {environment} from "../../environments/environment";
-
+import { Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
-
-import {Faculty} from "../models/faculty";
+import { Faculty } from "../models/faculty";
+import { environment } from "../../environments/environment";
 
 @Injectable()
 export class FacultySearchService {
-    constructor(private http: Http) {}
+  constructor(private http: HttpClient) {
+  }
 
-    fetch(universityId: string): Promise<Faculty[]> {
-        return this.http
-            .get(`${environment.API_URL}/universities/university/${universityId}/faculties`)
-            .toPromise()
-            .then(response => {
-                return response.json() as Faculty[];
-            });
+  fetch(universityId: string): Promise<Faculty[]> {
+    return this.http
+      .get(`${environment.API_URL}/universities/university/${universityId}/faculties`)
+      .toPromise()
+      .then(response => {
+        return response as Faculty[];
+      });
 
-    }
+  }
 }

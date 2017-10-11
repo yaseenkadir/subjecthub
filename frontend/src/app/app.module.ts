@@ -25,7 +25,9 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { SubjectDetailsComponent } from './subject-details/subject-details.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SearchPageComponent } from './search-page/search-page.component';
-import {UserService} from "./services/user.service";
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './utils/auth-interceptor';
+import { AuthService } from './services/auth.service';
 
 
 @NgModule({
@@ -33,7 +35,7 @@ import {UserService} from "./services/user.service";
       AppRoutingModule,
       BrowserModule,
       FormsModule,
-      HttpModule,
+      HttpClientModule,
       ReactiveFormsModule,
       AlertModule.forRoot(),
 
@@ -63,6 +65,13 @@ import {UserService} from "./services/user.service";
     SearchPageComponent,
   ],
   bootstrap: [AppComponent],
-  providers: [UserService]
+  providers: [
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    }
+  ]
 })
 export class AppModule {}
