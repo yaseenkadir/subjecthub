@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { UniversitySearchService} from '../services/university-search.service';
 import { University} from '../models/university';
+import { Utils } from '../utils/utils';
 
 @Component({
     selector: 'app-universities',
@@ -14,9 +15,7 @@ import { University} from '../models/university';
 export class UniversitiesComponent implements OnInit {
 
     universities: University[];
-    fatalMessage: string = null;
-    sysErrorMessageTemplate: string = "Universities system has encountered an error, please refresh.";
-    message: string = null;
+    errorMessage: string = null;
 
     constructor(private router: Router, private universitySearchService: UniversitySearchService) {
 
@@ -27,8 +26,7 @@ export class UniversitiesComponent implements OnInit {
     }
 
     cleanMessages(){
-        this.fatalMessage = null;
-        this.message = null;
+        this.errorMessage = null;
     }
 
     goToUniversitySearchpage(university) {
@@ -40,16 +38,11 @@ export class UniversitiesComponent implements OnInit {
     fetch(){
         this.cleanMessages();
         this.universitySearchService.getUniversities()
-            .then(result => {
-                if(result.isSuccessful()){
-                    this.universities = result.response;
-                } else {
-                    this.fatalMessage = result.response[result.message];
-                }
+            .then(universities => {
+                this.universities = universities;
             })
             .catch(e => {
-                this.fatalMessage = this.sysErrorMessageTemplate;
-                console.log(e)
+                this.errorMessage = Utils.getApiErrorMessage(e);
             });
     }
 }

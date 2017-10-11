@@ -12,6 +12,12 @@ indent_size=4
 continuation_indent_size=4
 max_line_length=100
 
+[*.{js,ts,json}]
+indent_size=2
+indent_style=space
+continuation_indent_size=2
+max_line_length=100
+
 [{Jenkinsfile,*.gradle,*.groovy,*.gant,*.gdsl,*.gy}]
 indent_style=space
 indent_size=4

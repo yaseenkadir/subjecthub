@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import {AddTagService} from '../services/add-tag.service';
 import {Tag} from "../models/Tag";
+import { Utils } from '../utils/utils';
 
 @Component({
   selector: 'app-add-tag',
@@ -48,7 +49,7 @@ export class AddTagComponent {
                   this.clearField();
               })
               .catch(err => {
-                  this.error = err.json().message;
+                  this.error = Utils.getApiErrorMessage(err);
                   this.clearField();
               })
           }, 1000);

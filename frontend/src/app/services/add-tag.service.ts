@@ -1,18 +1,16 @@
-import {Injectable} from '@angular/core';
-import {Http} from "@angular/http";
-import {Tag} from '../models/Tag';
-
-import {environment} from '../../environments/environment';
-import {SubjectHubApiResponse} from "../models/subject-hub-api-response";
+import { Injectable } from '@angular/core';
+import { Tag } from '../models/Tag';
+import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class AddTagService {
-    constructor(private http: Http) {
-    }
+  constructor(private http: HttpClient) {
+  }
 
-    createTag(universityID: number, subjectId: number, tag: Tag): Promise<SubjectHubApiResponse<Tag>> {
-        return this.http.post(`${environment.API_URL}/universities/university/${universityID}/subjects/subject/${subjectId}/addTag`, tag)
-            .toPromise()
-            .then(res => res.json() as SubjectHubApiResponse<Tag>);
-    }
+  createTag(universityID: number, subjectId: number, tag: Tag): Promise<Tag> {
+    return this.http.post(`${environment.API_URL}/universities/university/${universityID}/subjects/subject/${subjectId}/addTag`, tag)
+      .toPromise()
+      .then(res => res as Tag);
+  }
 }
