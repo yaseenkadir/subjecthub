@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
     isLoading: boolean = false;
 
     constructor(private authService: AuthService, private toastr: ToastrService,
-                private location: Location, fb: FormBuilder) {
+                private location: Location, fb: FormBuilder, private router: Router) {
 
         this.loginForm = fb.group({
             'username': [
@@ -78,8 +78,8 @@ export class LoginComponent implements OnInit {
         if (this.loginForm.valid) {
             console.log('Form is valid. Attempting login.');
             this.isLoading = true;
-            this.authService.authenticate(form.username, form.password)
-                .then(() => this.loginSuccess())
+            this.authService.login(form.username, form.password)
+                .then((res) => this.loginSuccess(res))
                 .catch((e) => this.loginError(e));
         } else {
             console.log('Login form is invalid. Displaying errors.');
@@ -90,11 +90,15 @@ export class LoginComponent implements OnInit {
         return false;
     }
 
-    private loginSuccess(): void {
-        this.isLoading = false;
-        console.log('Successfully authenticated user.');
-        this.toastr.success('Logged in', null, {timeOut: 3000});
-        this.location.back();
+    private loginSuccess(response): void {
+      console.log(response);
+      this.authService.saveToken(response.token);
+
+
+      this.isLoading = false;
+      console.log('Successfully authenticated user.');
+      this.toastr.success('Logged in', null, {timeOut: 3000});
+      location.reload();
     }
 
     private loginError(e): void {
@@ -106,6 +110,7 @@ export class LoginComponent implements OnInit {
     }
 
   ngOnInit() {
+    if (this.authService.isLoggedIn()) this.router.navigate(['/']);
   }
 
 }

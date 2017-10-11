@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from "../app/services/user.service";
+import {AuthService} from "../app/services/auth.service";
 import {User} from "../app/models/user";
 import {Subscription} from "rxjs/Subscription";
 
@@ -7,32 +7,20 @@ import {Subscription} from "rxjs/Subscription";
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.css'],
-  providers: [UserService]
+  providers: [AuthService]
 })
 export class NavigationComponent implements OnInit {
 
-  private user: User;
+  private user: any;
   private userSubscription: Subscription;
 
-  constructor(private userService: UserService) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.user = null;
-
-    console.log("Nav bar component initialised.");
-    this.userSubscription = this.userService.userObservable$
-      .subscribe((user: User) => {
-          console.log("Received emitter event");
-          this.user = user;
-        }
-      );
-  }
-
-  ngOnDestroy() {
-    this.userSubscription.unsubscribe();
+    this.user = this.authService.currentUser() || null;
   }
 
   logout() {
-    this.userService.logout();
+    this.authService.logout();
   }
 }
