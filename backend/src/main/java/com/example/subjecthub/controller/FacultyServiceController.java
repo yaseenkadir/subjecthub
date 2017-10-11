@@ -88,6 +88,7 @@ public class FacultyServiceController implements FacultyServiceApi {
 
     @Override
     @RequestMapping(value = "/faculty", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Faculty createFaculty(
         @PathVariable Long universityId,
         @RequestBody Faculty faculty
