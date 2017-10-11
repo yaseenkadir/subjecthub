@@ -301,6 +301,113 @@ VALUES (
     3
 );
 
+/* Security Fundamentals */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
+                      undergrad, postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    20,
+    '41900',
+    'Security Fundamentals',
+    6,
+    'Security is a major issue for enterprises, with breaches leaving them vulnerable to legal sanctions, financial loss or reduced customer confidence. This subject introduces students to modern security issues and technologies by considering various aspects, from security principles and policies, to network and system security, as well as intrusion detection and cyber security. Students learn and apply programming skills to implement secure communications while demonstrating professional practice in a group project.',
+    'To pass this subject, you must achieve an overall mark of 50% or greater. In general, supplementary assessments are not offered in this subject. Students are referred to the University Policy and Procedures for the Assessment of Coursework Subjects for further details.',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    1
+);
+
+/* Cyber Security */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
+                      undergrad, postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    21,
+    '48730',
+    'Cyber Security',
+    6,
+    'Network security is a major issue for enterprises, with breaches of security possibly being punished by legal sanctions, financial loss, or loss of customer confidence. This subject consolidates the student''s understanding of security by considering security principles from both a people management and a technical perspective, exploring security technologies commonly used in industry. Topics covered include network security theories, such as RSA algorithm, security appliances such as firewalls, and Intrusion Detection Systems; security services such as confidentiality, integrity and authentication; and technologies such as IPSec, SSL, etc. Students doing this subject are well placed to contribute to the security solution of a modern organisation using industry-based tools and solutions.',
+    'A passing grade will be awarded if an aggregate mark of 50% or better is achieved overall. To pass the subject, students must achieve at least 45% in the written exam. Under the University’s assessment policy no supplementary examination is required in this subject and none shall be offered. ',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    1
+);
+
+/* Digital Forensics */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
+                      undergrad, postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    22,
+    '48436',
+    'Digital Forensics',
+    6,
+    'This is a practice-based subject, using material based on the textbook. Learning is laboratory-based. Students assess if a crime has been committed, acquire digital evidence, analyse the evidence and prepare forensic reports. \nThe emphasis is on digital forensics applications, in particular: \n- forensic analysis of a digital storage device where evidence of visits to web sites is recovered to support or oppose a hypothesis before a criminal court \n- eDiscovery (a form of discovery related to civil litigation) where students acquire evidence of contact with a third party using email or social media \n- intrusion investigation into the nature and extent of an unauthorised network intrusion. Students look for evidence of malware being installed on the device that may use the network to exfiltrate data to an unauthorised person.',
+    'A passing grade will be awarded if an aggregate mark of 50% or better is achieved overall.',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    1
+);
+
+/* Network Servers */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
+                      undergrad, postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    23,
+    '31388',
+    'Network Servers',
+    6,
+    'Through this subject students gain an understanding of the design principles and implementation issues for the deployment of network servers based on Windows and Linux operating systems. Techniques and skills for system administration are developed through a comprehensive sequence of laboratory activities in combination with mini-lectures and design tasks.',
+    'Students must have a total mark of at least 50% to be eligible for a pass of this subject AND must pass the final skills test. \nStudents who do not meet these minimum requirements but achieve an overall mark of 50% or greater will fail the subject and receive their overall mark with an "X" (fail) grade.',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    1
+);
+
+/* Applying Network Security */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
+                      undergrad, postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    24,
+    '41890',
+    'Applying Network Security',
+    6,
+    'In the network security subject students learn about the theory underlying computer-security. This subject applies this theory to practice by using material based on the Cisco Network Security course. The emphasis is on network security appliances and networking infrastructure such as firewalls, access control, secure network design and Virtual Private Networks.'||chr(10)||'Students work collaboratively throughout the session. From week 1 students form groups of three and all lab work is a shared experience. All additional activities, such as researching concepts, exploring networking challenges and building the required networks, are achieved by students working cooperatively. \nGroups are also encouraged to share their findings with other groups, and while most assessments are individual, this shared knowledge contributes positively to the whole learning experience.',
+    'A passing grade will be awarded if an aggregate mark of 50% or better is achieved overall. ',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    1
+);
+
+/* Probability and Random Variables */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
+                      undergrad, postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    25,
+    '37161',
+    'Probability and Random Variables',
+    6,
+    'When modelling real-world problems we need to deal with uncertainty, and probability provides an effective way to quantify and model uncertainty. This subject introduces concepts in probability such as dependent and independent events as well as conditional probability. The idea of modelling random events with distributions is introduced, including probability calculation, expectation, variance, generating functions, and order statistics for independent events. The subject concludes by considering discrete Markov chains.',
+    'In order to pass this subject, a student must achieve a final result of 50% or more. Any assessment task worth 40% or more requires the student to gain at least 40% of the mark for that task. If 40% is not reached, an X grade fail may be awarded for the subject, irrespective of an overall mark greater than 50.',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    1
+);
 
 /*
   _   _    ___   __        __
