@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Consts} from "../config/consts";
 import {Utils} from "../utils/utils";
 import {ToastrService} from "ngx-toastr";
+import {Location} from "@angular/common";
 
 @Component({
     selector: 'app-register',
@@ -25,7 +26,8 @@ export class RegisterComponent implements OnInit {
     authError?: string = null;
     isLoading: boolean = false;
 
-    constructor(private authService: AuthService, private toastr: ToastrService, fb: FormBuilder) {
+    constructor(private authService: AuthService, private toastr: ToastrService,
+                private location: Location, fb: FormBuilder) {
 
         this.registerForm = fb.group({
             "username": [
@@ -106,6 +108,7 @@ export class RegisterComponent implements OnInit {
         this.isLoading = false;
         console.log('Successfully registered user.');
         this.toastr.success('Successfully Registered', null, {timeOut: 3000})
+        this.location.back();
     }
 
     private registerError(e) {

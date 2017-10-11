@@ -4,6 +4,8 @@ import {AuthService} from '../services/auth.service';
 import {Consts} from '../config/consts';
 import {Utils} from '../utils/utils';
 import {ToastrService} from 'ngx-toastr';
+import {Router} from "@angular/router";
+import {Location} from "@angular/common";
 
 @Component({
     selector: 'app-login',
@@ -26,7 +28,8 @@ export class LoginComponent implements OnInit {
 
     isLoading: boolean = false;
 
-    constructor(private authService: AuthService, private toastr: ToastrService, fb: FormBuilder) {
+    constructor(private authService: AuthService, private toastr: ToastrService,
+                private location: Location, fb: FormBuilder) {
 
         this.loginForm = fb.group({
             'username': [
@@ -91,6 +94,7 @@ export class LoginComponent implements OnInit {
         this.isLoading = false;
         console.log('Successfully authenticated user.');
         this.toastr.success('Logged in', null, {timeOut: 3000});
+        this.location.back();
     }
 
     private loginError(e): void {
