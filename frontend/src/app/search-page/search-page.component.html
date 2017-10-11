@@ -1,10 +1,6 @@
 <div *ngIf="!university">
     <app-spinner></app-spinner>
 </div>
-
-<app-navigation></app-navigation>
-<div class="wrapper">
-    <div *ngIf="university" class="container">
-        <fuse-search-bar [university]="university"></fuse-search-bar>
-    </div>
+<div *ngIf="university">
+    <fuse-search-bar [university]="university"></fuse-search-bar>
 </div>
