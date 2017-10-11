@@ -7,16 +7,17 @@ import com.example.subjecthub.entity.Subject;
 import com.example.subjecthub.entity.University;
 import com.example.subjecthub.exception.ExceptionAdvice;
 import com.example.subjecthub.repository.AssessmentRepository;
-import com.example.subjecthub.repository.FacultyRepository;
 import com.example.subjecthub.repository.SubjectRepository;
 import com.example.subjecthub.repository.UniversityRepository;
-import com.example.subjecthub.testutils.UrlUtils;
+import com.example.subjecthub.testutils.TestUtils;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,10 +26,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.subjecthub.testutils.UrlUtils.buildAssessmentApiUrl;
+import static com.example.subjecthub.testutils.UrlUtils.buildAssessmentsApiUrl;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -69,41 +73,39 @@ public class AssessmentServiceControllerTests {
         this.subject = subjectRepository.findByFaculty_University_Id(this.university.getId()).get(0);
     }
 
-    //Add a assessment to subject 1 and check the number of assessments afterwards & check the name of newly added assessment exists
     @Test
     public void testAddAssessment() throws Exception {
-        mockMvc.perform(get("/api/universities/university/1/subjects/subject/1/assessments"))
+        //Add a assessment to subject 1 and check that it exists
+        mockMvc.perform(get(buildAssessmentsApiUrl(1L, 1L)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)))
+            .andExpect(jsonPath("$", hasSize(1)))
             .andReturn();
 
         createAssessment("TestAssignment",  this.subject);
 
         // Checks that new assessment appears in list
-        mockMvc.perform(get("/api/universities/university/1/subjects/subject/1/assessments"))
+        mockMvc.perform(get(buildAssessmentsApiUrl(1L, 1L)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].name", is("TestAssignment")))
+            .andExpect(jsonPath("$", hasSize(2)))
+            .andExpect(jsonPath("$[1].name", is("TestAssignment")))
             .andReturn();
     }
 
-    //Check if we have assessments in subject 2 (0 expected as no assessments were created under this subject)
     @Test
     public void testOtherSubject() throws Exception {
-        // Tests that data for subject 2 exists.
-        mockMvc.perform(get("/api/universities/university/1/subjects/subject/2/assessments"))
+        // Check that we don't have assessments in subject 2
+        mockMvc.perform(get(buildAssessmentsApiUrl(1L, 2L)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)))
             .andReturn();
     }
 
-    //Create a new assessment and get this assessment by its auto generated assessment id & check the assessment name
     @Test
     public void testGetSingleAssessment() throws Exception {
-        Assessment a = createAssessment("TestSingleAssessment", this.subject);
+        Assessment a = createAssessment("TestSingleAssessment", subject);
 
-        String assessmentUri = "/api/universities/university/"+ this.university.getId() + "/subjects/subject/" + this.subject.getId() + "/assessments/assessment/" + a.getId();
-        mockMvc.perform(get(assessmentUri))
+        // Create a new assessment and check that it can be fetched
+        mockMvc.perform(get(buildAssessmentApiUrl(1L, 1L, a.getId())))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name", is("TestSingleAssessment")))
             .andReturn();
@@ -112,6 +114,7 @@ public class AssessmentServiceControllerTests {
     //Create 2 assessments and add to the subject & get all the assessments matching the assessment name criteria
     @Test
     public void testGetAssessmentsFuzzySearch() throws Exception {
+        // TODO: Fuzzy matching should be a "/search" endpoint instead of on a list endpoint.
         // Tests basic fuzzy matching, used as an example of behaviour. Tests should change if
         // similarity ratios in FuzzyUtils change.
         String a1Name = "engineering and information technology";
@@ -131,7 +134,7 @@ public class AssessmentServiceControllerTests {
         };
 
         for(String name : names) {
-            mockMvc.perform(get("/api/universities/university/ "+ this.university.getId() + "/subjects/subject/" + this.subject.getId() + "/assessments?name=" + name))
+            mockMvc.perform(get(buildAssessmentsApiUrl(1L, 1L) + "?name=" + name))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name", is(a1Name)))
@@ -140,7 +143,7 @@ public class AssessmentServiceControllerTests {
         }
 
         // Check that a non existent subject doesn't match.
-        mockMvc.perform(get("/api/universities/university/ "+ this.university.getId() + "/subjects/subject/" + this.subject.getId() + "/assessments?name=samsepiol"))
+        mockMvc.perform(get(buildAssessmentsApiUrl(1L, 1L) + "?name=samsepiol"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)))
             .andReturn();
@@ -192,10 +195,125 @@ public class AssessmentServiceControllerTests {
             .andExpect(jsonPath("$.message", is("Access is denied")));
     }
 
-/**
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    public void testEditAssessment() throws Exception {
+        // Renames an assessment and checks that the name is in the assessments list.
+        Assessment editedAssessment = assessmentRepository.findOne(1L);
+        editedAssessment.setName("Edited Test");
+
+        mockMvc
+            .perform(put(buildAssessmentApiUrl(1L, 1L, 1L))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJson(editedAssessment)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id", is(1)))
+            .andExpect(jsonPath("$.name", is("Edited Test")))
+            .andExpect(jsonPath("$.description", is("A test with questions.")));
+
+        mockMvc.perform(get(buildAssessmentsApiUrl(1L, 1L)))
+            .andExpect(jsonPath("$", hasSize(1)))
+            .andExpect(jsonPath("$[0].id", is(1)))
+            .andExpect(jsonPath("$[0].name", is("Edited Test")))
+            .andExpect(jsonPath("$[0].description", is("A test with questions.")));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    public void testEditAssessmentIdsDontMatch() throws Exception {
+        Assessment assessment = new Assessment();
+        assessment.setId(2L);
+
+        mockMvc
+            .perform(put(buildAssessmentApiUrl(1L, 1L, 1L))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJson(assessment)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message",
+                is("Payload assessmentId and URL path assessmentId do not match.")));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"USER"})
+    public void testUserCantEditAssessment() throws Exception {
+        Assessment assessment = new Assessment();
+
+        mockMvc
+            .perform(put(buildAssessmentApiUrl(1L, 1L, 1L))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJson(assessment)))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message", is("Access is denied")));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    public void testCreateAssessment() throws Exception {
+        Assessment assessment = new Assessment();
+        assessment.setName("Created Assessment");
+        assessment.setType(Assessment.AssessmentType.PROJECT);
+        assessment.setGroupWork(true);
+        assessment.setLength("5000 LoC");
+        assessment.setDescription("A software project");
+        assessment.setWeighting(50);
+
+        MvcResult result = mockMvc
+            .perform(post(buildAssessmentsApiUrl(1L, 1L) + "/assessment")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJson(assessment)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name", is("Created Assessment")))
+            .andExpect(jsonPath("$.type", is("PROJECT")))
+            .andExpect(jsonPath("$.groupWork", is(true)))
+            .andExpect(jsonPath("$.length", is("5000 LoC")))
+            .andExpect(jsonPath("$.description", is("A software project")))
+            .andExpect(jsonPath("$.weighting", is(50)))
+            .andReturn();
+
+        JsonNode jsonNode = TestUtils.fromString(result.getResponse().getContentAsString());
+        Long newId = jsonNode.get("id").asLong();
+
+        mockMvc.perform(get(buildAssessmentsApiUrl(1L, 1L)))
+            .andExpect(jsonPath("$", hasSize(2)))
+            // We know it exists from before, so we only check a couple of fields.
+            .andExpect(jsonPath("$[1].id", is(newId.intValue())))
+            .andExpect(jsonPath("$[1].name", is("Created Assessment")))
+            .andExpect(jsonPath("$[1].description", is("A software project")))
+            .andReturn();
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    public void testCreateAssessmentFailsWithIdSupplied() throws Exception {
+        Assessment assessment = new Assessment();
+        assessment.setId(1L);
+
+        mockMvc
+            .perform(post(buildAssessmentsApiUrl(1L, 1L) + "/assessment")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJson(assessment)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message",
+                is("Cannot specify id for assessment creation.")));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"USER"})
+    public void testUserCantCreateAssessment() throws Exception {
+        Assessment assessment = new Assessment();
+
+        mockMvc
+            .perform(post(buildAssessmentsApiUrl(1L, 1L) + "/assessment")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJson(assessment)))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message", is("Access is denied")));
+    }
+
+    /**
      * Util test method that handles extraneous params for creating subject objects.
      */
-
     private Assessment createAssessment(String name, Subject subject) {
         Assessment assessment = new Assessment();
         assessment.setDescription("TEST - Assessment Description");

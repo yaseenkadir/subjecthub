@@ -324,6 +324,7 @@ public class SubjectServiceControllerTests {
         Subject subject = subjectRepository.findOne(1L);
         subject.setName("Renamed Subject");
         subject.setFaculty(faculty);
+        subject.getAssessments().clear();
 
         mockMvc
             .perform(put(buildSubjectApiUrl(1L, 1L))
@@ -418,6 +419,7 @@ public class SubjectServiceControllerTests {
     public void testValidateSubjectPayloadNoComments() throws Exception {
         // Test that you can't edit a subject if you supply comments
         Subject subject = subjectRepository.findOne(1L);
+        subject.getAssessments().clear();
 
         subject.getComments().add(new SubjectComment());
         mockMvc
