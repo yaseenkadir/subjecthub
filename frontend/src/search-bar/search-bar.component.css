@@ -127,6 +127,13 @@ body {
   z-index: 5;
   position: relative;
 }
+.title, .title:hover{
+    color: black;
+    text-decoration: none;
+}
+.title:hover > i{
+    color: red;
+}
 .btn-default:hover {
     background-color: #eee;
     box-sizing: border-box;
