@@ -314,10 +314,10 @@ INSERT INTO universities (university_id, name, abbreviation)
 VALUES (2, 'University of Wollongong', 'UOW');
 
 INSERT INTO faculties (faculty_id, name, code, university_id)
-VALUES (4, 'Business', 'BUIS', 2);
+VALUES (4, 'Business', NULL, 2);
 
 INSERT INTO faculties (faculty_id, name, code, university_id)
-VALUES (5, 'Engineering and Information Sciences', 'EIS', 2);
+VALUES (5, 'Engineering and Information Sciences', NULL, 2);
 
 /* Subjects */
 /* Programming Fundamentals */
