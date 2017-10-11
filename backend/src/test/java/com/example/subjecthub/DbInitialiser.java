@@ -1,5 +1,6 @@
 package com.example.subjecthub;
 
+import com.example.subjecthub.entity.Assessment;
 import com.example.subjecthub.entity.Faculty;
 import com.example.subjecthub.entity.Subject;
 import com.example.subjecthub.entity.SubjectHubUser;
@@ -26,6 +27,7 @@ public class DbInitialiser implements ApplicationRunner {
     private FacultyRepository facultyRepository;
     private SubjectRepository subjectRepository;
     private SubjectHubUserRepository subjectHubUserRepository;
+    private AssessmentRepository assessmentRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -35,12 +37,14 @@ public class DbInitialiser implements ApplicationRunner {
         UniversityRepository universityRepository,
         FacultyRepository facultyRepository,
         SubjectRepository subjectRepository,
-        SubjectHubUserRepository subjectHubUserRepository
+        SubjectHubUserRepository subjectHubUserRepository,
+        AssessmentRepository assessmentRepository
     ) {
         this.universityRepository = universityRepository;
         this.facultyRepository = facultyRepository;
         this.subjectRepository = subjectRepository;
         this.subjectHubUserRepository = subjectHubUserRepository;
+        this.assessmentRepository = assessmentRepository;
     }
 
     @Override
@@ -69,6 +73,16 @@ public class DbInitialiser implements ApplicationRunner {
         u1f1Subject1.setSummer(false);
         u1f1Subject1.setFaculty(u1Faculty1);
         u1f1Subject1 = subjectRepository.save(u1f1Subject1);
+
+        Assessment u1f1s1assessment1 = new Assessment();
+        u1f1s1assessment1.setSubject(u1f1Subject1);
+        u1f1s1assessment1.setDescription("A test with questions.");
+        u1f1s1assessment1.setName("Test 1");
+        u1f1s1assessment1.setGroupWork(false);
+        u1f1s1assessment1.setLength("60 minutes");
+        u1f1s1assessment1.setType(Assessment.AssessmentType.TEST);
+        u1f1s1assessment1.setWeighting(20);
+        u1f1s1assessment1 = assessmentRepository.save(u1f1s1assessment1);
 
         Subject u1f1Subject2 = new Subject();
         u1f1Subject2.setName("Advanced Testing");
