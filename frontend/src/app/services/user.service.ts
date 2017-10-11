@@ -2,6 +2,7 @@
 import {Injectable} from "@angular/core";
 import {User} from "../models/user";
 import {JwtHelper} from "angular2-jwt";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class UserService {
@@ -10,6 +11,9 @@ export class UserService {
     private token: string;
     private parsedToken: any;
     private expiry: Date;
+
+    private userEventSource = new BehaviorSubject<User>(null);
+    userObservable$ = this.userEventSource.asObservable();
 
     private static JWT_STORAGE_KEY: string = 'subjecthubjwtkey';
     private static USER_STORAGE_KEY: string = 'subjecthubuserkey';
@@ -30,7 +34,12 @@ export class UserService {
             // Casting `as {Class}` doesn't really do anything. We need to use a serializer or
             // manually instantiate it, like we are doing below. TODO: Use a serializer
             this.user = new User(user.username, user.email);
+            this.notifyUserChanged(this.user);
         }
+    }
+
+    notifyUserChanged(user: User) {
+      this.userEventSource.next(user);
     }
 
     /**
@@ -64,10 +73,17 @@ export class UserService {
             console.log('User details are being updated in local storage.');
             localStorage.setItem(UserService.USER_STORAGE_KEY, JSON.stringify(user));
         }
-        this.user = user;
+        this.user = castedUser;
+        this.notifyUserChanged(castedUser);
     }
 
     getUser() {
         return this.user;
+    }
+
+    logout() {
+      localStorage.removeItem(UserService.USER_STORAGE_KEY);
+      this.user = null;
+      this.notifyUserChanged(null);
     }
 }
