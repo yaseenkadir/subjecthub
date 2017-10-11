@@ -1,5 +1,6 @@
 
 import {FormGroup} from "@angular/forms";
+import { HttpErrorResponse } from '@angular/common/http';
 
 export class Utils {
 
@@ -20,7 +21,7 @@ export class Utils {
             // If e has status 0, it's likely due to no internet connection to backend.
             return "Unable to connect to server.";
         } else {
-            return e.json()['message'];
+            return e.error.message;
         }
     }
 }
