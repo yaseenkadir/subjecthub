@@ -107,10 +107,10 @@ export class RegisterComponent implements OnInit {
       console.log(response);
       // this.authService.saveToken(response.token);
 
-      //   this.isLoading = false;
-      //   console.log('Successfully registered user.');
-      //   this.toastr.success('Successfully Registered', null, {timeOut: 3000})
-      //   location.reload();
+      this.isLoading = false;
+      console.log('Successfully registered user.');
+      this.toastr.success('Please login', 'Successfully Registered', {timeOut: 3000})
+      this.router.navigate([`/login`]);
     }
 
     private registerError(e) {

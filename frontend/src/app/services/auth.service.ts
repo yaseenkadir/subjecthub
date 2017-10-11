@@ -1,95 +1,91 @@
-import {Injectable} from '@angular/core';
-import {Headers, Http} from '@angular/http';
-
-import {environment} from '../../environments/environment';
-import {SubjectHubApiResponse} from '../models/subject-hub-api-response';
-import {LoginResponse} from '../models/login-response';
-import {User} from '../models/user';
-import {UserService} from "./user.service";
-
+import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
+import { LoginResponse } from '../models/login-response';
+import { HttpClient } from '@angular/common/http';
+import { User } from '../models/user';
 
 
 @Injectable()
 export class AuthService {
 
-    constructor(private http: Http, private userService: UserService) {
-    }
+  constructor(private http: HttpClient) {
+  }
 
+  login(username: string, password: string): Promise<LoginResponse> {
+    let requestBody = {'username': username, 'password': password};
 
-    login(username: string, password: string): Promise<LoginResponse> {
-        let requestBody = {'username': username, 'password': password};
+    return this.http.post(environment.API_URL + '/auth/authenticate', requestBody)
+      .toPromise()
+      // Caller handles error
+      .then(res => res);
+  }
 
-        return this.http.post(environment.API_URL + '/auth/authenticate', requestBody)
-            .toPromise()
-            // Caller handles error
-            .then(res => res.json());
-    }
+  register(username: string, password: string, email: string): Promise<void> {
+    let request = {'username': username, 'password': password, 'email': email};
+    console.log(`Attempting to register [${username}, ${email}, ${password}]`);
 
-    register(username: string, password: string, email: string): Promise<void> {
-        let request = {'username': username, 'password': password, 'email': email};
-        console.log(`Attempting to register [${username}, ${email}, ${password}]`);
+    return this.http.post(environment.API_URL + '/auth/register', request)
+      .toPromise()
+      // We do nothing with the response currently, but it may return details in the future.
+      .then(() => {});
+  }
 
-        return this.http.post(environment.API_URL + '/auth/register', request)
-            .toPromise()
-            // We do nothing with the response currently, but it may return details in the future.
-            .then(res => res.json());
-    }
+  saveToken = token => {
+    window.sessionStorage["token"] = token;
+  };
 
-     saveToken = token => {
-      window.sessionStorage["token"] = token;
-    };
+  getToken = () => {
+    return window.sessionStorage["token"];
+  };
 
-     getToken = () => {
-      return window.sessionStorage["token"];
-    };
+  deleteToken = () => {
+    delete window.sessionStorage["token"];
+  };
 
-     deleteToken = () => {
-      delete window.sessionStorage["token"];
-    };
+  logout = () => {
+    delete window.sessionStorage["token"];
+    location.reload();
+  };
 
-     logout = () => {
-      delete window.sessionStorage["token"];
-      location.reload();
-    };
+  isLoggedIn = () => {
+    let token = this.getToken();
+    let payload;
 
-     isLoggedIn = () => {
-      let token = this.getToken();
-      let payload;
+    if (token) {
+      try {
+        payload = token.split(".")[1];
+        payload = window.atob(payload);
+        payload = JSON.parse(payload);
 
-      if (token) {
-        try {
-          payload = token.split(".")[1];
-          payload = window.atob(payload);
-          payload = JSON.parse(payload);
+        let hasExpired = payload.exp < Date.now() / 1000;
 
-          let hasExpired = payload.exp < Date.now() / 1000;
+        if (hasExpired) this.logout();
 
-          if (hasExpired) this.logout();
-
-          return !hasExpired;
-        } catch (err) {
-          return false;
-        }
-      } else {
+        return !hasExpired;
+      } catch (err) {
         return false;
       }
-    };
+    } else {
+      return false;
+    }
+  };
 
-     currentUser = () => {
-      if (this.isLoggedIn()) {
-        try {
-          let token = this.getToken();
-          let payload = token.split(".")[1];
-          payload = window.atob(payload);
-          payload = JSON.parse(payload);
+  currentUser = () => {
+    if (this.isLoggedIn()) {
+      try {
+        let token = this.getToken();
+        let payload = token.split(".")[1];
+        payload = window.atob(payload);
+        payload = JSON.parse(payload);
 
-          const user = {
-            username: payload.sub,
-          };
-          return user;
-        } catch (err) {
-          throw new Error(err);
-        }
+        let username = payload.sub;
+        // TODO-HIGH: Add user roles to jwt token
+        // temporary hack to determine whether a user is an admin or not
+        const isAdmin = username === 'admin';
+        return new User(username, 'abc@example.com', isAdmin);
+      } catch (err) {
+        throw new Error(err);
       }
     }
+  };
 }
