@@ -22,3 +22,36 @@
   padding-top: 17px;
   padding-bottom: 5px;
 }
+
+.tile {
+    width: 100%;
+    display: inline-block;
+    box-sizing: border-box;
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.tile .title {
+    margin-top: 4px;
+}
+
+.tile:hover {
+    background-color: #fafafa;
+}
+
+.tile:hover > .content .icon {
+    color: red;
+}
+
+.tile .content {
+    width: 100%;
+}
+
+.tile .content .text {
+    text-align: left;
+}
+
+.tile .content .icon {
+    text-align: right;
+}

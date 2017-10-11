@@ -5,7 +5,8 @@
         <p *ngIf="message" class="error">{{message}}</p>
     </div>
     <div class="col-md-12" *ngIf="!fatalMessage">
-        <table class="table table-responsive core-table">
+        <!--For admin view!!-->
+        <!--<table class="table table-responsive core-table">
             <thead>
                 <th>ID</th>
                 <th>Name</th>
@@ -24,6 +25,23 @@
                     </td>
                 </tr>
             </tbody>
-        </table>
+        </table>-->
+        <div class="row">
+            <div class="col-sm-4" *ngFor="let university of universities">
+                <button class="tile" (click)="goToUniversitySearchpage(university)">
+                    <table class="content">
+                        <tr>
+                            <td class="text">
+                                <h3 class="title">{{university.abbreviation}}</h3>
+                                <p>{{university.name}}</p>
+                            </td>
+                            <td class="icon">
+                                <h1><i class="glyphicon glyphicon-search"></i></h1>
+                            </td>
+                        </tr>
+                    </table>
+                </button>
+            </div>
+        </div>
     </div>
 </div>
