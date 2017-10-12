@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "Subject-Hub",
-		"_postman_id": "a60746b8-3d93-90d9-673a-b18655ea0167",
+		"_postman_id": "4f8c04a0-bcc4-e292-c539-81b8e0db7c0f",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -17,7 +17,10 @@
 						"url": "{{domain}}/api/universities",
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Fetches all universities."
 					},
 					"response": []
@@ -26,7 +29,7 @@
 					"name": "Get Universities (w GET params)",
 					"request": {
 						"url": {
-							"raw": "{{domain}}/api/universities",
+							"raw": "{{domain}}/api/universities?",
 							"host": [
 								"{{domain}}"
 							],
@@ -54,7 +57,10 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Fetches all universities with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
 					},
 					"response": []
@@ -63,7 +69,7 @@
 					"name": "Get Universities (w GET params and Fuzzy examples)",
 					"request": {
 						"url": {
-							"raw": "{{domain}}/api/universities",
+							"raw": "{{domain}}/api/universities?",
 							"host": [
 								"{{domain}}"
 							],
@@ -91,7 +97,10 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Fetches all universities with GET params that you can enable. Select \"Params\" next to the address and enable the ones that you wish to use."
 					},
 					"response": []
@@ -102,8 +111,72 @@
 						"url": "{{domain}}/api/universities/university/1",
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Fetches a specific university."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete University",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update/Edit University",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "copy jwt here",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 1,\n\t\"name\": \"University of Things and Stuff\",\n\t\"abbreviation\": \"UoTaS\"\n}"
+						},
+						"description": "Edits/Updates a specific university."
+					},
+					"response": []
+				},
+				{
+					"name": "Create University",
+					"request": {
+						"url": "{{domain}}/api/universities/university",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "copy jwt here",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"University of American Samoa\",\n\t\"abbreviation\": \"UAS\"\n}"
+						},
+						"description": "Creates a university."
 					},
 					"response": []
 				}
@@ -281,6 +354,58 @@
 						"description": "Fetches a specific subject for a university."
 					},
 					"response": []
+				},
+				{
+					"name": "Edit Subject",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "copy jwt here",
+								"description": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"12345\",\n    \"name\": \"Intro to Spring Boot\",\n    \"faculty\": {\n        \"id\": 1\n    },\n    \"creditPoints\": 6,\n    \"description\": \"This subject teaches you about the Spring Framework.\",\n    \"minRequirements\": \"Must have >= 70% test coverage.\",\n    \"undergrad\": true,\n    \"postgrad\": false,\n    \"autumn\": true,\n    \"spring\": false,\n    \"summer\": false,\n    \"rating\": 10,\n    \"numRatings\": 2\n}"
+						},
+						"description": "Edits a subject."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Subject",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "copy jwt here",
+								"description": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"12345\",\n    \"name\": \"Intro to Spring Boot\",\n    \"faculty\": {\n        \"id\": 1\n    },\n    \"creditPoints\": 6,\n    \"description\": \"This subject teaches you about the Spring Framework.\",\n    \"minRequirements\": \"Must have >= 70% test coverage.\",\n    \"undergrad\": true,\n    \"postgrad\": false,\n    \"autumn\": true,\n    \"spring\": false,\n    \"summer\": false\n}"
+						},
+						"description": "Create a subject."
+					},
+					"response": []
 				}
 			]
 		},
@@ -375,6 +500,57 @@
 						"description": "Fetches a specific assessment for a subject."
 					},
 					"response": []
+				},
+				{
+					"name": "Edit Assessment",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/assessments/assessment/1",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "copy jwt here",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Assessment task 1\",\n    \"description\": \"Description has been edited.\",\n    \"weighting\": 30,\n    \"groupWork\": true,\n    \"length\": \"There is no word limit.\",\n    \"type\": \"PROJECT\"\n}"
+						},
+						"description": "Edits a specific assessment for a subject."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Assessment",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/subjects/subject/1/assessments/assessment",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "copy jwt here",
+								"description": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Elder Law\",\n    \"description\": \"Last minute quiz.\",\n    \"weighting\": 10,\n    \"groupWork\": false,\n    \"length\": \"5 questions\",\n    \"type\": \"TEST\"\n}"
+						},
+						"description": "Creates an assessment for a subject."
+					},
+					"response": []
 				}
 			]
 		},
@@ -419,6 +595,26 @@
 							"raw": "{\n\t\"username\": \"example\",\n\t\"password\": \"password\"\n}"
 						},
 						"description": "Authenticates the user. A JWT is returned which can be used to authenticate for further requests."
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate User (Admin)",
+					"request": {
+						"url": "{{domain}}/api/auth/authenticate",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"admin\",\n\t\"password\": \"password\"\n}"
+						},
+						"description": "Authenticates with admin credentials (localhost credentials). A JWT is returned which can be used to authenticate for further requests."
 					},
 					"response": []
 				},
@@ -568,6 +764,76 @@
 							"raw": "{\n\t\"userId\":\"1\",\n\t\"comment\":\"test comment\"\n}"
 						},
 						"description": "Adds a comment to a subject in a university."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Faculties",
+			"description": "",
+			"item": [
+				{
+					"name": "Faculties",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/faculties",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Get faculties for a university."
+					},
+					"response": []
+				},
+				{
+					"name": "Faculty",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/faculties/faculty/1/",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Get a specific faculty for a university."
+					},
+					"response": []
+				},
+				{
+					"name": "Faculty",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/faculties/faculty/1/",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " copy jwt here",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Deletes a specific faculty."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Faculty",
+					"request": {
+						"url": "{{domain}}/api/universities/university/1/faculties/faculty/1/",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "copy jwt here",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"name\": \"Faculty of Computers and Stuff\",\n    \"code\": \"FCS\"\n}"
+						},
+						"description": "Edit a faculty for a university."
 					},
 					"response": []
 				}
