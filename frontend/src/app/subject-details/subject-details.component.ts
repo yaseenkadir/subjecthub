@@ -31,7 +31,7 @@ export class SubjectDetailsComponent implements OnInit {
   }
 
   fetchSubject() {
-    return this.subjectService.fetch(this.universityId, this.subjectId);
+    return this.subjectService.getSubject(this.universityId, this.subjectId);
   }
 
   ngOnInit() {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { UniversitySearchService} from '../services/university-search.service';
+import { UniversityService} from '../services/university.service';
 import { University} from '../models/university';
 import { Utils } from '../utils/utils';
 
@@ -9,7 +9,7 @@ import { Utils } from '../utils/utils';
     selector: 'app-universities',
     templateUrl: './universities.component.html',
     styleUrls: ['./universities.component.css'],
-    providers: [UniversitySearchService]
+    providers: [UniversityService]
 })
 
 export class UniversitiesComponent implements OnInit {
@@ -17,11 +17,12 @@ export class UniversitiesComponent implements OnInit {
     universities: University[];
     errorMessage: string = null;
 
-    constructor(private router: Router, private universitySearchService: UniversitySearchService) {
+    constructor(private router: Router, private universitySearchService: UniversityService) {
 
     }
 
     ngOnInit() {
+        this.universities = [];
         this.fetch();
     }
 
