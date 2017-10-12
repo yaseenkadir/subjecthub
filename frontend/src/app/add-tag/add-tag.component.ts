@@ -42,7 +42,7 @@ export class AddTagComponent {
       if (!this.tag.name) this.error = "A Tag Name must be supplied";
       else {
           this.isLoading = true;
-          setTimeout(() => {
+
             this.tagService.createTag(this.universityId, this.subjectId, this.tag)
               .then(subject => {
                   this.success = "Tag added successfully";
@@ -53,7 +53,7 @@ export class AddTagComponent {
                   this.error = Utils.getApiErrorMessage(err);
                   this.clearField();
               })
-          }, 1000);
+
 
       }
   }
