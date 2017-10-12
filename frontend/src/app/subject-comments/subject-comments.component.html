@@ -3,6 +3,9 @@
     <p *ngIf="fatalMessage" class="error">{{fatalMessage}}</p>
     <p *ngIf="message" class="error">{{message}}</p>
     <div *ngIf="!fatalMessage">
+        <div *ngIf="comments.length == 0" class="row">
+            <h5>No comments.</h5>
+        </div>
         <div class="row" *ngFor="let comment of comments">
             <div class="comment">
                 <div class="arm thumbs"><button class="btn btn-default thumbUp" onclick="this.thumbUp(comment.id)">{{comment.thumbsUp}}</button>

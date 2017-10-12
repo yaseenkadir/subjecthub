@@ -33,7 +33,7 @@
     <div>
         <section (click)="goToSubjectDetails(subject)" *ngFor="let subject of displaySubjects " class="panel panel-default">
             <div class="contents">
-                <h4 class="panel-heading well"><a (click)="goToSubjectDetails(subject)">{{subject.code}} - {{subject.name}}
+                <h4 class="panel-heading well"><a [routerLink]="['/university', university.id, 'subject', subject.id]">{{subject.code}} - {{subject.name}}
                     <i class="glyphicon glyphicon-circle-arrow-right"></i></a>
                 </h4>
                 <div class="panel-body">
