@@ -283,11 +283,47 @@ VALUES (
     2
 );
 
-/* Foundations of Law */
+/* Health Systems and Change*/
 INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
                       undergrad, postgrad, autumn, spring, summer, faculty_id)
 VALUES (
     11,
+    '92297',
+    'Health Systems and Change',
+    6,
+    'Health systems worldwide are facing increasing pressure to improve their efficiency and effectiveness while delivering safe, high quality and patient-centred care. Most countries accept that existing models of health care delivery are not sustainable for future decades, resulting in modern health services engaging in large system changes. This subject assists students to develop knowledge and skills in understanding and adapting health systems to achieve efficiency and effectiveness. The subject initially examines a range of change theories that can be applied to the healthcare environment as well as relevant leadership theories within the context of change. Finally the subject focuses on national health reform and a range of service improvement approaches and tools such as lean thinking, clinical process mapping and patient flow analysis. A number of recent initiatives are presented that explain how to implement change at national, corporate, statewide and health care organisation levels.',
+    'A student must achieve an overall mark of 50% or greater in the subject.',
+    FALSE,
+    TRUE,
+    TRUE,
+    TRUE,
+    FALSE,
+    2
+);
+
+/* Fundamentals of Mental Health Nursing */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
+                      undergrad, postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    12,
+    '92436',
+    'Fundamentals of Mental Health Nursing',
+    6,
+    'In this subject students learn concepts about mental health presentations and care generally and within the specialised context of mental health care settings, both acute and community-based. Students consider recovery as a context for mental health practice as they begin to explore different mental health issues and people who have experience of mental health challenges. As this is a foundational mental health clinical subject, students explore a range of skills in assessment such as mental state examination, risk assessment and attending to family and carers'' needs. Students also begin to develop the knowledge, attitudes and skills required for mental health nursing practice, therapeutic communication and reflective practice. This subject explores personal and professional resilience to better enable students to work effectively with complex presentations in mental health and generalist care settings.',
+    'A student must achieve an overall mark of 50% or greater in the subject.',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    2
+);
+
+/* Foundations of Law */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
+                      undergrad, postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    13,
     '70102',
     'Foundations of Law',
     8,
@@ -295,6 +331,42 @@ VALUES (
     'Class attendance is a subject requirement. Your seminar leader will take a roll during class. Although we encourage you to attend every seminar we understand that things happen and you can afford to miss up to four seminars without penalty provided that you send an email to your seminar leader to explain your absence. However, if you miss more than four classes you will not be permitted to receive a mark for the subject. In exceptional circumstances of illness and misadventure, you may be offered an opportunity to submit additional work for each class missed and permitted to receive a mark for the subject. Please note that work commitments and personal travel do not constitute an acceptable reason for absence from seminars. Please do not plan holidays that coincide with UTS teaching weeks.',
     TRUE,
     FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    3
+);
+
+/* Law and Justice Studies*/
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
+                      undergrad, postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    14,
+    '76069',
+    'Law and Justice Studies',
+    6,
+    'This subject introduces students to the dynamics of law reform and community engagement. Students experience the practice of community-based law through a placement with a social justice agency. In their placement, students gain experience and understanding of the ethics of practice, the legal needs addressed by the agency, and access to justice issues for disadvantaged individuals and communities. Depending on the requirements of participating organisations students may review and assess the impact of legislation and legislative reforms on vulnerable populations, undertake research and write reports on specific legal issues related to the practice of the agency, interview clients under the supervision of practicing lawyers, develop creative legal education materials and prepare case summaries.Students develop legal skills such as self-management, a practical understanding of the rules and practice of professional legal responsibility, the practice of ethical behaviour in a social justice context, and collaboration with colleagues, community groups and government agencies. Students develop communication and research skills through undertaking research on complex legal issues to generate appropriate theoretical and practical legal responses.',
+    'This subject is taught at Masters level. All students will need to achieve the advanced subject learning outcomes of self-management, critical reflection and professional responsibility through their participation in the internship and pre-departure preparations, their critical reflection and their debriefing presentation.',
+    TRUE,
+    FALSE,
+    TRUE,
+    TRUE,
+    FALSE,
+    3
+);
+
+/* Introduction to Taxation Law */
+INSERT INTO subjects (subject_id, code, name, credit_points, description, min_requirements,
+                      undergrad, postgrad, autumn, spring, summer, faculty_id)
+VALUES (
+    15,
+    '77938',
+    'Introduction to Taxation Law',
+    6,
+    'This subject acquaints students with Australian taxation law in a practical business environment. The focus of the syllabus is on the application of tax law concepts in a professional accounting setting. It aims to develop students'' conceptual and analytical skills and an appreciation of the Australian tax system. It provides a general analysis of the current tax system and consideration of the many changes it is presently undergoing with an emphasis on the implications for the commercial world. The subject looks at the Income Tax Assessment Act, the Tax Law Reform Project and the New Tax System. Particular concepts to be considered include: taxable income, income, deductions, capital gains tax, trusts, partnerships, companies and shareholders, tax accounting, tax planning and anti-avoidance provisions, fringe benefits tax and goods and services tax.',
+    'To obtain a pass in this subject, students must obtain a total of at least 50 marks from all components of the assessment.',
+    FALSE,
+    TRUE,
     TRUE,
     TRUE,
     FALSE,
