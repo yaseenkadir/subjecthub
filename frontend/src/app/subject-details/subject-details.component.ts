@@ -66,4 +66,8 @@ export class SubjectDetailsComponent implements OnInit {
       })
   }
 
+  navigateBack() {
+    this.location.back();
+  }
+
 }

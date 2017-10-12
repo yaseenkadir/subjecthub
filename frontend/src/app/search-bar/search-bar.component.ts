@@ -11,8 +11,8 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import { SubjectSearchService } from '../app/services/subject-search.service';
-import { Subject } from '../app/models/subject';
+import { SubjectSearchService } from '../services/subject-search.service';
+import { Subject } from '../models/subject';
 
 class Option {
   name: string;

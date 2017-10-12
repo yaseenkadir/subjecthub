@@ -24,6 +24,7 @@ export class SubjectCommentsComponent implements OnInit {
 
   constructor(private subjectCommentsService: SubjectCommentsService) {
     this.canAddComment = false;
+    this.comments = [];
   }
 
   ngOnInit() {

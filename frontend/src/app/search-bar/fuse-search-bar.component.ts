@@ -8,11 +8,11 @@ import "rxjs/add/operator/switchMap";
 import "rxjs/add/operator/toPromise";
 import Promise from 'bluebird';
 
-import {FacultySearchService} from "../app/services/faculty-search.service";
-import { SubjectSearchService } from "../app/services/subject-search.service";
-import {Faculty} from "../app/models/faculty";
-import { University } from '../app/models/university';
-import { Subject } from '../app/models/subject';
+import {FacultySearchService} from "../services/faculty-search.service";
+import { SubjectSearchService } from "../services/subject-search.service";
+import {Faculty} from "../models/faculty";
+import { University } from '../models/university';
+import { Subject } from '../models/subject';
 
 @Component({
   selector: "fuse-search-bar",
@@ -55,7 +55,7 @@ export class FuseSearchBarComponent implements OnInit {
 
   search(term: string): void {
     if (!term) return;
-    this.displaySubjects = this.fuse.search(term) as Subject[];
+    else this.displaySubjects = this.fuse.search(term) as Subject[];
   }
 
   fetchSubjects(): Promise<Subject[]> {

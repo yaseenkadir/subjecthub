@@ -2,9 +2,9 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from "./app.component";
-import { NavigationComponent } from "../navigation/navigation.component";
-import { SearchBarComponent } from "../search-bar/search-bar.component";
-import { FuseSearchBarComponent } from "../search-bar/fuse-search-bar.component";
+import { NavigationComponent } from "./navigation/navigation.component";
+import { SearchBarComponent } from "./search-bar/search-bar.component";
+import { FuseSearchBarComponent } from "./search-bar/fuse-search-bar.component";
 import { RegisterComponent } from './register/register.component';
 import {AlertModule} from "ngx-bootstrap";
 import { LoginComponent } from './login/login.component';
