@@ -1,7 +1,11 @@
 <!-- search bar -->
 <div class="row">
     <div class="col-md-12 text-center">
-        <h2>{{university.abbreviation}} subjects</h2>
+        <h2><a class="title" href="#">
+            <i class="glyphicon glyphicon-circle-arrow-left"></i>
+            Search Subjects at {{university.abbreviation}}:
+        </a>
+        </h2>
     </div>
     <div class=" col-xs-8 col-xs-offset-2">
         <div class="input-group">
@@ -27,19 +31,18 @@
 <div class="col-md-12">
     <p class="search-results-count">About {{displaySubjects.length}} results</p>
     <div>
-        <section (click)="goToSubjectDetails(subject)" *ngFor="let subject of displaySubjects " class="search-result-item">
-            <div>
-                <div class="row">
-                    <div class="col-sm-9">
-                        <h4 class="search-result-item-heading"><a href="#">{{subject.code}} - {{subject.name}}</a></h4>
-                        <p class="info">{{subject.creditPoints}} Credit Points :: {{subject.faculty.name}}</p>
-                        <p class="info"></p>
-                        <p class="description">{{subject.description}}</p>
-                        <p class="info"></p>
-                        <h4>Requirements</h4>
-                        <p *ngIf="subject.minRequirements" class="fs-mini text-muted"> {{subject.minRequirements}}</p>
-                    </div>
-
+        <section (click)="goToSubjectDetails(subject)" *ngFor="let subject of displaySubjects " class="panel panel-default">
+            <div class="contents">
+                <h4 class="panel-heading well"><a (click)="goToSubjectDetails(subject)">{{subject.code}} - {{subject.name}}
+                    <i class="glyphicon glyphicon-circle-arrow-right"></i></a>
+                </h4>
+                <div class="panel-body">
+                    <p class="info">{{subject.creditPoints}} Credit Points :: {{subject.faculty.name}}</p>
+                    <p></p>
+                    <p>{{subject.description}}</p>
+                    <p></p>
+                    <h4>Requirements</h4>
+                    <p *ngIf="subject.minRequirements" class="fs-mini text-muted"> {{subject.minRequirements}}</p>
                 </div>
             </div>
         </section>

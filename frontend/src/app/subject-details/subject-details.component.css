@@ -1,0 +1,8 @@
+.title, .title:hover{
+    color: black;
+    text-decoration: none;
+}
+
+.title:hover > i{
+    color: red;
+}

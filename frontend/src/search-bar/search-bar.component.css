@@ -127,3 +127,47 @@ body {
   z-index: 5;
   position: relative;
 }
+.title, .title:hover{
+    color: black;
+    text-decoration: none;
+}
+.title:hover > i{
+    color: red;
+}
+.btn-default:hover {
+    background-color: #eee;
+    box-sizing: border-box;
+}
+.panel .well{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    background-color: #f8f8f8;
+    border: none;
+}
+.panel-default {
+    margin-bottom: 15px;
+}
+.panel a, .panel a:hover {
+    color: black;
+}
+/*alternative, only link changes color of arrow:*/
+/*.panel a:hover > i {
+    color: red;
+}*/
+.panel:hover > .contents i {
+    color: red;
+}
+.panel-body .info {
+    margin-top: -10px;
+    font-size: 12px;
+    color: #999;
+}
+.panel:hover {
+    webkit-animation: on-result 2.5s 1;
+    animation: on-result 2s 1;
+}
+@keyframes on-result {
+    0% {box-shadow: none;}
+    15% {box-shadow: 0 0 4px #888;}
+    100% {box-shadow: none}
+}
