@@ -66,14 +66,19 @@ public class AuthControllerTests {
         RegisterRequest registerRequest = new RegisterRequest("tester", "test123", "a@test.com");
 
         String requestJson = TestUtils.asJson(registerRequest);
-        mockMvc
+        MvcResult result = mockMvc
             .perform(post("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.username", is("tester")))
-            .andExpect(jsonPath("$.password").doesNotExist())
-            .andExpect(jsonPath("$.email", is("a@test.com")));
+            .andReturn();
+
+        String token = JsonPath.read(result.getResponse().getContentAsString(), "$.token");
+        Claims c = jwtTokenUtils.getClaimsFromToken(token);
+        Assert.assertEquals("tester", c.get("username"));
+        Assert.assertEquals("a@test.com", c.get("email"));
+        Assert.assertEquals(false, c.get("admin"));
+
     }
 
     @Test
