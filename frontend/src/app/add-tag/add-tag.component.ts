@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-
+import { Router } from '@angular/router';
 import {AddTagService} from '../services/add-tag.service';
 import {Tag} from "../models/Tag";
 import { Utils } from '../utils/utils';
@@ -22,7 +22,7 @@ export class AddTagComponent {
   tag: Tag;
   isLoading: boolean;
 
-  constructor(private tagService: AddTagService) {
+  constructor(private tagService: AddTagService, private router: Router) {
     this.tag = new Tag('');
     this.isLoading = false;
   }
@@ -47,6 +47,7 @@ export class AddTagComponent {
               .then(subject => {
                   this.success = "Tag added successfully";
                   this.clearField();
+                  location.reload();
               })
               .catch(err => {
                   this.error = Utils.getApiErrorMessage(err);
