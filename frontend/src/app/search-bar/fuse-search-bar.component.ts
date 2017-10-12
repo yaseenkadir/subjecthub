@@ -8,7 +8,7 @@ import "rxjs/add/operator/switchMap";
 import "rxjs/add/operator/toPromise";
 import Promise from 'bluebird';
 
-import {FacultySearchService} from "../services/faculty-search.service";
+import {FacultyService} from "../services/faculty.service";
 import { SubjectSearchService } from "../services/subject-search.service";
 import {Faculty} from "../models/faculty";
 import { University } from '../models/university';
@@ -18,7 +18,7 @@ import { Subject } from '../models/subject';
   selector: "fuse-search-bar",
   templateUrl: "./fuse-search-bar.component.html",
   styleUrls: ["./search-bar.component.css"],
-  providers: [SubjectSearchService, FacultySearchService]
+  providers: [SubjectSearchService, FacultyService]
 })
 export class FuseSearchBarComponent implements OnInit {
   @Input ()
@@ -49,7 +49,7 @@ export class FuseSearchBarComponent implements OnInit {
       "description"
     ]
   };
-  constructor(private router: Router, private facultySearchService: FacultySearchService, private subjectSearchService: SubjectSearchService) {
+  constructor(private router: Router, private facultySearchService: FacultyService, private subjectSearchService: SubjectSearchService) {
     this.displaySubjects = [];
   }
 
