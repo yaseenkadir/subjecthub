@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SubjectCommentsService } from "../services/subject-comments.service";
 import { SubjectComment } from "../models/subject-comment";
 import { Utils } from '../utils/utils';
@@ -11,13 +11,16 @@ import { Utils } from '../utils/utils';
 })
 
 export class SubjectCommentsComponent implements OnInit {
+  @Input()
+  universityId: number;
+
+  @Input()
+  subjectId: number;
 
   comments: SubjectComment[];
   fatalMessage: string = null;
   message: string = null;
   canAddComment: boolean = false;
-  universityId: number = 1; //to be provided by parent in the future
-  subjectId: number = 1; //to be provided by parent in the future
 
   constructor(private subjectCommentsService: SubjectCommentsService) {
     this.canAddComment = false;
