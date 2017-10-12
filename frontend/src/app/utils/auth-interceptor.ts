@@ -16,11 +16,9 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // https://angular.io/guide/http#setting-new-headers
     this.authService = this.injector.get(AuthService);
-    console.log(`Intercepting a request.`);
     let authRequest = req.clone();
     if (this.authService.getToken() != null) {
       const authHeader = this.authService.getToken();
-      console.log(`Setting auth headers for request.`);
       authRequest = req.clone({setHeaders: {Authorization: authHeader}});
     }
     return next.handle(authRequest)

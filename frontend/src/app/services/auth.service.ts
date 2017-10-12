@@ -77,12 +77,7 @@ export class AuthService {
         let payload = token.split(".")[1];
         payload = window.atob(payload);
         payload = JSON.parse(payload);
-
-        let username = payload.sub;
-        // TODO-HIGH: Add user roles to jwt token
-        // temporary hack to determine whether a user is an admin or not
-        const isAdmin = username === 'admin';
-        return new User(username, 'abc@example.com', isAdmin);
+        return new User(payload.id, payload.username, payload.email, payload.admin);
       } catch (err) {
         throw new Error(err);
       }
