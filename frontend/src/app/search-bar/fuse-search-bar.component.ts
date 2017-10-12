@@ -54,7 +54,7 @@ export class FuseSearchBarComponent implements OnInit {
   }
 
   search(term: string): void {
-    if (!term) this.displaySubjects = this.subjects;
+    if (!term) return;
     else this.displaySubjects = this.fuse.search(term) as Subject[];
   }
 
