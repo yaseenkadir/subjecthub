@@ -8,9 +8,9 @@
         </div>
         <div class="row" *ngFor="let comment of comments">
             <div class="comment">
-                <div class="arm thumbs"><button class="btn btn-default thumbUp" onclick="this.thumbUp(comment.id)">{{comment.thumbsUp}}</button>
+                <div class="arm thumbs"><button class="btn btn-default thumbUp" (click)="this.thumbUp(comment.id)">{{comment.thumbsUp}}</button>
                     <br/>
-                    <button class="btn btn-default thumbDown" onclick="this.thumbDown(comment.id)">{{comment.thumbsDown}}</button>
+                    <button class="btn btn-default thumbDown" (click)="this.thumbDown(comment.id)">{{comment.thumbsDown}}</button>
                 </div>
                 <div *ngIf="comment.isFlagged" class="body reported">
                     <div class="box">
@@ -18,7 +18,7 @@
                         <div class="metadata">
                             <div class="box">
                                 <div class="info">by {{comment.user.username}}, at {{comment.postTime | date:'d/M/yy H:m'}}</div>
-                                <div class="action"><button class="action btn btn-default flagged" onclick="this.unflag(comment.id)">!</button></div>
+                                <div class="action"><button class="action btn btn-default flagged" (click)="this.unflag(comment.id)">!</button></div>
                             </div>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                         <div class="metadata">
                             <div class="box">
                                 <div class="info">by {{comment.user.username}}, at {{comment.postTime | date:'d/M/yy H:m'}}</div>
-                                <div class="action"><button class="btn btn-default notFlagged" onclick="this.flag(comment.id)">!</button></div>
+                                <div class="action"><button class="btn btn-default notFlagged" (click)="this.flag(comment.id)">!</button></div>
                             </div>
                         </div>
                     </div>
