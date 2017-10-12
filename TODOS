@@ -1,66 +1,23 @@
-TODO: Add tags to entity module
-1. Add Tag to database schemas and create associate entity to map M:N between Tag and Subject
-2. Add Tag entity
-3. Add tag/s field to Subjects
 
-Later
-4. Add api method to subjects allowing users to add tags
+Yaseen
+Register returns token
+Token contains more details, username, email, isAdmin
+Enable create options from dropdown
+Enable endpoints to services
+Enable deletes
+    - Uni
+    - Faculty
+    - Subject
+    - Assessment
 
-TODO: Add rating feature
-1. Add api method to SubjectServiceApi allowing students to rate
-2. Add implementation to SubjectServiceController
-3. Add rating/stars to angular app that connects with backend
+Miles
+Remove timer on add tag
+Add tag should refresh page
+Fix subject search clearing results
 
-Later
-4. Refactor rating to be it's own entity, instead of calculating a rolling average
+Simran
+Fix add comments
+Display more subject criteria - semesters, undergrad/postgrad min requirements
+Display tags in search result
 
-TODO: Add commenting
-1. Add Comment to database schema
-2. Add Comment entity
-3. Add comments field to Subjects (list)
-3.3 Add comments field to SubjectHubUsers (list)
-3.6 Add some subject comments data in data.sql
-4. Add api method to SubjectServiceApi allowing comments
-5. Add implementation for comments to SubjectServiceController
-5.5 Add comments service to frontend TODO
-6. Add comments component to subjects page TODO
-7. Add comments input field on the subject details page TODO
 
-Later
-8. Add flagging
-9. Add thumbs up options
-
-Need To Confirm
-1. How many thumbs can one user give/can they revoke/how is it controlled
-2. I am suspicious that flagged attribute in comments table (schema) defaults to null as opposed to false?
-
-TODO: Add home page which lets users select their university
-
-TODO: Add missing Universities Controller
-2. Add a findByAbbreviation method
-3. Use a similar pattern to SubjectServiceApi-SubjectServiceController
-
-TODO: Add missing Faculties Controller and FacultyServiceApi
-1. The api should be a child of /api/universities/ i.e. /api/universities/faculties
-2. Add a findByCode method
-
-TODO: Add Assessments Controller and AssessmentsServiceApi
-1. Should be a child of /api/universities/subjects/{subject_id}/assessments
-2. Should return all assessments for a subjects
-3. Add filtering abilities using GET params e.g. assessment type, weighting, and/or if it involves
-group work
-4. Add assessment component to angular
-
-TODO: Add users/students
-1. (No idea how to do this, we'll learn together)
-2. Add login page
-3. Add user profile page which includes a feed of all their comments.
-4. Add user/student component
-
-TODO: Add instructor to entity module
-TODO: Add role based permissions
-TODO: Add pre-requisites
-TODO: Add courses
-
-TODO: Add angular tests
-TODO: Add angular test config to run-tests.sh.
