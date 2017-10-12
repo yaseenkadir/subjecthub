@@ -1,34 +1,31 @@
 <div>
     <h2>Comments</h2>
-    <p *ngIf="fatalMessage" class="error">{{fatalMessage}}</p>
-    <p *ngIf="message" class="error">{{message}}</p>
-    <div *ngIf="!fatalMessage">
-        <div *ngIf="comments.length == 0" class="row">
-            <h5>No comments.</h5>
-        </div>
+    <div *ngIf="comments.length == 0" class="row">
+        <h5>No comments.</h5>
+    </div>
         <div class="row" *ngFor="let comment of comments">
             <div class="comment">
                 <div class="arm thumbs"><button class="btn btn-default thumbUp" (click)="this.thumbUp(comment.id)">{{comment.thumbsUp}}</button>
                     <br/>
                     <button class="btn btn-default thumbDown" (click)="this.thumbDown(comment.id)">{{comment.thumbsDown}}</button>
                 </div>
-                <div *ngIf="comment.isFlagged" class="body reported">
+                <div *ngIf="comment.flagged" class="body">
                     <div class="box">
-                        <div class="post">{{comment.post}}</div>
+                        <div class="post reported">{{comment.post}}</div>
                         <div class="metadata">
                             <div class="box">
-                                <div class="info">by {{comment.user.username}}, at {{comment.postTime | date:'d/M/yy H:m'}}</div>
+                                <div class="info">by {{comment.user.username}}, at {{comment.postTime | date:'dd/MM/yy H:mm'}}</div>
                                 <div class="action"><button class="action btn btn-default flagged" (click)="this.unflag(comment.id)">!</button></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div *ngIf="!comment.isFlagged" class="body">
+                <div *ngIf="!comment.flagged" class="body">
                     <div class="box">
                         <div class="post">{{comment.post}}</div>
                         <div class="metadata">
                             <div class="box">
-                                <div class="info">by {{comment.user.username}}, at {{comment.postTime | date:'d/M/yy H:m'}}</div>
+                                <div class="info">by {{comment.user.username}}, at {{comment.postTime | date:'dd/MM/yy H:mm'}}</div>
                                 <div class="action"><button class="btn btn-default notFlagged" (click)="this.flag(comment.id)">!</button></div>
                             </div>
                         </div>
@@ -37,12 +34,12 @@
             </div>
         </div>
     </div>
-    <!--<form *ngIf="canAddComment" [formGroup]="addCommentForm" (submit)="addComment(addCommentForm.value)">-->
-        <!--<p>Posting as: bob</p>&lt;!&ndash;need to get username from auth somehow&ndash;&gt;-->
-        <!--<input formControlName="message" type="text" placeholder="Comment" class="form-control">-->
-        <!--<button class="btn btn-default">Post!</button>-->
-    <!--</form>-->
-    <p *ngIf="!canAddComment">
-        Need to login to post a comment!
-    </p>
+    <form [formGroup]="addCommentForm" (submit)="addComment(addCommentForm.value)">
+        <p *ngIf="!user">You are not logged in, please login to post a comment!</p>
+        <p *ngIf="user">Posting as: {{user}}</p>
+        <input *ngIf="!user" disabled="true" formControlName="comment" type="text" placeholder="Comment" class="form-control">
+        <input *ngIf="user"  formControlName="comment" type="text" placeholder="Comment" class="form-control">
+        <button *ngIf="!user" disabled="true" class="btn btn-default">Post!</button>
+        <button *ngIf="user" class="btn btn-default">Post!</button>
+    </form>
 </div>

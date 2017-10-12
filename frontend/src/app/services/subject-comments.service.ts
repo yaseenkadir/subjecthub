@@ -16,8 +16,8 @@ export class SubjectCommentsService {
       `No comments found for subject id: ${subject}`, `Comments request failed`);
   }
 
-  add(university: number, subject: number, message: string): Promise<SubjectComment> {
-    let requestBody = {"message": message};
+  add(university: number, subject: number, comment: object): Promise<SubjectComment> {
+    let requestBody = comment;
     return this.commentActionPost(`/universities/university/${university}/subjects/subject/${subject}/comments/comment/add`,
       requestBody, `Unable to add comment for subject id: ${subject}`, `Add comment request failed`);
   }
