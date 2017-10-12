@@ -2,12 +2,15 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SubjectCommentsService } from "../services/subject-comments.service";
 import { SubjectComment } from "../models/subject-comment";
 import { Utils } from '../utils/utils';
+import { AuthService } from '../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-subject-comments',
   templateUrl: './subject-comments.component.html',
   styleUrls: ['./subject-comments.component.css'],
-  providers: [SubjectCommentsService]
+  providers: [SubjectCommentsService, AuthService, ToastrService]
 })
 
 export class SubjectCommentsComponent implements OnInit {
@@ -18,89 +21,40 @@ export class SubjectCommentsComponent implements OnInit {
   subjectId: number;
 
   comments: SubjectComment[];
-  fatalMessage: string = null;
-  message: string = null;
-  canAddComment: boolean = false;
+  user: String = "";
 
-  constructor(private subjectCommentsService: SubjectCommentsService) {
-    this.canAddComment = false;
-    this.comments = [];
+  addCommentForm: FormGroup;
+
+  constructor(private subjectCommentsService: SubjectCommentsService, private authService: AuthService,
+              private toastr: ToastrService, private fb: FormBuilder) {
+    this.addCommentForm = fb.group({
+      "comment": [
+        null
+        ]
+    });
+    if(authService.isLoggedIn()){this.user = this.authService.currentUser().username}
   }
 
   ngOnInit() {
     this.fetch();
   }
 
-  cleanMessages() {
-    this.fatalMessage = null;
-    this.message = null;
-  }
-
   fetch() {
-    this.cleanMessages();
     this.subjectCommentsService.fetch(this.universityId, this.subjectId)
       .then(result => {
         this.comments = result;
-        this.canAddComment = true;
       })
       .catch(e => {
         console.log(e);
-        this.fatalMessage = Utils.getApiErrorMessage(e);
-        this.canAddComment = false;
       });
   }
 
   thumbUp(commentId: number) {
-    this.cleanMessages();
-    this.subjectCommentsService.addThumbUp(this.universityId, this.subjectId, commentId)
-      .then(comment => {
-        this.handleCommentActionSuccess(comment);
-      })
-      .catch(e => {
-        this.handleCommentActionFailed(e);
-      });
-  }
-
-  thumbDown(commentId: number) {
-    this.cleanMessages();
-    this.subjectCommentsService.addThumbDown(this.universityId, this.subjectId, commentId)
-      .then(comment => {
-        this.handleCommentActionSuccess(comment);
-      })
-      .catch(e => {
-        this.handleCommentActionFailed(e);
-      });
-  }
-
-  flag(commentId: number) {
-    this.cleanMessages();
-    this.subjectCommentsService.flag(this.universityId, this.subjectId, commentId)
-      .then(comment => {
-        this.handleCommentActionSuccess(comment);
-      })
-      .catch(e => {
-        this.handleCommentActionFailed(e);
-      });
-  }
-
-  unflag(commentId: number) {
-    this.cleanMessages();
-    this.subjectCommentsService.unFlag(this.universityId, this.subjectId, commentId)
-      .then(comment => {
-        this.handleCommentActionSuccess(comment);
-      })
-      .catch(e => {
-        this.handleCommentActionFailed(e);
-      });
-  }
-
-  addComment(message: string) {
-    this.cleanMessages();
-    //need auth? or is spring enough
-    if (this.canAddComment) {
-      this.subjectCommentsService.add(this.universityId, this.subjectId, message)
+    if(this.checkLoggedIn()){
+      this.subjectCommentsService.addThumbUp(this.universityId, this.subjectId, commentId)
         .then(comment => {
-          this.handleCommentActionSuccess(comment);
+          console.log("thumb up added to comment");
+          this.refresh();
         })
         .catch(e => {
           this.handleCommentActionFailed(e);
@@ -108,28 +62,72 @@ export class SubjectCommentsComponent implements OnInit {
     }
   }
 
-  handleCommentActionSuccess(comment: SubjectComment) {
-    this.canAddComment = true;
-    this.placeComment(comment);
+  thumbDown(commentId: number) {
+    if(this.checkLoggedIn()){
+      this.subjectCommentsService.addThumbDown(this.universityId, this.subjectId, commentId)
+        .then(comment => {
+          console.log("thumbs down added to comment");
+          this.refresh();
+        })
+        .catch(e => {
+          this.handleCommentActionFailed(e);
+        });
+    }
+  }
+
+  flag(commentId: number) {
+    if(this.checkLoggedIn()){
+      this.subjectCommentsService.flag(this.universityId, this.subjectId, commentId)
+        .then(comment => {
+          console.log("flagged comment");
+          this.refresh();
+        })
+        .catch(e => {
+          this.handleCommentActionFailed(e);
+        });
+    }
+  }
+
+  unflag(commentId: number) {
+    if(this.checkLoggedIn()){
+      this.subjectCommentsService.unFlag(this.universityId, this.subjectId, commentId)
+        .then(comment => {
+          console.log("unflagged comment");
+          this.refresh();
+        })
+        .catch(e => {
+          this.handleCommentActionFailed(e);
+        });
+    }
+  }
+
+  addComment(comment: object) {
+    if (this.checkLoggedIn()) {
+      this.subjectCommentsService.add(this.universityId, this.subjectId, comment)
+        .then(comment => {
+          console.log("added comment");
+          this.refresh();
+        })
+        .catch(e => {
+          this.handleCommentActionFailed(e);
+        });
+    }
   }
 
   handleCommentActionFailed(error: any) {
     console.log(error);
-    this.canAddComment = false;
-    this.message = Utils.getApiErrorMessage(error);
   }
 
-  placeComment(response: SubjectComment) {
-    let found: boolean = false;
-    this.comments.forEach(currentValue => {
-      if (currentValue.id = response.id) {
-        currentValue = response;
-        found = true;
-      }
-    });
-    if (!found) {
-      this.comments.push(response);
+  checkLoggedIn(): boolean {
+    if (!this.authService.isLoggedIn()){
+      this.toastr.error("Not logged in!");
+      return false;
+    }else{
+      return true;
     }
   }
 
+  refresh(){
+    location.reload();
+  }
 }
