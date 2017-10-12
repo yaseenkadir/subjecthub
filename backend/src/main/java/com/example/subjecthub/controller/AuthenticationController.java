@@ -1,6 +1,7 @@
 package com.example.subjecthub.controller;
 
 import com.example.subjecthub.Application;
+import com.example.subjecthub.api.AuthServiceApi;
 import com.example.subjecthub.dto.AuthenticationRequest;
 import com.example.subjecthub.dto.JwtResponse;
 import com.example.subjecthub.dto.RegisterRequest;
@@ -28,7 +29,7 @@ import java.util.regex.Pattern;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
-public class AuthenticationController {
+public class AuthenticationController implements AuthServiceApi {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -46,6 +47,7 @@ public class AuthenticationController {
     // characters.
     private static final Pattern usernamePattern = Pattern.compile("^[a-zA-Z]{1}[a-zA-Z0-9]{4,19}");
 
+    @Override
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public JwtResponse authenticate(
         @RequestBody AuthenticationRequest authRequest
@@ -63,12 +65,14 @@ public class AuthenticationController {
             throw new SubjectHubException("Invalid credentials.");
         }
 
-        Application.log.info("{} logged in.", authRequest.getUsername());
-        return new JwtResponse(jwtTokenUtils.generateToken(authRequest.getUsername()));
+        SubjectHubUser user = subjectHubUserRepository.findByUsername(authRequest.getUsername()).get();
+        Application.log.info("{} logged in.", user.getUsername());
+        return new JwtResponse(jwtTokenUtils.generateToken(user));
     }
 
+    @Override
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public SubjectHubUserResponse register(
+    public JwtResponse register(
         @RequestBody RegisterRequest registerRequest
     ) {
         // TODO: Handle usernames as case insensitive
@@ -79,9 +83,9 @@ public class AuthenticationController {
         String hashedPassword = bCryptPasswordEncoder.encode(registerRequest.getPassword());
         SubjectHubUser subjectHubUser = new SubjectHubUser(registerRequest.getUsername(),
             hashedPassword, registerRequest.getEmail());
-        subjectHubUserRepository.save(subjectHubUser);
+        subjectHubUser = subjectHubUserRepository.save(subjectHubUser);
         Application.log.info("{} successfully registered.", registerRequest.getUsername());
-        return userResponse(subjectHubUser);
+        return new JwtResponse(jwtTokenUtils.generateToken(subjectHubUser));
     }
 
     /**
@@ -91,6 +95,16 @@ public class AuthenticationController {
      */
     @RequestMapping(value = "/self", method = RequestMethod.GET)
     public SubjectHubUserResponse getUser() {
+        // Retrieves requesting user and copies it to a SubjectHubUserResponse to hide password
+        // details.
+        SubjectHubUser user = getRequestingUser();
+        SubjectHubUserResponse response = new SubjectHubUserResponse();
+        BeanUtils.copyProperties(user, response);
+        return response;
+    }
+
+    @Override
+    public SubjectHubUser getRequestingUser() {
         UserDetails userDetails;
         try {
             userDetails =
@@ -106,7 +120,7 @@ public class AuthenticationController {
             throw new SubjectHubUnexpectedException(String.format("User %s is authenticated but " +
                 "was not found in database", userDetails.getUsername()));
         }
-        return userResponse(user.get());
+        return user.get();
     }
 
     /**

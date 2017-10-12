@@ -1,6 +1,7 @@
 package com.example.subjecthub.security;
 
 import com.example.subjecthub.Application;
+import com.example.subjecthub.entity.SubjectHubUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;
@@ -16,6 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -47,22 +49,33 @@ public class JwtTokenUtils {
             .getBody();
     }
 
-    public String generateToken(String username) throws JwtException {
-        return generateToken(username, null,
+    public String generateToken(SubjectHubUser user) {
+        Application.log.info("Generating token for {}", user);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", user.getUsername());
+        claims.put("admin", user.getAdmin());
+        claims.put("email", user.getEmail());
+        claims.put("id", user.getId());
+        return generateToken(user.getUsername(), claims,
             Date.from(ZonedDateTime.now().plusWeeks(1).toInstant()));
     }
 
-    public String generateToken(String username, @Nullable Map<String, Object> claims, Date expiry)
+    public String generateToken(String subject, @Nullable Map<String, Object> claims, Date expiry)
         throws JwtException {
-        JwtBuilder builder = Jwts.builder()
-            .setSubject(username)
-            .signWith(SignatureAlgorithm.HS512, secretKey)
-            .setExpiration(expiry);
 
-        if (claims != null) {
-            builder.setClaims(claims);
+        if (claims == null) {
+            claims = new HashMap<>();
         }
-        return builder.compact();
+
+        JwtBuilder builder = Jwts.builder();
+        return builder
+            .setClaims(claims)
+            // set subject after claims or else setting claims will overwrite subject
+            // 2+ hours debugging this...
+            .setSubject(subject)
+            .signWith(SignatureAlgorithm.HS512, secretKey)
+            .setExpiration(expiry)
+            .compact();
     }
 
     public boolean validateToken(String token, UserDetails userDetails) throws JwtException {
