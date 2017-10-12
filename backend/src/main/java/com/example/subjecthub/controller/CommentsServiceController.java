@@ -25,6 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/universities/university/{universityId}/subjects/subject/{subjectId}/comments")
+@CrossOrigin("*")
 public class CommentsServiceController implements CommentServiceApi {
 
     @Autowired
