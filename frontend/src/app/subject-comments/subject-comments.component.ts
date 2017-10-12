@@ -5,6 +5,7 @@ import { Utils } from '../utils/utils';
 import { AuthService } from '../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-subject-comments',
@@ -21,7 +22,7 @@ export class SubjectCommentsComponent implements OnInit {
   subjectId: number;
 
   comments: SubjectComment[];
-  user: String = "";
+  user: User;
 
   addCommentForm: FormGroup;
 
@@ -32,7 +33,12 @@ export class SubjectCommentsComponent implements OnInit {
         null
         ]
     });
-    if(authService.isLoggedIn()){this.user = this.authService.currentUser().username}
+
+    this.comments = [];
+
+    if (authService.isLoggedIn()) {
+      this.user = this.authService.currentUser() || null;
+    }
   }
 
   ngOnInit() {

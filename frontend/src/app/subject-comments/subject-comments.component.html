@@ -51,13 +51,16 @@
         </div>
     </div>
     <form [formGroup]="addCommentForm" (submit)="addComment(addCommentForm.value)">
-        <p *ngIf="!user">You are not logged in, please login to post a comment!</p>
-        <p *ngIf="user">Posting as: {{user}}</p>
-        <input *ngIf="!user" disabled="true" formControlName="comment" type="text"
-               placeholder="Comment" class="form-control">
-        <input *ngIf="user" formControlName="comment" type="text" placeholder="Comment"
-               class="form-control">
-        <button *ngIf="!user" disabled="true" class="btn btn-default">Post!</button>
-        <button *ngIf="user" class="btn btn-default">Post!</button>
+        <ng-container *ngIf="user">
+            <p>Posting as: {{user.username}}</p>
+            <input formControlName="comment" type="text" placeholder="Comment" class="form-control">
+            <button class="btn btn-default">Post!</button>
+        </ng-container>
+        <ng-container *ngIf="!user">
+            <p>You are not logged in, please login to post a comment!</p>
+            <input disabled formControlName="comment" type="text" placeholder="Comment"
+                   class="form-control">
+            <button disabled class="btn btn-default">Post!</button>
+        </ng-container>
     </form>
 </div>
