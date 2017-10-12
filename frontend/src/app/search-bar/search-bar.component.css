@@ -2,6 +2,13 @@ body {
   margin-top: 20px;
   background-color: #eee;
 }
+
+.search-instructions {
+    color: #888888;
+    font-size: 12px;
+    padding: 10px;
+}
+
 .search-result-item-body-faded {
   margin-left: 200px;
   opacity: 0.3;

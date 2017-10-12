@@ -3,8 +3,8 @@ export class SubjectComment {
     user: object;
     subject: object;
     post: string;
-    postTime: Date; //not sure if this the right datatype
-    isFlagged: boolean;
+    postTime: Date;
+    flagged: boolean;
     thumbsUp: number;
     thumbsDown: number;
 }
