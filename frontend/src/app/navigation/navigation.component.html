@@ -14,12 +14,12 @@
         <div class="navbar-collapse collapse" id="user-details-dropdown">
             <ul class="nav navbar-nav navbar-right">
                 <ng-container *ngIf="user == null">
-                    <li><a routerLink="/login">Login</a></li>
-                    <li><a routerLink="/register">Register</a></li>
+                    <li routerLinkActive="active"><a routerLink="/login">Login</a></li>
+                    <li routerLinkActive="active"><a routerLink="/register">Register</a></li>
                 </ng-container>
                 <ng-container *ngIf="user != null">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{user.username}}<span
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{user.username}} <span
                             class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">Your profile</a></li>
@@ -32,6 +32,6 @@
                 </ng-container>
             </ul>
         </div>
-        <!--/.nav-collapse -->
+
     </div>
 </nav>

@@ -83,4 +83,8 @@ export class AuthService {
       }
     }
   };
+
+  isAdmin(): boolean {
+    return this.isLoggedIn() && this.currentUser().admin;
+  }
 }
