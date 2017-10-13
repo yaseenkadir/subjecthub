@@ -4,26 +4,31 @@ import { Router } from '@angular/router';
 import { UniversityService} from '../services/university.service';
 import { University} from '../models/university';
 import { Utils } from '../utils/utils';
+import { AuthService } from '../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-universities',
     templateUrl: './universities.component.html',
     styleUrls: ['./universities.component.css'],
-    providers: [UniversityService]
+    providers: [UniversityService, AuthService],
 })
 
 export class UniversitiesComponent implements OnInit {
 
     universities: University[];
     errorMessage: string = null;
+    isAdmin: boolean;
+    isLoading: boolean;
 
-    constructor(private router: Router, private universitySearchService: UniversityService) {
-
+    constructor(protected router: Router, protected universityService: UniversityService,
+                protected authService: AuthService, protected toastr: ToastrService) {
     }
 
     ngOnInit() {
         this.universities = [];
         this.fetch();
+        this.isAdmin = this.authService.isAdmin();
     }
 
     cleanMessages(){
@@ -37,12 +42,17 @@ export class UniversitiesComponent implements OnInit {
 
 
     fetch(){
+        this.isLoading = true;
         this.cleanMessages();
-        this.universitySearchService.getUniversities()
+        this.universityService.getUniversities()
             .then(universities => {
-                this.universities = universities;
+                setTimeout(() => {
+                  this.isLoading = false;
+                  this.universities = universities;
+                }, 300);
             })
             .catch(e => {
+                this.isLoading = true;
                 this.errorMessage = Utils.getApiErrorMessage(e);
             });
     }

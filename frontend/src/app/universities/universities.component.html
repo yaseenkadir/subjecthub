@@ -4,42 +4,29 @@
         <p *ngIf="errorMessage" class="error">{{errorMessage}}</p>
     </div>
     <div class="col-md-12" *ngIf="!fatalMessage">
-        <!--For admin view!!-->
-        <!--<table class="table table-responsive core-table">
-            <thead>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Abbreviation</th>
-                <th>Actions</th>
-            </thead>
-            <tbody *ngFor="let university of universities">
-                <tr>
-                    <td>{{university.id}}</td>
-                    <td>{{university.name}}</td>
-                    <td>{{university.abbreviation}}</td>
-                    <td>
-                        <button (click)="goToUniversitySearchpage(university)" class="btn-search">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>-->
-        <div class="row">
-            <div class="col-sm-4" *ngFor="let university of universities">
-                <button class="tile" (click)="goToUniversitySearchpage(university)">
-                    <table class="content">
-                        <tr>
-                            <td class="text">
-                                <h3 class="title">{{university.abbreviation}}</h3>
-                                <p>{{university.name}}</p>
-                            </td>
-                            <td class="icon">
-                                <h1><i class="glyphicon glyphicon-search"></i></h1>
-                            </td>
-                        </tr>
-                    </table>
-                </button>
+        <div *ngIf="isLoading">
+            <app-spinner></app-spinner>
+        </div>
+        <div *ngIf="!isLoading">
+            <div *ngIf="!isAdmin" class="row">
+                <div class="col-sm-4" *ngFor="let university of universities">
+                    <button class="tile" (click)="goToUniversitySearchpage(university)">
+                        <table class="content">
+                            <tr>
+                                <td class="text">
+                                    <h3 class="title">{{university.abbreviation}}</h3>
+                                    <p>{{university.name}}</p>
+                                </td>
+                                <td class="icon">
+                                    <h1><i class="glyphicon glyphicon-search"></i></h1>
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-4 col-md-offset-4 text-center" *ngIf="universities.length == 0">
+                <h4>No universities exist.</h4>
             </div>
         </div>
     </div>

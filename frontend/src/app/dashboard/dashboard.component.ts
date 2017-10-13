@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -8,9 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  isAdmin: boolean = false;
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
+    this.isAdmin = this.authService.isAdmin();
   }
-
 }

@@ -3,11 +3,15 @@ p.error {
   color: #a94442;
 }
 
-#toast-container .toast {
-  margin-top: 500px;
-  opacity: 1;
+.toast-top-center {
+  margin-top: 20px;
 }
 
 .wrapper {
   margin-top: 10vh;
+}
+
+.center {
+  text-align: center;
+  margin: 0 auto;
 }

@@ -1,26 +1,12 @@
-.btn-search {
+.btn-uni-action {
   background: none;
   border: none;
   color: #494949;
   font-size: 24px;
 }
 
-.btn-search:hover {
+.btn-uni-action:hover {
   color: red;
-}
-
-.core-table {
-  font-size: 15px;
-  text-align: center;
-}
-
-.core-table > thead > th {
-  text-align: center;
-}
-
-.core-table > tbody > tr > td {
-  padding-top: 17px;
-  padding-bottom: 5px;
 }
 
 .tile {

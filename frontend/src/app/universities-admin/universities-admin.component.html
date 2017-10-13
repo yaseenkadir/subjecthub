@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h2>Universities</h2>
+    </div>
+    <div class="col-md-12" *ngIf="!fatalMessage">
+        <div *ngIf="isLoading">
+            <app-spinner></app-spinner>
+        </div>
+        <div *ngIf="!isLoading">
+            <table class="table table-responsive core-table">
+                <thead>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Abbreviation</th>
+                <th>Actions</th>
+                </thead>
+                <ng-container *ngIf="universities.length != 0">
+                    <tbody *ngFor="let university of universities">
+                    <tr>
+                        <td>{{university.id}}</td>
+                        <td>{{university.name}}</td>
+                        <td>{{university.abbreviation}}</td>
+                        <td>
+                            <button (click)="goToUniversitySearchpage(university)" class="btn-uni-action">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                            <button (click)="deleteUniversity(university.id)" class="btn-uni-action">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </button>
+                            <button (click)="openModal(university)" class="btn-uni-action">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </ng-container>
+            </table>
+            <div class="row">
+                <div class="center">
+                    <button type="button" (click)="openModal(null)" class="btn btn-labeled btn-primary">
+                        <span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>
+                        Create University
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-4 col-md-offset-4 text-center" *ngIf="universities.length == 0">
+                <h4>No universities exist.</h4>
+            </div>
+        </div>
+    </div>
+</div>
