@@ -24,7 +24,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { UniversityEditComponent } from './university-edit/university-edit.component'
 import { CreateSubjectComponent } from './create-subject/create-subject.component';
+
 import { EditUniversityComponent } from './edit-university/edit-university.component';
+
 
 const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

@@ -2,10 +2,13 @@ import { Faculty } from './faculty';
 import { Assessment } from './assessment';
 export class Subject {
   assessments: Assessment[];
+  comments: any[];
   availability: boolean;
   description: string;
-  creditPoints: number;
-  code: number;
+
+  creditPoints: string;
+  code:  string;
+
   studentType: string;
   faculty: Faculty;
   id: number;
@@ -14,17 +17,21 @@ export class Subject {
   numRatings: number;
   postgrad: boolean;
   rating: number;
+  autumn: boolean;
   spring: boolean;
   summer: boolean;
   undergrad: boolean;
 
-  constructor(code: string, name: string, creditPoints: string, description: string, minRequirements: string, postgrad: boolean, undergrad: boolean) {
-    this.code = Number(code);
-    this.name = name;
-    this.creditPoints = Number(creditPoints);
-    this.description = description;
-    this.minRequirements = minRequirements;
-    this.postgrad = postgrad;
-    this.undergrad = undergrad;
+  constructor() {
+    this.name = '';
+    this.description = '';
+    this.creditPoints = '';
+    this.code = '';
+    this.minRequirements = '';
+    this.postgrad = false;
+    this.undergrad = false;
+    this.summer = false;
+    this.spring = false;
+    this.autumn = false;
   }
 }

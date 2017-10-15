@@ -44,6 +44,7 @@ export class UniversitiesAdminComponent extends UniversitiesComponent implements
       });
   }
 
+
   goToFacultyEdit(universityId: number) {
     this.router.navigate([], {})
     this.router.navigate([`university/${universityId}/faculties/edit`])

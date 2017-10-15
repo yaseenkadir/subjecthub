@@ -1,61 +1,96 @@
 <!-- Faculties -->
 <div *ngIf="isLoading">
-  <app-spinner></app-spinner>
+    <app-spinner></app-spinner>
 </div>
 <div *ngIf="!isLoading">
-  <div class="row">
-    <div class="col-md-12 text-center">
-      <h2>{{university.abbreviation}}: Faculties</h2>
-    </div>
-    <div class="col-md-12" *ngIf="!fatalMessage">
+    <div *ngIf="!isEditingFaculty">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>
+                    <a class="title" (click)="goBack()">
+                        <!--TODO: link to previous page, OR, subject's university's search-->
+                        <i class="glyphicon glyphicon-circle-arrow-left"></i> {{university.abbreviation}}: Faculties
+                    </a>
+                </h1>
 
-      <!-- Filter and Create Faculty -->
-      <div class="row">
-        <div class="col-md-2 pull-right">
-          <button (click)="openFacultyModal(null)" type="button" class="btn btn-labeled btn-primary">
+            </div>
+            <div class="col-md-12" *ngIf="!fatalMessage">
+
+                <!-- Filter and Create Faculty -->
+                <div class="row">
+                    <div class="col-md-2 pull-right">
+                        <button (click)="showFacultyForm()" type="button" class="btn btn-labeled btn-primary">
               <span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>
               Create Faculty
           </button>
-        </div>
-        <div class="col-md-2 pull-right">
-          <input placeholder="Filter Faculties" class="form-control" name="facultyFilter" [(ngModel)]="filterFaculties" />
-        </div>
-      </div>
-      <hr/>
-      <!-- Table View -->
-      <div class="scroll">
-        <table class="table table-responsive core-table">
-          <thead>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Code</th>
-            <th>Actions</th>
-          </thead>
-          <ng-container *ngIf="faculties.length != 0">
-            <tbody *ngFor="let faculty of faculties | filter: 'name' : filterFaculties">
-              <tr>
-                <td>{{faculty.id}}</td>
-                <td>{{faculty.name}}</td>
-                <td>{{faculty.code}}</td>
-                <td>
-                  <button class="btn-uni-action">
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        <input placeholder="Filter Faculties" class="form-control" name="facultyFilter" [(ngModel)]="filterFaculties" />
+                    </div>
+                </div>
+                <hr/>
+                <!-- Table View -->
+                <div class="scroll">
+                    <table class="table table-responsive core-table">
+                        <thead>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Actions</th>
+                        </thead>
+                        <ng-container *ngIf="faculties.length != 0">
+                            <tbody *ngFor="let faculty of faculties | filter: 'name' : filterFaculties">
+                                <tr>
+                                    <td>{{faculty.id}}</td>
+                                    <td>{{faculty.name}}</td>
+                                    <td>{{faculty.code}}</td>
+                                    <td>
+                                        <button class="btn-uni-action">
                               <i class="glyphicon glyphicon-trash"></i>
                           </button>
-                  <button (click)="openFacultyModal(faculty)" class="btn-uni-action">
+                                        <button (click)="showFacultyForm(faculty)" class="btn-uni-action">
                               <i class="glyphicon glyphicon-edit"></i>
                           </button>
-                  <button (click)="goToCreateSubjectPage(faculty)" class="btn-uni-action">
+                                        <button (click)="goToCreateSubjectPage(faculty)" class="btn-uni-action">
                               <i class="glyphicon glyphicon-cog"></i>
                           </button>
-                </td>
-              </tr>
-            </tbody>
-          </ng-container>
-        </table>
-        <div class="col-md-4 col-md-offset-4 text-center" *ngIf="faculties.length == 0">
-          <h4>No Faculties exist.</h4>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </ng-container>
+                    </table>
+                    <div class="col-md-4 col-md-offset-4 text-center" *ngIf="faculties.length == 0">
+                        <h4>No Faculties exist.</h4>
+                    </div>
+                </div>
+                <hr/>
+            </div>
         </div>
-      </div>
-      <hr/>
     </div>
-  </div>
+    <div *ngIf="isEditingFaculty">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <h2 *ngIf="isCreate">Create New Faculty</h2>
+                <h2 *ngIf="!isCreate">Edit Faculty</h2>
+                <form>
+                    <div [className]="setNameErrorClass()">
+                        <label>Name</label>
+                        <input class="form-control" name="facultyName" [(ngModel)]="selectedFaculty.name" />
+                        <span *ngIf="errors.name" class="help-block">{{errors.name}}</span>
+                    </div>
+                    <div [className]="setCodeErrorClass()">
+                        <label>Code</label>
+                        <input class="form-control" name="facultyCode" [(ngModel)]="selectedFaculty.code" />
+                        <span *ngIf="errors.code" class="help-block">{{errors.code}}</span>
+                    </div>
+                    <div class="form-group">
+                        <button (click)="submit()" class="bnt btn-primary form-control">Submit</button>
+                    </div>
+                    <div class="form-group">
+                        <button (click)="hideFacultyForm()" class="bnt btn-danger form-control">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

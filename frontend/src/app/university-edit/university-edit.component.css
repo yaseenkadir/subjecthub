@@ -26,7 +26,8 @@
 }
 
 .scroll {
-  max-height: 30vh;
+  max-height: 60vh;
+
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -39,5 +40,15 @@
 }
 
 .btn-uni-action:hover {
+  color: red;
+}
+
+.title,
+.title:hover {
+  color: black;
+  text-decoration: none;
+}
+
+.title:hover > i {
   color: red;
 }
