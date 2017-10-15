@@ -14,8 +14,7 @@ import { Subject } from '../models/subject';
 import { Utils } from '../utils/utils';
 import { AuthService } from '../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+
 import { CreateFacultyComponent } from '../create-faculty/create-faculty.component';
 
 
@@ -32,31 +31,32 @@ export class UniversityEditComponent implements OnInit {
   faculties: Faculty[];
   errorMessage: string = null;
   filterFaculties: string;
-  filterSubjects: string
   isLoading: boolean;
-
-  private editFacultyModal: BsModalRef;
-  private isEditingUni: boolean;
-  private isCreatingFaculty: boolean;
-  private editingFaculty: Faculty;
+  isEditingFaculty: boolean;
+  selectedFaculty: Faculty;
+  errors = {
+    name: '',
+    code: ''
+  }
+  isCreate: boolean;
 
   constructor(
-    protected router: Router, 
+    protected router: Router,
     protected universityService: UniversityService,
     protected authService: AuthService,
-    protected toastr: ToastrService, 
+    protected toastr: ToastrService,
     private route: ActivatedRoute,
     private subjectService: SubjectService,
     private facultyService: FacultyService,
-    private modalService: BsModalService
     ) {
       this.subjects  = [];
       this.faculties = [];
-}
+      this.isEditingFaculty = false;
+  }
 
-cleanMessages(){
-  this.errorMessage = null;
-}
+  cleanMessages(){
+    this.errorMessage = null;
+  }
 
   ngOnInit() {
     this.isLoading = true;
@@ -70,11 +70,6 @@ cleanMessages(){
     }).subscribe(() => {
       this.isLoading = false;
     })
-    this.modalService.onHidden.subscribe((reason: string) => {
-      // We're not unsubscribing from these events. Could cause memory issues.
-      this.onEditFacultyModelClose();
-    });
-  
   }
 
   fetchFaculties(universityId: string) {
@@ -88,8 +83,6 @@ cleanMessages(){
   }
 
 
-
-
   fetchUni(universityId: string) {
     return this.universityService.getUniversity(universityId)
         .then(university => {
@@ -101,74 +94,104 @@ cleanMessages(){
 }
 
 
-goToCreateSubjectPage(faculty: Faculty) {
-  this.router.navigate([`university/${this.university.id}/faculty/${faculty.id}/subjects/edit`])
-}
-
-openFacultyModal(faculty: Faculty) {
-  this.editFacultyModal = this.modalService.show(CreateFacultyComponent);
-
-  if (faculty != null) {
-    this.editFacultyModal.content.setFaculty(faculty);
-    this.editingFaculty = faculty;
-    console.log(this.editingFaculty);
-    console.log(typeof this.editingFaculty.id);
-    this.editFacultyModal.content.title = 'Edit Faculty';
-    this.isEditingUni = true;
-  } else {
-    this.editFacultyModal.content.title = 'Create Faculty';
-    this.isCreatingFaculty = true;
+  goToCreateSubjectPage(faculty: Faculty) {
+    this.router.navigate([`university/${this.university.id}/faculty/${faculty.id}/subjects/edit`])
   }
-}
 
-private onEditFacultyModelClose(): void {
-  console.log('Modal closed');
-  let saved = this.editFacultyModal.content.saved;
-  if (saved) {
-    let faculty = this.editFacultyModal.content.getFaculty();
-    if (this.isCreatingFaculty) {
-      this.createFaculty(faculty);
-    } else if (this.isEditingUni) {
-      faculty.id = this.editingFaculty.id;
-      if (faculty.name == this.editingFaculty.name && faculty.code == this.editingFaculty.code) {
-        this.toastr.info('No changes made.')
-      } else {
-        this.editFaculty(faculty);
-      }
+
+  showFacultyForm(selectedFaculty) {
+    if (!selectedFaculty) {
+      selectedFaculty = new Faculty(null, '', '')
+      this.isCreate = true;
+
     } else {
-      throw new Error("Modal closed but without knowing if edit or create action.");
+      this.isCreate = false;
     }
+
+    this.selectedFaculty = selectedFaculty;
+    this.isEditingFaculty = !this.isEditingFaculty;
+    console.log(this.selectedFaculty);
   }
-  this.editFacultyModal = null;
-  this.isEditingUni = false;
-  this.isCreatingFaculty = false;
-  this.editingFaculty = null;
-}
 
-private createFaculty(faculty: Faculty): void {
-  this.facultyService.createFaculty(this.university.id.toString(), faculty)
-    .then((response: Faculty) => {
-      this.toastr.success(`Created ${faculty.name}`, null, {timeOut: 3000});
-      this.fetchFaculties(this.university.id.toString());
-      
-    })
-    .catch(error => {
-      console.log(error);
-      this.toastr.error(Utils.getApiErrorMessage(error), 'Unable to create Faculty');
-    });
-}
+  hideFacultyForm() {
+    this.selectedFaculty = undefined;
+    this.isEditingFaculty = !this.isEditingFaculty;
+  }
+
+  setNameErrorClass() {
+    let className = 'form-group';
+    if (this.errors.name) className += ' has-error';
+    return className;
+  }
+
+  setCodeErrorClass() {
+    let className = 'form-group';
+    if (this.errors.code) className += ' has-error';
+    return className;
+  }
+
+  validateFaculty() {
+    const name = this.selectedFaculty.name.trim();
+    const code = this.selectedFaculty.code.trim();
+
+    if (!name) {
+      this.errors.name = 'A Faculty Must have a name'
+    }
+
+    if (name.length > 50) {
+      this.errors.name = 'A Faculty name must be less than 50 characters'
+    }
+
+    if (this.containsDigit(name)) {
+      this.errors.name = "A Faculty name must not contain any numbers"
+    }
+
+    if (code && code.length > 10) {
+      this.errors.code = 'A Faculty code must be less than 10 characters';
+    }
+    return !this.errors.code && !this.errors.name;
+  }
+
+  containsDigit(word) {
+    return word.match(/\d+/);
+  }
+
+  submit() {
+    if (!this.validateFaculty()) return;
+    if (this.isCreate) {
+      this.createFaculty(this.selectedFaculty)
+    } else {
+      this.editFaculty(this.selectedFaculty);
+    }
 
 
-private editFaculty(faculty: Faculty): void {
-  this.facultyService.editFaculty(this.university.id, faculty.id, faculty)
-    .then((response: Faculty) => {
-      this.toastr.success(`Edited ${response.name}`, null, {timeOut: 3000});
-      this.fetchFaculties(this.university.id.toString());
-      
-    })
-    .catch(error => {
-      console.log(error);
-      this.toastr.error(Utils.getApiErrorMessage(error), 'Unable to edit university');
-    });
-}
+  }
+
+  private createFaculty(faculty: Faculty): void {
+
+    this.facultyService.createFaculty(this.university.id.toString(), faculty)
+      .then((response: Faculty) => {
+        this.toastr.success(`Created ${faculty.name}`, null, {timeOut: 3000});
+        this.fetchFaculties(this.university.id.toString());
+        this.hideFacultyForm();
+      })
+      .catch(error => {
+        console.log(error);
+        this.toastr.error(Utils.getApiErrorMessage(error), 'Unable to create Faculty');
+      });
+  }
+
+
+  private editFaculty(faculty: Faculty): void {
+    this.facultyService.editFaculty(this.university.id, faculty.id, faculty)
+      .then((response: Faculty) => {
+        this.toastr.success(`Edited ${response.name}`, null, {timeOut: 3000});
+        this.fetchFaculties(this.university.id.toString());
+        this.hideFacultyForm();
+      })
+      .catch(error => {
+        console.log(error);
+        this.toastr.error(Utils.getApiErrorMessage(error), 'Unable to edit university');
+      });
+  }
 }
