@@ -6,7 +6,13 @@
     <div *ngIf="!isEditingFaculty">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h2>{{university.abbreviation}}: Faculties</h2>
+                <h1>
+                    <a class="title" (click)="goBack()">
+                        <!--TODO: link to previous page, OR, subject's university's search-->
+                        <i class="glyphicon glyphicon-circle-arrow-left"></i> {{university.abbreviation}}: Faculties
+                    </a>
+                </h1>
+
             </div>
             <div class="col-md-12" *ngIf="!fatalMessage">
 
@@ -78,7 +84,7 @@
                         <span *ngIf="errors.code" class="help-block">{{errors.code}}</span>
                     </div>
                     <div class="form-group">
-                        <button (click)="submit()" class="bnt btn-primary form-control">Create</button>
+                        <button (click)="submit()" class="bnt btn-primary form-control">Submit</button>
                     </div>
                     <div class="form-group">
                         <button (click)="hideFacultyForm()" class="bnt btn-danger form-control">Cancel</button>
@@ -88,4 +94,3 @@
         </div>
     </div>
 </div>
-

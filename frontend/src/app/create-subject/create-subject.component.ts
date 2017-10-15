@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Location } from '@angular/common';
 import Promise from 'bluebird';
 
 import { SubjectService } from '../services/subject.service';
@@ -50,7 +51,7 @@ export class CreateSubjectComponent implements OnInit {
     private subjectService: SubjectService,
     private universityService: UniversityService,
     private facultyService: FacultyService,
-
+    private location: Location,
     private router: Router,
     private route: ActivatedRoute,
     protected toastr: ToastrService,
@@ -109,6 +110,10 @@ export class CreateSubjectComponent implements OnInit {
       this.isLoading = false;
     })
 
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   submit() {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Location } from '@angular/common';
 import Promise from 'bluebird';
 
 import { UniversityService} from '../services/university.service';
@@ -48,6 +49,7 @@ export class UniversityEditComponent implements OnInit {
     protected authService: AuthService,
     protected toastr: ToastrService,
     private route: ActivatedRoute,
+    private location: Location,
     private subjectService: SubjectService,
     private facultyService: FacultyService,
     ) {
@@ -72,7 +74,7 @@ export class UniversityEditComponent implements OnInit {
       ])
     }).subscribe(() => {
       this.isLoading = false;
-    }) 
+    })
   }
 
   fetchFaculties(universityId: string) {
@@ -95,6 +97,11 @@ export class UniversityEditComponent implements OnInit {
         .catch(e => {
             this.errorMessage = Utils.getApiErrorMessage(e);
         });
+}
+
+
+goBack() {
+  this.location.back();
 }
 
 

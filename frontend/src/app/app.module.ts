@@ -27,7 +27,7 @@ import { SearchPageComponent } from './search-page/search-page.component';
 import { AuthInterceptor } from './utils/auth-interceptor';
 import { AuthService } from './services/auth.service';
 import { UniversitiesAdminComponent } from './universities-admin/universities-admin.component';
-import { EditUniversityComponent } from './universities-admin/edit-university.component';
+import { EditUniversityComponent } from './edit-university/edit-university.component';
 import { UniversityEditComponent } from './university-edit/university-edit.component';
 import { CreateFacultyComponent } from './create-faculty/create-faculty.component';
 import { CreateSubjectComponent } from './create-subject/create-subject.component';

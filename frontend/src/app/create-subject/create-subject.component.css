@@ -14,3 +14,13 @@
 .btn-uni-action:hover {
   color: red;
 }
+
+.title,
+.title:hover {
+  color: black;
+  text-decoration: none;
+}
+
+.title:hover > i {
+  color: red;
+}
