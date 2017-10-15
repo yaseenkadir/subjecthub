@@ -8,6 +8,8 @@ import { AlertModule } from 'ngx-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
 
+import { FilterPipe } from './pipes/filter.pipe';
+
 import { AppRoutingModule } from './app.module.routes';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -26,6 +28,9 @@ import { AuthInterceptor } from './utils/auth-interceptor';
 import { AuthService } from './services/auth.service';
 import { UniversitiesAdminComponent } from './universities-admin/universities-admin.component';
 import { EditUniversityComponent } from './universities-admin/edit-university.component';
+import { UniversityEditComponent } from './university-edit/university-edit.component';
+import { CreateFacultyComponent } from './create-faculty/create-faculty.component';
+import { CreateSubjectComponent } from './create-subject/create-subject.component';
 
 
 @NgModule({
@@ -63,6 +68,10 @@ import { EditUniversityComponent } from './universities-admin/edit-university.co
     SearchPageComponent,
     EditUniversityComponent,
     UniversitiesAdminComponent,
+    UniversityEditComponent,
+    FilterPipe,
+    CreateFacultyComponent,
+    CreateSubjectComponent
   ],
   bootstrap: [AppComponent],
   providers: [
@@ -74,7 +83,9 @@ import { EditUniversityComponent } from './universities-admin/edit-university.co
     }
   ],
   entryComponents: [
-    EditUniversityComponent
+    EditUniversityComponent,
+    CreateFacultyComponent,
+    CreateSubjectComponent
   ]
 })
 export class AppModule {

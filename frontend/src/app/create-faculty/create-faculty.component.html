@@ -1,0 +1,45 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">{{title}}</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="editForm">
+    <div class="form-group">
+      <label>Faculty Name</label>
+      <ng-container *ngIf="displayNameError && facultyName.invalid && (facultyName.dirty || facultyName.touched)">
+        <p class="error">
+          <ng-container *ngIf="facultyName.errors.required">
+            Name is required.
+          </ng-container>
+          <ng-container *ngIf="(displayNameError && facultyName.errors.minlength) || facultyName.errors.maxlength">
+            Name must be between 5-100 characters long.
+          </ng-container>
+        </p>
+      </ng-container>
+      <input type="text" formControlName="facultyName" name="name" class="form-control" placeholder="Faculty Name">
+    </div>
+    <div class="form-group">
+      <label>Faculty Code</label>
+      <ng-container *ngIf="displayAbbreviationError && facultyCode.invalid && (facultyCode.dirty || facultyCode.touched)">
+        <p class="error">
+          <ng-container *ngIf="facultyCode.errors.required">
+            Abbreviation is required.
+          </ng-container>
+          <ng-container *ngIf="(displayAbbreviationError && facultyCode.errors.minlength) || facultyCode.errors.maxlength">
+            Abbreviation must be between 1-5 characters long.
+          </ng-container>
+        </p>
+      </ng-container>
+      <input type="text" formControlName="facultyCode" name="abbreviation" class="form-control" placeholder="Faculty Code">
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Close</button>
+  <button type="button" class="btn btn-labeled btn-primary" (click)="save()">
+        <span class="btn-label"><i class="glyphicon glyphicon-save"></i></span>
+        Save
+    </button>
+</div>

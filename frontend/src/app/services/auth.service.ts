@@ -11,7 +11,7 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
-  login(username: string, password: string): Promise<LoginResponse> {
+  login(username: string, password: string): Promise<any> {
     let requestBody = {'username': username, 'password': password};
 
     return this.http.post(environment.API_URL + '/auth/authenticate', requestBody)

@@ -3,8 +3,5 @@
   "editor.formatOnSave": true,
   "editor.minimap.enabled": false,
   "prettier.bracketSpacing": true,
-  "prettier.eslintIntegration": true,
-  "clang-format.language.javascript.enable": false,
-  "java.format.enabled": false,
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "prettier.eslintIntegration": true
 }
