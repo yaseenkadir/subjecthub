@@ -8,7 +8,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Utils } from '../utils/utils';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
-import { EditUniversityComponent } from './edit-university.component';
 
 @Component({
   selector: 'app-universities-admin',
@@ -21,22 +20,16 @@ export class UniversitiesAdminComponent extends UniversitiesComponent implements
   universities: University[];
   errorMessage: string = null;
   isLoading: boolean;
-  private editUniModal: BsModalRef;
-  private isEditingUni: boolean;
-  private isCreatingUni: boolean;
-  private editingUni: University;
 
-  constructor(router: Router, universityService: UniversityService, authService: AuthService,
-              toastr: ToastrService, private modalService: BsModalService) {
+  constructor(router: Router,
+              universityService: UniversityService,
+              authService: AuthService,
+              toastr: ToastrService) {
     super(router, universityService, authService, toastr);
   }
 
   ngOnInit() {
     super.ngOnInit();
-    this.modalService.onHidden.subscribe((reason: string) => {
-      // We're not unsubscribing from these events. Could cause memory issues.
-      this.onEditModelClose();
-    });
   }
 
   deleteUniversity(universityId: number) {
@@ -51,71 +44,16 @@ export class UniversitiesAdminComponent extends UniversitiesComponent implements
       });
   }
 
-  goToEditUniversity(universityId: number) {
+  goToFacultyEdit(universityId: number) {
+    this.router.navigate([], {})
     this.router.navigate([`university/${universityId}/faculties/edit`])
   }
 
-  openModal(university: University) {
-    this.editUniModal = this.modalService.show(EditUniversityComponent);
-
-    if (university != null) {
-      this.editUniModal.content.setUniversity(university);
-      this.editingUni = university;
-      console.log(this.editingUni);
-      console.log(typeof this.editingUni.id);
-      this.editUniModal.content.title = 'Edit University';
-      this.isEditingUni = true;
-    } else {
-      this.editUniModal.content.title = 'Create University';
-      this.isCreatingUni = true;
-    }
+  goToEditUniversity(universityId: number) {
+    this.router.navigate([`university/${universityId}/edit`])
   }
 
-  private onEditModelClose(): void {
-    console.log('Modal closed');
-    let saved = this.editUniModal.content.saved;
-    if (saved) {
-      let uni = this.editUniModal.content.getUniversity();
-      if (this.isCreatingUni) {
-        this.createUniversity(uni);
-      } else if (this.isEditingUni) {
-        uni.id = this.editingUni.id;
-        if (uni.name == this.editingUni.name && uni.abbreviation == this.editingUni.abbreviation) {
-          this.toastr.info('No changes made.')
-        } else {
-          this.editUniversity(uni);
-        }
-      } else {
-        throw new Error("Modal closed but without knowing if edit or create action.");
-      }
-    }
-    this.editUniModal = null;
-    this.isEditingUni = false;
-    this.isCreatingUni = false;
-    this.editingUni = null;
-  }
-
-  private createUniversity(university: University): void {
-    this.universityService.createUniversity(university)
-      .then((response: University) => {
-        this.toastr.success(`Created ${university.name}`, null, {timeOut: 3000});
-        this.fetch();
-      })
-      .catch(error => {
-        console.log(error);
-        this.toastr.error(Utils.getApiErrorMessage(error), 'Unable to create university');
-      });
-  }
-
-  private editUniversity(university: University): void {
-    this.universityService.editUniveristy(university.id, university)
-      .then((response: University) => {
-        this.toastr.success(`Edited ${response.name}`, null, {timeOut: 3000});
-        this.fetch();
-      })
-      .catch(error => {
-        console.log(error);
-        this.toastr.error(Utils.getApiErrorMessage(error), 'Unable to edit university');
-      });
+  goToCreateUniversity() {
+    this.router.navigate([`university/create`]);
   }
 }

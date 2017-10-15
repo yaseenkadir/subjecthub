@@ -6,6 +6,7 @@ import 'rxjs/add/operator/share';
 import { University } from '../models/university';
 import { Observable } from 'rxjs/Observable';
 import { ApiUrlUtils } from '../utils/utils';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Injectable()
 export class UniversityService {
@@ -52,10 +53,18 @@ export class UniversityService {
   }
 
   private handleUniversitiesResponse(response: Observable<any>): Promise<University[]> {
-    return response.toPromise().then(r => {return r as University[]});
+    return response.toPromise().then(r => {
+      let universities = new Array<University>();
+      for (let uni of r) {
+        universities.push(new University(uni.id, uni.name, uni.abbreviation));
+      }
+      return universities;
+    });
   }
 
   private handleUniversityResponse(response: Observable<any>): Promise<University> {
-    return response.toPromise().then(r => {return r as University});
+    return response.toPromise().then(r => {
+      return new University(r.id, r.name, r.abbreviation);
+    });
   }
 }
