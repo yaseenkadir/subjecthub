@@ -1,0 +1,122 @@
+<!-- Faculties -->
+<div *ngIf="isLoading">
+  <app-spinner></app-spinner>
+</div>
+<div *ngIf="!isLoading">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <h2>{{university.abbreviation}}: Faculties</h2>
+    </div>
+    <div class="col-md-12" *ngIf="!fatalMessage">
+
+      <!-- Filter and Create Faculty -->
+      <div class="row">
+        <div class="col-md-2 pull-right">
+          <button (click)="openFacultyModal(null)" type="button" class="btn btn-labeled btn-primary">
+              <span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>
+              Create Faculty
+          </button>
+        </div>
+        <div class="col-md-2 pull-right">
+          <input placeholder="Filter Faculties" class="form-control" name="facultyFilter" [(ngModel)]="filterFaculties" />
+        </div>
+      </div>
+      <hr/>
+      <!-- Table View -->
+      <div class="scroll">
+        <table class="table table-responsive core-table">
+          <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Actions</th>
+          </thead>
+          <ng-container *ngIf="faculties.length != 0">
+            <tbody *ngFor="let faculty of faculties | filter: 'name' : filterFaculties">
+              <tr>
+                <td>{{faculty.id}}</td>
+                <td>{{faculty.name}}</td>
+                <td>{{faculty.code}}</td>
+                <td>
+                  <button class="btn-uni-action">
+                              <i class="glyphicon glyphicon-trash"></i>
+                          </button>
+                  <button (click)="openFacultyModal(faculty)" class="btn-uni-action">
+                              <i class="glyphicon glyphicon-edit"></i>
+                          </button>
+                  <button (click)="goToCreateSubjectPage(faculty)" class="btn-uni-action">
+                              <i class="glyphicon glyphicon-cog"></i>
+                          </button>
+                </td>
+              </tr>
+            </tbody>
+          </ng-container>
+        </table>
+        <div class="col-md-4 col-md-offset-4 text-center" *ngIf="faculties.length == 0">
+          <h4>No Faculties exist.</h4>
+        </div>
+      </div>
+      <hr/>
+    </div>
+    <!-- Subjects  -->
+    <!-- <div class="row">
+      <div class="col-md-12 text-center">
+        <h2>{{university.abbreviation}}: Subjects</h2>
+      </div>
+      <div class="col-md-12" *ngIf="!fatalMessage">
+        <div *ngIf="isLoading">
+          <app-spinner></app-spinner>
+        </div> -->
+    <!-- Filter and Create Subject -->
+    <!-- <div class="row">
+          <div class="col-md-2 pull-right">
+            <button type="button" class="btn btn-labeled btn-primary">
+                  <span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>
+                  Create Subject
+              </button>
+          </div>
+          <div class="col-md-2 pull-right">
+            <input placeholder="Filter Subjects" class="form-control" name="subjectFilter" [(ngModel)]="filterSubjects" />
+          </div>
+        </div>
+        <hr/> -->
+    <!-- Table View -->
+    <!-- <div class="scroll" *ngIf="!isLoading">
+          <table class="table table-responsive core-table">
+            <thead>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Faculty</th>
+              <th>Actions</th>
+            </thead>
+            <ng-container *ngIf="subjects.length != 0">
+              <tbody *ngFor="let subject of subjects | filter: 'name' : filterSubjects">
+                <tr>
+                  <td>{{subject.code}}</td>
+                  <td>{{subject.name}}</td>
+                  <td>{{subject.faculty.code}}</td>
+                  <td>
+                    <button class="btn-uni-action">
+                              <i class="glyphicon glyphicon-trash"></i>
+                          </button>
+                    <button class="btn-uni-action">
+                              <i class="glyphicon glyphicon-edit"></i>
+                          </button>
+                    <button class="btn-uni-action">
+                              <i class="glyphicon glyphicon-cog"></i>
+                          </button>
+                  </td>
+                </tr>
+              </tbody>
+            </ng-container>
+          </table>
+
+          <div class="col-md-4 col-md-offset-4 text-center" *ngIf="subjects.length == 0">
+            <h4>No Subjects exist.</h4>
+          </div>
+        </div>
+        <hr/>
+
+      </div>
+    </div> -->
+  </div>

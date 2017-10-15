@@ -51,6 +51,10 @@ export class UniversitiesAdminComponent extends UniversitiesComponent implements
       });
   }
 
+  goToEditUniversity(universityId: number) {
+    this.router.navigate([`university/${universityId}/faculties/edit`])
+  }
+
   openModal(university: University) {
     this.editUniModal = this.modalService.show(EditUniversityComponent);
 
