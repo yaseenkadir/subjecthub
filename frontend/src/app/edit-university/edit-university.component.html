@@ -1,0 +1,48 @@
+<div class="col-md-6 col-md-offset-3">
+    <div class="row">
+        <h3>{{title}}</h3>
+    </div>
+    <div class="row">
+        <form [formGroup]="editForm">
+            <div class="form-group">
+                <label>University Name</label>
+                <ng-container *ngIf="displayNameError && universityName.invalid && (universityName.dirty || universityName.touched)">
+                    <p class="error">
+                        <ng-container *ngIf="universityName.errors.required">
+                            Name is required.
+                        </ng-container>
+                        <ng-container
+                            *ngIf="(displayNameError && universityName.errors.minlength) || universityName.errors.maxlength">
+                            Name must be between 5-100 characters long.
+                        </ng-container>
+                    </p>
+                </ng-container>
+                <input type="text" formControlName="universityName" name="name" class="form-control"
+                       placeholder="University Name">
+            </div>
+            <div class="form-group">
+                <label>Abbreviation</label>
+                <ng-container
+                    *ngIf="displayAbbreviationError && universityAbbreviation.invalid && (universityAbbreviation.dirty || universityAbbreviation.touched)">
+                    <p class="error">
+                        <ng-container *ngIf="universityAbbreviation.errors.required">
+                            Abbreviation is required.
+                        </ng-container>
+                        <ng-container
+                            *ngIf="(displayAbbreviationError && universityAbbreviation.errors.minlength) || universityAbbreviation.errors.maxlength">
+                            Abbreviation must be between 1-5 characters long.
+                        </ng-container>
+                    </p>
+                </ng-container>
+                <input type="text" formControlName="universityAbbreviation" name="abbreviation" class="form-control"
+                       placeholder="University Abbreviation">
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-labeled btn-primary" (click)="save()">
+                    <span class="btn-label"><i class="glyphicon glyphicon-floppy-disk"></i></span>
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
