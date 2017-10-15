@@ -1,0 +1,16 @@
+.scroll {
+  max-height: 65vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.btn-uni-action {
+  background: none;
+  border: none;
+  color: #494949;
+  font-size: 24px;
+}
+
+.btn-uni-action:hover {
+  color: red;
+}

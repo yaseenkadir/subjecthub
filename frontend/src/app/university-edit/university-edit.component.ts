@@ -65,7 +65,6 @@ cleanMessages(){
       const universityId = params.get('university');
       return Promise.all([
         this.fetchFaculties(universityId),
-        this.fetchSubjects(universityId),
         this.fetchUni(universityId)
       ])
     }).subscribe(() => {
@@ -88,15 +87,7 @@ cleanMessages(){
     });
   }
 
-  fetchSubjects(universityId: string) {
-    this.subjectService.getSubjects(universityId)
-    .then(subjects => {
-         this.subjects = subjects;
-    })
-    .catch(e => {   
-        this.errorMessage = Utils.getApiErrorMessage(e);
-    });
-  }
+
 
 
   fetchUni(universityId: string) {
@@ -173,7 +164,7 @@ private editFaculty(faculty: Faculty): void {
     .then((response: Faculty) => {
       this.toastr.success(`Edited ${response.name}`, null, {timeOut: 3000});
       this.fetchFaculties(this.university.id.toString());
-      this.fetchSubjects(this.university.id.toString());
+      
     })
     .catch(error => {
       console.log(error);
