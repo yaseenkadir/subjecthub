@@ -25,6 +25,9 @@ import { SearchPageComponent } from './search-page/search-page.component';
 import { UniversityEditComponent } from './university-edit/university-edit.component'
 import { CreateSubjectComponent } from './create-subject/create-subject.component';
 
+import { EditUniversityComponent } from './edit-university/edit-university.component';
+
+
 const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
@@ -33,7 +36,9 @@ const routes: Routes = [
     { path: 'university/:university/faculties/edit', component: UniversityEditComponent },
     { path: 'university/:university/search', component: SearchPageComponent},
     { path: 'university/:university/faculty/:faculty/subjects/edit', component: CreateSubjectComponent },
-    { path: 'university/:university/subject/:subject', component: SubjectDetailsComponent}
+    { path: 'university/:university/subject/:subject', component: SubjectDetailsComponent},
+    { path: 'university/:universityId/edit', component: EditUniversityComponent},
+    { path: 'university/create', component: EditUniversityComponent}
 ];
 
 @NgModule({

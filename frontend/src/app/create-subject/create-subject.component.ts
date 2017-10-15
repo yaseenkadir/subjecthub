@@ -12,7 +12,9 @@ import { Faculty } from '../models/faculty';
 import { UniversityService} from '../services/university.service';
 import { University} from '../models/university';
 
+
 import { ToastrService } from 'ngx-toastr';
+
 import { Utils } from '../utils/utils';
 
 @Component({
@@ -29,6 +31,7 @@ export class CreateSubjectComponent implements OnInit {
   errorMessage: string = null;
   isLoading: boolean;
   filterSubjects: string;
+
   isCreate: boolean;
   selectedSubject: Subject;
   isEditingSubject: boolean;
@@ -42,10 +45,12 @@ export class CreateSubjectComponent implements OnInit {
     session: '',
   }
 
+
   constructor(
     private subjectService: SubjectService,
     private universityService: UniversityService,
     private facultyService: FacultyService,
+
     private router: Router,
     private route: ActivatedRoute,
     protected toastr: ToastrService,
@@ -65,6 +70,7 @@ export class CreateSubjectComponent implements OnInit {
     }
   }
 
+
   fetchFaculty(universityId: string, facultyId: string) {
     return this.facultyService.getFaculty(universityId, facultyId)
     .then(faculty => faculty)
@@ -76,6 +82,7 @@ export class CreateSubjectComponent implements OnInit {
         .then(university =>  university)
         .catch(e => Utils.getApiErrorMessage(e));
 }
+
 
   fetchSubjects(universityId: string): Promise<Subject[]> {
     return this.subjectService.getSubjects(universityId)

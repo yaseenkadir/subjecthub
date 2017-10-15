@@ -33,6 +33,7 @@ import { CreateFacultyComponent } from './create-faculty/create-faculty.componen
 import { CreateSubjectComponent } from './create-subject/create-subject.component';
 
 
+
 @NgModule({
   imports: [
     AppRoutingModule,
@@ -83,6 +84,7 @@ import { CreateSubjectComponent } from './create-subject/create-subject.componen
     }
   ],
   entryComponents: [
+
     EditUniversityComponent,
     CreateFacultyComponent,
     CreateSubjectComponent

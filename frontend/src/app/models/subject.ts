@@ -5,8 +5,10 @@ export class Subject {
   comments: any[];
   availability: boolean;
   description: string;
+
   creditPoints: string;
   code:  string;
+
   studentType: string;
   faculty: Faculty;
   id: number;

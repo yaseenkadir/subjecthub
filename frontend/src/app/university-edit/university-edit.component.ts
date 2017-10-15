@@ -15,6 +15,8 @@ import { Utils } from '../utils/utils';
 import { AuthService } from '../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 
+
+
 import { CreateFacultyComponent } from '../create-faculty/create-faculty.component';
 
 
@@ -58,6 +60,7 @@ export class UniversityEditComponent implements OnInit {
     this.errorMessage = null;
   }
 
+
   ngOnInit() {
     this.isLoading = true;
     this.route.paramMap
@@ -69,7 +72,7 @@ export class UniversityEditComponent implements OnInit {
       ])
     }).subscribe(() => {
       this.isLoading = false;
-    })
+    }) 
   }
 
   fetchFaculties(universityId: string) {
@@ -81,6 +84,7 @@ export class UniversityEditComponent implements OnInit {
         this.errorMessage = Utils.getApiErrorMessage(e);
     });
   }
+
 
 
   fetchUni(universityId: string) {
@@ -194,4 +198,5 @@ export class UniversityEditComponent implements OnInit {
         this.toastr.error(Utils.getApiErrorMessage(error), 'Unable to edit university');
       });
   }
+
 }
