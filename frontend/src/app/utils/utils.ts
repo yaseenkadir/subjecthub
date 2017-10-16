@@ -74,3 +74,8 @@ export class ApiUrlUtils {
     return ApiUrlUtils.buildCommentsUrl(universityId, subjectId) + '/comment/' + commentId;
   }
 }
+
+export enum ActionType {
+  Edit,
+  Create
+}

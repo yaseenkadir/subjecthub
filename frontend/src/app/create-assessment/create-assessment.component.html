@@ -1,0 +1,106 @@
+
+<div *ngIf="isLoading">
+    <app-spinner></app-spinner>
+</div>
+<div *ngIf="!isLoading" class="col-md-6 col-md-offset-3">
+    <div class="row">
+        <h3>{{title}}</h3>
+    </div>
+    <div class="row">
+        <form [formGroup]="editForm">
+            <div class="form-group">
+                <label>Assessment Name</label>
+                <ng-container *ngIf="nameError && assessmentName.invalid && (assessmentName.dirty || assessmentName.touched)">
+                    <p class="error">
+                        <ng-container *ngIf="assessmentName.errors.required">
+                            Name is required.
+                        </ng-container>
+                        <ng-container
+                            *ngIf="(nameError && assessmentName.errors.minlength) || assessmentName.errors.maxlength">
+                            Name must be between {{MIN_ASSESSMENT_NAME_LENGTH}}-{{MAX_ASSESSMENT_NAME_LENGTH}} characters long.
+                        </ng-container>
+                    </p>
+                </ng-container>
+                <input type="text" formControlName="assessmentName" name="name" class="form-control"
+                       placeholder="Assessment Name" [(ngModel)]="editingAssessment.name">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <ng-container
+                    *ngIf="descriptionError && description.invalid && (description.dirty || description.touched)">
+                    <p class="error">
+                        <ng-container *ngIf="description.errors.required">
+                            Description is required.
+                        </ng-container>
+                        <ng-container
+                            *ngIf="(descriptionError && description.errors.minlength) || description.errors.maxlength">
+                            Description must be between {{MIN_ASSESSMENT_DESCRIPTION_LENGTH}}-{{MAX_ASSESSMENT_DESCRIPTION_LENGTH}} characters long.
+                        </ng-container>
+                    </p>
+                </ng-container>
+                <textarea rows="4" formControlName="description" class="form-control"
+                          placeholder="Assessment Description"
+                          [(ngModel)]="editingAssessment.description"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Weighting</label>
+                <ng-container *ngIf="weighting.invalid && (weighting.dirty || weighting.touched)">
+                    <p class="error">
+                        <ng-container *ngIf="weighting.errors.required">
+                            Weighting is required
+                        </ng-container>
+                        <ng-container *ngIf="weighting.errors.pattern">
+                            Weighting must be a number between 1-100
+                        </ng-container>
+                    </p>
+                </ng-container>
+                <input type="number" formControlName="weighting" class="form-control"
+                       placeholder="Weighting" [(ngModel)]="editingAssessment.weighting">
+            </div>
+            <div class="form-group">
+                <label>Group Work</label>
+                <p class="error" *ngIf="groupWorkError">
+                    Must select an option.
+                </p>
+                <div class="radio">
+                    <label>
+                        <input type="radio" value="true" (click)="setGroupWork(true)"
+                               [checked]="editingAssessment == null || editingAssessment.groupWork"> True</label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" value="false" (click)="setGroupWork(false)"
+                               [checked]="editingAssessment != null && !editingAssessment.groupWork"> False</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Assessment Length</label>
+                <ng-container *ngIf="lengthError && assessmentLength.invalid && (assessmentLength.dirty || assessmentLength.touched)">
+                    <p class="error">
+                        <ng-container *ngIf="assessmentLength.errors.required">
+                            Length is required
+                        </ng-container>
+                        <ng-container *ngIf="(lengthError && assessmentLength.errors.minlength) || assessmentLength.errors.maxlength">
+                            Assessment length must be between {{MIN_ASSESSMENT_LENGTH_LENGTH}}-{{MAX_ASSESSMENT_LENGTH_LENGTH}}
+                        </ng-container>
+                    </p>
+                </ng-container>
+                <textarea rows="4" formControlName="assessmentLength" class="form-control"
+                          placeholder="Assessment length e.g. 2000 words, 5 pages, etc."
+                          [(ngModel)]="editingAssessment.length"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Assessment Type</label>
+                <select formControlName="assessmentType" class="form-control">
+                    <option *ngFor="let type of enumAssessmentTypes()" [value]="type">{{type}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-labeled btn-primary" (click)="save()">
+                    <span class="btn-label"><i class="glyphicon glyphicon-floppy-disk"></i></span>
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
