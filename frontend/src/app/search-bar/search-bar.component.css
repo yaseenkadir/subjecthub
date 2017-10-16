@@ -139,7 +139,7 @@ body {
     text-decoration: none;
 }
 .title:hover > i{
-    color: red;
+    color: #337ab7;
 }
 .btn-default:hover {
     background-color: #eee;
@@ -162,7 +162,7 @@ body {
     color: red;
 }*/
 .panel:hover > .contents i {
-    color: red;
+    color: #337ab7;
 }
 .panel-body .info {
     margin-top: -10px;
