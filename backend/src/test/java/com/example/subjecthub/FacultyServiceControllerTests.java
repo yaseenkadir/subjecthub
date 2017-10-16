@@ -269,7 +269,7 @@ public class FacultyServiceControllerTests {
     }
 
     private University makeTestUniversity() {
-        University testUniversity = new University("University of No Codes", "NoCo");
+        University testUniversity = new University("University of No Codes", "NoCo", "");
         testUniversity = universityRepository.save(testUniversity);
 
         Faculty facultyWithoutACode = new Faculty("Faculty without a code", null, testUniversity);

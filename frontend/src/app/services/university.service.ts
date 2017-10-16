@@ -56,7 +56,7 @@ export class UniversityService {
     return response.toPromise().then(r => {
       let universities = new Array<University>();
       for (let uni of r) {
-        universities.push(new University(uni.id, uni.name, uni.abbreviation));
+        universities.push(this.anyToUniversity(uni));
       }
       return universities;
     });
@@ -64,7 +64,11 @@ export class UniversityService {
 
   private handleUniversityResponse(response: Observable<any>): Promise<University> {
     return response.toPromise().then(r => {
-      return new University(r.id, r.name, r.abbreviation);
+      return this.anyToUniversity(r);
     });
+  }
+
+  private anyToUniversity(uni: any) {
+    return new University(uni.id, uni.name, uni.abbreviation, uni.imageUrl);
   }
 }

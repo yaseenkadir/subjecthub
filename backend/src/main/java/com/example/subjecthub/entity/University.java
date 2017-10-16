@@ -32,6 +32,10 @@ public class University {
     @Column(nullable = false)
     private String abbreviation;
 
+    // Apparently spring can map (snake_case to camelCase for columns)
+    @Column(nullable = false)
+    private String imageUrl;
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "university", orphanRemoval = true)
     private List<Faculty> faculties;
@@ -44,6 +48,11 @@ public class University {
         this();
         this.name = name;
         this.abbreviation = abbreviation;
+    }
+
+    public University(String name, String abbreviation, String imageUrl) {
+        this(name, abbreviation);
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -76,6 +85,14 @@ public class University {
 
     public void setFaculties(List<Faculty> faculties) {
         this.faculties = faculties;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override

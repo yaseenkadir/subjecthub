@@ -232,7 +232,7 @@ public class UniversityControllerTests {
     @Test
     @WithMockUser(authorities = {"ADMIN"})
     public void testEditUniversity() throws Exception {
-        University university = new University("Edit University", "EditU");
+        University university = new University("Edit University", "EditU", "");
 
         mockMvc
             .perform(put(buildUniApiUrl(1L))
@@ -253,7 +253,7 @@ public class UniversityControllerTests {
     @Test
     @WithMockUser(authorities = {"ADMIN"})
     public void testEditUniversityIdsDontMatch() throws Exception {
-        University editUniversity = new University("Edit Uni", "EU");
+        University editUniversity = new University("Edit Uni", "EU", "");
         editUniversity.setId(2L);
 
         mockMvc
@@ -268,7 +268,7 @@ public class UniversityControllerTests {
     @Test
     @WithMockUser(authorities = {"USER"})
     public void testUserCantEditUniversity() throws Exception {
-        University editUniversity = new University("Edit Uni", "EU");
+        University editUniversity = new University("Edit Uni", "EU", "");
 
         mockMvc
             .perform(put(buildUniApiUrl(1L))
@@ -282,7 +282,7 @@ public class UniversityControllerTests {
     @WithMockUser(authorities = {"ADMIN"})
     public void testCreateUniversity() throws Exception {
         // Go land crabs!
-        University university = new University("University of American Samoa", "UAS");
+        University university = new University("University of American Samoa", "UAS", "");
 
         MvcResult result = mockMvc
             .perform(post("/api/universities/university")
@@ -307,7 +307,7 @@ public class UniversityControllerTests {
     @Test
     @WithMockUser(authorities = {"ADMIN"})
     public void testCreateUniversityFailsWithIdSupplied() throws Exception {
-        University university = new University("Test Uni", "TU");
+        University university = new University("Test Uni", "TU", "");
         university.setId(1L);
 
         mockMvc
@@ -322,7 +322,7 @@ public class UniversityControllerTests {
     @Test
     @WithMockUser(authorities = {"USER"})
     public void testUserCantCreateUniversity() throws Exception {
-        University university = new University("Test Uni", "TU");
+        University university = new University("Test Uni", "TU", "");
 
         mockMvc
             .perform(post("/api/universities/university")
@@ -340,6 +340,7 @@ public class UniversityControllerTests {
         University testUniversity = new University();
         testUniversity.setName(name);
         testUniversity.setAbbreviation(abbreviation);
+        testUniversity.setImageUrl("");
         return universityRepository.save(testUniversity);
     }
 }
