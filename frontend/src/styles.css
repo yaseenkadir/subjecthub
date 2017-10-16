@@ -58,3 +58,7 @@ body {
 .btn-action:hover {
   color: #337ab7;
 }
+
+body {
+  background: #f7f7f7;
+}

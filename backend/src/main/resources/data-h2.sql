@@ -35,8 +35,9 @@ VALUES(
  */
 
 
-INSERT INTO universities (university_id, name, abbreviation)
-VALUES (1, 'University of Technology Sydney', 'UTS');
+INSERT INTO universities (university_id, name, abbreviation, image_url)
+VALUES (1, 'University of Technology Sydney', 'UTS',
+        'https://s3-ap-southeast-2.amazonaws.com/wordpress.multisite.prod.uploads/wp-content/uploads/sites/4/2017/07/10125839/UTSLogo_Horizontal_BLK.png');
 
 /* Initialise faculties */
 INSERT INTO faculties (faculty_id, name, code, university_id)
@@ -489,8 +490,9 @@ VALUES (
   \___/   \___/     \_/\_/
 
  */
-INSERT INTO universities (university_id, name, abbreviation)
-VALUES (2, 'University of Wollongong', 'UOW');
+INSERT INTO universities (university_id, name, abbreviation, image_url)
+VALUES (2, 'University of Wollongong', 'UOW',
+        'https://www.uow.edu.au/content/groups/public/@web/documents/siteelement/uow171491.png');
 
 INSERT INTO faculties (faculty_id, name, code, university_id)
 VALUES (4, 'Business', NULL, 2);
