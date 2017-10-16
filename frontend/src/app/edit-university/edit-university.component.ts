@@ -97,15 +97,17 @@ export class EditUniversityComponent implements OnInit {
     this.universityService.getUniversity(universityId)
       .then((university: University) => {
         setTimeout(() => {
+          this.isLoading = false;
           this.university = university;
           this.title = `Editing ${university.name}`;
           console.log(university);
           this.universityName.setValue(university.name);
           this.universityAbbreviation.setValue(university.abbreviation);
-        }, 800);
+        }, 500);
       })
       .catch((error) => {
         // TODO: Display big error message;
+        this.isLoading = false;
       });
   }
 
@@ -141,13 +143,19 @@ export class EditUniversityComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
     this.universityService.editUniveristy(newUni.id, newUni)
       .then((response: University) => {
-        this.toastr.success(`Edited ${response.name}`, null, {timeOut: 3000});
-        this.location.back();
+        setTimeout(() => {
+          this.isLoading = false;
+          this.toastr.success(`Edited ${response.name}`, null, {timeOut: 3000});
+          this.location.back();
+        }, 500)
+
       })
       .catch(error => {
         console.log(error);
+        this.isLoading = false;
         this.toastr.error(Utils.getApiErrorMessage(error), 'Unable to edit university');
       });
   }
@@ -155,13 +163,18 @@ export class EditUniversityComponent implements OnInit {
   private createUniversity() {
     let newUni = new University(null, this.universityName.value, this.universityAbbreviation.value);
 
+    this.isLoading = true;
     this.universityService.createUniversity(newUni)
       .then((response: University) => {
-        this.toastr.success(`Created ${response.name}`, null, {timeOut: 3000});
-        this.location.back();
+        setTimeout(() => {
+          this.isLoading = false;
+          this.toastr.success(`Created ${response.name}`, null, {timeOut: 3000});
+          this.location.back();
+        }, 500)
       })
       .catch(error => {
         console.log(error);
+        this.isLoading = false;
         this.toastr.error(Utils.getApiErrorMessage(error), 'Unable to create university');
       });
   }
