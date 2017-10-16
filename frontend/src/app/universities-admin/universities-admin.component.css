@@ -1,12 +1,1 @@
-.core-table {
-  font-size: 15px;
-  text-align: center;
-}
 
-.core-table > thead > th {
-  text-align: center;
-}
-
-.core-table > tbody > tr > td {
-  vertical-align: middle;
-}

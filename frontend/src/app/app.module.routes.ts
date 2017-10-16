@@ -26,6 +26,8 @@ import { UniversityEditComponent } from './university-edit/university-edit.compo
 import { CreateSubjectComponent } from './create-subject/create-subject.component';
 
 import { EditUniversityComponent } from './edit-university/edit-university.component';
+import { CreateAssessmentComponent } from './create-assessment/create-assessment.component';
+import { AdminAssessmentsComponent } from './admin-assessments/admin-assessments.component';
 
 
 const routes: Routes = [
@@ -38,7 +40,16 @@ const routes: Routes = [
     { path: 'university/:university/faculty/:faculty/subjects/edit', component: CreateSubjectComponent },
     { path: 'university/:university/subject/:subject', component: SubjectDetailsComponent},
     { path: 'university/:universityId/edit', component: EditUniversityComponent},
-    { path: 'university/create', component: EditUniversityComponent}
+    { path: 'university/create', component: EditUniversityComponent},
+
+
+    // Admin components
+    // TODO: Move other components into admin section
+
+    // Assessments
+    { path: 'admin/university/:universityId/subject/:subjectId/assessment', component: AdminAssessmentsComponent},
+    { path: 'admin/university/:universityId/subject/:subjectId/assessment/:assessmentId', component: CreateAssessmentComponent },
+    { path: 'admin/university/:universityId/subject/:subjectId/assessment/create', component: CreateAssessmentComponent },
 ];
 
 @NgModule({

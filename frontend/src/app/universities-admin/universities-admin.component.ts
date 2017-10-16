@@ -6,8 +6,6 @@ import { UniversitiesComponent } from '../universities/universities.component';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Utils } from '../utils/utils';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 
 @Component({
   selector: 'app-universities-admin',
@@ -46,7 +44,6 @@ export class UniversitiesAdminComponent extends UniversitiesComponent implements
 
 
   goToFacultyEdit(universityId: number) {
-    this.router.navigate([], {})
     this.router.navigate([`university/${universityId}/faculties/edit`])
   }
 

@@ -31,6 +31,8 @@ import { EditUniversityComponent } from './edit-university/edit-university.compo
 import { UniversityEditComponent } from './university-edit/university-edit.component';
 import { CreateFacultyComponent } from './create-faculty/create-faculty.component';
 import { CreateSubjectComponent } from './create-subject/create-subject.component';
+import { CreateAssessmentComponent } from './create-assessment/create-assessment.component';
+import { AdminAssessmentsComponent } from './admin-assessments/admin-assessments.component';
 
 
 
@@ -72,7 +74,9 @@ import { CreateSubjectComponent } from './create-subject/create-subject.componen
     UniversityEditComponent,
     FilterPipe,
     CreateFacultyComponent,
-    CreateSubjectComponent
+    CreateSubjectComponent,
+    CreateAssessmentComponent,
+    AdminAssessmentsComponent
   ],
   bootstrap: [AppComponent],
   providers: [

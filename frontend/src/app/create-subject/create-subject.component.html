@@ -40,6 +40,7 @@
                             <th>Code</th>
                             <th>Name</th>
                             <th>Faculty</th>
+                            <th>Assessments</th>
                             <th>Actions</th>
                         </thead>
                         <ng-container *ngIf="subjects.length != 0">
@@ -48,11 +49,11 @@
                                     <td>{{subject.code}}</td>
                                     <td>{{subject.name}}</td>
                                     <td>{{subject.faculty.code}}</td>
+                                    <td><a [routerLink]="['/admin', 'university', university.id, 'subject', subject.id, 'assessment']">Assessments</a></td>
                                     <td>
-
-                                        <button (click)="showSubjectForm(subject)" class="btn-uni-action">
-                              <i class="glyphicon glyphicon-edit"></i>
-                          </button>
+                                        <button (click)="showSubjectForm(subject)" class="btn-action">
+                                            <i class="glyphicon glyphicon-edit"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>

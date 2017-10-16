@@ -45,15 +45,16 @@
                                     <td>{{faculty.name}}</td>
                                     <td>{{faculty.code}}</td>
                                     <td>
-                                        <button class="btn-uni-action">
-                              <i class="glyphicon glyphicon-trash"></i>
-                          </button>
-                                        <button (click)="showFacultyForm(faculty)" class="btn-uni-action">
-                              <i class="glyphicon glyphicon-edit"></i>
-                          </button>
-                                        <button (click)="goToCreateSubjectPage(faculty)" class="btn-uni-action">
-                              <i class="glyphicon glyphicon-cog"></i>
-                          </button>
+                                        <!-- TODO: Add delete -->
+                                        <button class="btn-action">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                        </button>
+                                        <button (click)="showFacultyForm(faculty)" class="btn-action">
+                                            <i class="glyphicon glyphicon-edit"></i>
+                                        </button>
+                                        <button (click)="goToCreateSubjectPage(faculty)" class="btn-action">
+                                            <i class="glyphicon glyphicon-cog"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>

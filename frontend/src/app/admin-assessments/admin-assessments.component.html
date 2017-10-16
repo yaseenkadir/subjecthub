@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h2>Assessments</h2>
+        </div>
+    </div>
+    <div class="col-md-12" *ngIf="!fatalMessage">
+        <div *ngIf="isLoading">
+            <app-spinner></app-spinner>
+        </div>
+        <div *ngIf="!isLoading">
+            <table *ngIf="assessments.length != 0" class="table table-responsive core-table">
+                <thead>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Weighting</th>
+                <th>Actions</th>
+                </thead>
+                <ng-container *ngIf="assessments.length != 0">
+                    <tbody *ngFor="let assessment of assessments">
+                    <tr>
+                        <td>{{assessment.id}}</td>
+                        <td>{{assessment.name}}</td>
+                        <td>{{assessment.weighting}}</td>
+                        <td>
+                            <button (click)="deleteAssessment(assessment.id)" class="btn-action">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </button>
+
+                            <button (click)="editAssessment(assessment.id)" class="btn-action">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </ng-container>
+            </table>
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4 text-center" *ngIf="assessments.length == 0">
+                    <h4>No assessments exist.</h4>
+                </div>
+            </div>
+            <div class="row center">
+                <button type="button" (click)="createAssessment()" class="btn btn-labeled btn-primary">
+                    <span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>
+                    Create Assessment
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
