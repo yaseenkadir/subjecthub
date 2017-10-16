@@ -51,7 +51,7 @@ public class DbInitialiser implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         /* First university */
-        University university1 = new University("University of Testing", "UoT");
+        University university1 = new University("University of Testing", "UoT", "");
         university1 = universityRepository.save(university1);
 
         Faculty u1Faculty1 = new Faculty("Faculty of Testing", "FoT", university1);
@@ -102,7 +102,7 @@ public class DbInitialiser implements ApplicationRunner {
 
 
         /* Second university */
-        University university2 = new University("College of Testing", "CoT");
+        University university2 = new University("College of Testing", "CoT", "");
         university2 = universityRepository.save(university2);
 
         Faculty u2Faculty1 = new Faculty("Business Faculty", "BF", university2);

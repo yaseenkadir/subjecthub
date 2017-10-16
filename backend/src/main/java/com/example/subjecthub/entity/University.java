@@ -50,6 +50,11 @@ public class University {
         this.abbreviation = abbreviation;
     }
 
+    public University(String name, String abbreviation, String imageUrl) {
+        this(name, abbreviation);
+        this.imageUrl = imageUrl;
+    }
+
     public Long getId() {
         return id;
     }
