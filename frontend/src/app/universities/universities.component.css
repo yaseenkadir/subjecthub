@@ -6,7 +6,7 @@
 }
 
 .btn-uni-action:hover {
-  color: red;
+  color: #337ab7;
 }
 
 .tile {
@@ -27,7 +27,7 @@
 }
 
 .tile:hover > .content .icon {
-    color: red;
+    color: #337ab7;
 }
 
 .tile .content {

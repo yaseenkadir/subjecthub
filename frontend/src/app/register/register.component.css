@@ -1,0 +1,12 @@
+.btn-default {
+  background-color: #337ab7;
+  color: white;
+}
+.btn-default:hover {
+  box-shadow: 1px 1px 1px #888888;
+}
+.btn-default:active {
+  background-color: #296396;
+  color: white;
+  box-shadow: none !important;
+}

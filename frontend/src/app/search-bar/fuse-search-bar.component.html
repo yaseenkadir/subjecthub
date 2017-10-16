@@ -19,7 +19,7 @@
             </div>
             <input type="hidden" name="search_param" value="all" id="search_param">
             <input #searchForm id='search-form' class="search-query form-control" [(ngModel)]='term' (keyup)="search(searchForm.value)"
-                placeholder="Search by code, name, tag, description, undergrad/postgrad, " />
+                placeholder="Search here..." />
             <span class="input-group-btn">
                 <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
             </span>
