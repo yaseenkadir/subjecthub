@@ -1,24 +1,21 @@
 <div *ngIf="isLoading">
 <app-spinner></app-spinner>
 </div>
-<div *ngIf="!isLoading" class="row">
+<div *ngIf="!isLoading" id="content" class="row">
     <div class="col-md-4 col-md-offset-4">
-        <form class="">
-            <div class="form-group">
-                <label>Tag Name</label>
-                <input class="form-control" [(ngModel)]="tag.name" name="tag" placeholder="Please enter a tag name"/>
-            </div>
-            <div class="form-group">
-                <button (click)="submit()" class="form-control">
-                    <i class="glyphicon glyphicon-plus"></i>
-                </button>
-            </div>
-            <div *ngIf="success" class=" text-center form-group has-success">
-                <span class="help-block has-success">{{success}}</span>
-            </div>
-            <div *ngIf="error" class="text-center form-group has-error">
-                <span class="help-block has-error">{{error}}</span>
-            </div>
-        </form>
+        <p *ngIf="!isLoggedIn">Log in to add a tag</p>
+        <div class="input-group">
+            <input [disabled]="!isLoggedIn" type="text" class="form-control" [(ngModel)]="tag.name" name="tag" placeholder="Add a tag"/>
+            <span class="input-group-btn">
+                <!--<button (click)="submit()" class="btn btn-default" type="button">Add</button>-->
+                <button [disabled]="!isLoggedIn" (click)="submit()" class="btn btn-default" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+            </span>
+        </div>
+        <div *ngIf="success" class=" text-center form-group has-success">
+            <span class="help-block has-success">{{success}}</span>
+        </div>
+        <div *ngIf="error" class="text-center form-group has-error">
+            <span class="help-block has-error">{{error}}</span>
+        </div>
     </div>
 </div>

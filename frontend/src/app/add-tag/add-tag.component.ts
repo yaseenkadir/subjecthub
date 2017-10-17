@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import {AddTagService} from '../services/add-tag.service';
 import {Tag} from "../models/Tag";
 import { Utils } from '../utils/utils';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-add-tag',
@@ -22,9 +23,12 @@ export class AddTagComponent {
   tag: Tag;
   isLoading: boolean;
 
-  constructor(private tagService: AddTagService, private router: Router) {
+  isLoggedIn: boolean;
+
+  constructor(private tagService: AddTagService, private router: Router, private authService: AuthService) {
     this.tag = new Tag('');
     this.isLoading = false;
+    this.isLoggedIn = this.authService.isLoggedIn();
   }
   clearMessages() {
 

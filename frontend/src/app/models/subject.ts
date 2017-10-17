@@ -21,6 +21,7 @@ export class Subject {
   spring: boolean;
   summer: boolean;
   undergrad: boolean;
+  tags: any[];
 
   constructor() {
     this.name = '';
