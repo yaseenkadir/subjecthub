@@ -34,6 +34,20 @@ export class SubjectDetailsComponent implements OnInit {
     return this.subjectService.getSubject(this.universityId, this.subjectId);
   }
 
+  formatSubject(subject: Subject): Subject {
+    const session = [];
+    if (subject.undergrad) subject.studentType = 'Undergraduate';
+    if (subject.postgrad) subject.studentType = 'Postgraduate';
+
+    if (subject.summer) session.push('Summer');
+    if (subject.autumn) session.push('Autumn');
+    if (subject.spring) session.push('Spring');
+
+    subject.session = session.join(', ');
+    console.log(subject);
+    return subject;
+  }
+
   ngOnInit() {
     this.isLoading = true;
     this.route.paramMap
@@ -43,7 +57,7 @@ export class SubjectDetailsComponent implements OnInit {
         return this.fetchSubject();
       })
       .subscribe(subject => {
-        this.subject = subject;
+        this.subject = this.formatSubject(subject);
         this.isLoading = false;
       });
 
