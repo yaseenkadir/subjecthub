@@ -43,14 +43,16 @@ export class FuseSearchBarComponent implements OnInit {
       "code",
       "name",
       "availability",
-      "university.name",
-      "university.abbreviation",
       "creditPoints",
-      "description"
+      "description",
+      "studentType",
+      "session",
+      "tags.name"
     ]
   };
   constructor(private router: Router, private facultySearchService: FacultyService, private subjectSearchService: SubjectSearchService) {
     this.displaySubjects = [];
+    this.selectedFaculty = null;
   }
 
   search(term: string): void {
@@ -87,15 +89,42 @@ export class FuseSearchBarComponent implements OnInit {
   }
 
 
+  formatSubjects(subjects: Subject[]): Subject[] {
+    const formatted = subjects.map(subject => {
+      if (subject.postgrad) {
+        subject.studentType = 'Postgraduate'
+      }
+      if (subject.undergrad) {
+        subject.studentType = 'Undergraduate'
+      }
+      const session = []
+      if (subject.summer) {
+        session.push('summer')
+      }
+
+      if (subject.autumn) {
+        session.push('autumn')
+      }
+
+      if (subject.spring) {
+        session.push('spring')
+      }
+      subject.session = session.join(' ');
+      return subject;
+    })
+    console.log(formatted);
+    return formatted;
+  }
+
   ngOnInit(): void {
     Promise.all([
         this.fetchFaculties(),
         this.fetchSubjects()
     ]).spread((faculties, subjects) => {
         this.faculties = faculties;
-        this.subjects = subjects;
-        this.displaySubjects = subjects.map(s => s);
-        this.createFuse(subjects);
+        this.subjects = this.formatSubjects(subjects);
+        this.displaySubjects = this.subjects.map(s => s);
+        this.createFuse(this.subjects);
         this.search(this.term);
     });
   }

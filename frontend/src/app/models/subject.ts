@@ -10,6 +10,7 @@ export class Subject {
   code:  string;
 
   studentType: string;
+  session: string;
   faculty: Faculty;
   id: number;
   minRequirements: string;
