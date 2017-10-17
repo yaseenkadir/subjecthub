@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
-import { AlertModule } from 'ngx-bootstrap';
+import { AlertModule, TooltipModule } from 'ngx-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
 
@@ -33,6 +33,7 @@ import { CreateFacultyComponent } from './create-faculty/create-faculty.componen
 import { CreateSubjectComponent } from './create-subject/create-subject.component';
 import { CreateAssessmentComponent } from './create-assessment/create-assessment.component';
 import { AdminAssessmentsComponent } from './admin-assessments/admin-assessments.component';
+import { TimeAgoPipe } from 'time-ago-pipe';
 
 
 
@@ -54,6 +55,7 @@ import { AdminAssessmentsComponent } from './admin-assessments/admin-assessments
         positionClass: 'toast-top-center'
       }),
     ModalModule.forRoot(),
+    TooltipModule.forRoot(),
   ],
   declarations: [
     AppComponent,
@@ -76,7 +78,8 @@ import { AdminAssessmentsComponent } from './admin-assessments/admin-assessments
     CreateFacultyComponent,
     CreateSubjectComponent,
     CreateAssessmentComponent,
-    AdminAssessmentsComponent
+    AdminAssessmentsComponent,
+    TimeAgoPipe
   ],
   bootstrap: [AppComponent],
   providers: [

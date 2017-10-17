@@ -53,6 +53,12 @@ export class EditUniversityComponent implements OnInit {
           Validators.minLength(Consts.MIN_UNIVERSITIES_ABBREVIATION_LENGTH),
           Validators.maxLength(Consts.MAX_UNIVERSITIES_ABBREVIATION_LENGTH)
         ])
+      ],
+      'universityImageUrl': [
+        null,
+        Validators.compose([
+          Validators.required,
+        ])
       ]
     });
 
@@ -79,6 +85,10 @@ export class EditUniversityComponent implements OnInit {
     return this.editForm.get('universityAbbreviation');
   }
 
+  get universityImageUrl() {
+    return this.editForm.get('universityImageUrl');
+  }
+
   ngOnInit() {
     this.route.params.forEach((params: Params) => {
       console.log(params);
@@ -103,6 +113,7 @@ export class EditUniversityComponent implements OnInit {
           console.log(university);
           this.universityName.setValue(university.name);
           this.universityAbbreviation.setValue(university.abbreviation);
+          this.universityImageUrl.setValue(university.imageUrl);
         }, 500);
       })
       .catch((error) => {
@@ -135,7 +146,7 @@ export class EditUniversityComponent implements OnInit {
 
   private editUniversity() {
     let newUni = new University(this.university.id, this.universityName.value,
-      this.universityAbbreviation.value);
+      this.universityAbbreviation.value, this.universityImageUrl.value);
 
     if (this.university.equals(newUni)) {
       this.toastr.info('No changes made.');
@@ -161,7 +172,8 @@ export class EditUniversityComponent implements OnInit {
   }
 
   private createUniversity() {
-    let newUni = new University(null, this.universityName.value, this.universityAbbreviation.value);
+    let newUni = new University(null, this.universityName.value, this.universityAbbreviation.value,
+      this.universityImageUrl.value);
 
     this.isLoading = true;
     this.universityService.createUniversity(newUni)
