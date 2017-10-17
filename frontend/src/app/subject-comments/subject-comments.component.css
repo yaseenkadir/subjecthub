@@ -38,10 +38,11 @@
 .post {
     vertical-align: middle;
     text-align: left;
-    font-size: large;
+    /*font-size: large;*/
     border-left: 1px solid lightgrey;
     width:100%;
     padding-left: 10px;
+    padding-top: 5px;
 }
 .info {
     border-right: 1px solid lightgrey;
@@ -51,6 +52,17 @@
     vertical-align: top;
   text-align: right;
 }
+
+span.comment-poster {
+  color: #828282;
+  font-size: small;
+}
+
+p.comment-body {
+  margin-top: 10px;
+  word-break: break-all;
+}
+
 form input {
   margin-bottom: 10px;
 }

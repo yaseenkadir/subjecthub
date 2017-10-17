@@ -15,12 +15,8 @@
                 </button>
             </td>
             <td class="post {{comment.flagged && 'grey' || ''}}">
-                <p class="{{comment.flagged && 'reported' || ''}}">{{comment.post}}</p>
-            </td>
-            <td class="info {{comment.flagged && 'grey' || ''}}">
-                <pre class="info">Posted by {{comment.user.username}},<br/> at {{comment.postTime |
-                    date:'dd/MM/yy H:mm'}}.
-                </pre>
+                <span class="comment-poster">{{comment.user.username}} - <span tooltip="{{comment.postTime | date: 'medium'}}">{{comment.postTime | timeAgo}}</span></span>
+                <p class="comment-body {{comment.flagged && 'reported' || ''}}">{{comment.post}}</p>
             </td>
             <td class="action">
                 <button *ngIf="!comment.flagged" class="btn btn-default notFlagged"
