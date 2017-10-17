@@ -3,9 +3,9 @@
     <div *ngIf="comments.length == 0" class="row">
         <h5>No comments.</h5>
     </div>
-    <div class="row" *ngFor="let comment of comments">
-        <div class="comment">
-            <div class="arm thumbs">
+    <table>
+        <tr class="row comment" *ngFor="let comment of comments">
+            <td>
                 <button class="btn btn-default thumbUp" (click)="this.thumbUp(comment.id)">
                     {{comment.thumbsUp}}
                 </button>
@@ -13,52 +13,35 @@
                 <button class="btn btn-default thumbDown" (click)="this.thumbDown(comment.id)">
                     {{comment.thumbsDown}}
                 </button>
-            </div>
-            <div *ngIf="comment.flagged" class="body">
-                <div class="box">
-                    <div class="post reported">{{comment.post}}</div>
-                    <div class="metadata">
-                        <div class="box">
-                            <div class="info">by {{comment.user.username}}, at {{comment.postTime |
-                                date:'dd/MM/yy H:mm'}}
-                            </div>
-                            <div class="action">
-                                <button class="action btn btn-default flagged"
-                                        (click)="this.unflag(comment.id)">!
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div *ngIf="!comment.flagged" class="body">
-                <div class="box">
-                    <div class="post">{{comment.post}}</div>
-                    <div class="metadata">
-                        <div class="box">
-                            <div class="info">by {{comment.user.username}}, at {{comment.postTime |
-                                date:'dd/MM/yy H:mm'}}
-                            </div>
-                            <div class="action">
-                                <button class="btn btn-default notFlagged"
-                                        (click)="this.flag(comment.id)">!
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+            </td>
+            <td class="post {{comment.flagged && 'grey' || ''}}">
+                <p class="{{comment.flagged && 'reported' || ''}}">{{comment.post}}</p>
+            </td>
+            <td class="info {{comment.flagged && 'grey' || ''}}">
+                <pre class="info">Posted by {{comment.user.username}},<br/> at {{comment.postTime |
+                    date:'dd/MM/yy H:mm'}}.
+                </pre>
+            </td>
+            <td class="action">
+                <button *ngIf="!comment.flagged" class="btn btn-default notFlagged"
+                        (click)="this.flag(comment.id)">!
+                </button>
+                <button *ngIf="comment.flagged" class="action btn btn-default flagged"
+                        (click)="this.unflag(comment.id)">!
+                </button>
+            </td>
+        </tr>
+    </table>
+    <h2>Add Comments</h2>
     <form [formGroup]="addCommentForm" (submit)="addComment(addCommentForm.value)">
         <ng-container *ngIf="user">
             <p>Posting as: {{user.username}}</p>
-            <input formControlName="comment" type="text" placeholder="Comment" class="form-control">
+            <input formControlName="comment" type="text" placeholder="Type here to add comment." class="form-control">
             <button class="btn btn-default">Post!</button>
         </ng-container>
         <ng-container *ngIf="!user">
             <p>You are not logged in, please login to post a comment!</p>
-            <input disabled formControlName="comment" type="text" placeholder="Comment"
+            <input disabled formControlName="comment" type="text" placeholder="Type here to add comment."
                    class="form-control">
             <button disabled class="btn btn-default">Post!</button>
         </ng-container>
