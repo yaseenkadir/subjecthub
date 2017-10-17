@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Location } from '@angular/common';
+
 import { AssessmentService } from '../services/assessment.service';
 import { AuthService } from '../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
@@ -25,8 +27,14 @@ export class AdminAssessmentsComponent implements OnInit {
               private assessmentService: AssessmentService,
               private authService: AuthService,
               private route: ActivatedRoute,
+              private location: Location,
               private toastr: ToastrService) {
   }
+
+  goBack() {
+    this.location.back();
+  }
+
 
   ngOnInit() {
     this.route.params.forEach((params: Params) => {

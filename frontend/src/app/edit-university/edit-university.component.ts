@@ -77,6 +77,10 @@ export class EditUniversityComponent implements OnInit {
     });
   }
 
+  goBack() {
+    this.location.back();
+  }
+
   get universityName() {
     return this.editForm.get('universityName');
   }

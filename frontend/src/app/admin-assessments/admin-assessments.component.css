@@ -1,3 +1,13 @@
 div.row {
   margin-bottom: 10px;
 }
+.title,
+.title:hover {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.title:hover > i {
+  color: red;
+}
