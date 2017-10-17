@@ -11,10 +11,11 @@
         <div class="input-group">
             <div class="input-group-btn">
                 <select (change)="filterSubjects()" [(ngModel)]="selectedFaculty" style="width: 137px;" class="form-control">
+                    <option [ngValue]="null" disabled selected>Faculty</option>
                     <option [ngValue]=""></option>
-                        <option  [ngValue]="faculty" *ngFor="let faculty of faculties" >
-                            {{faculty.code}}
-                        </option>
+                    <option [ngValue]="faculty" *ngFor="let faculty of faculties" >
+                        {{faculty.code}}
+                    </option>
             </select>
             </div>
             <input type="hidden" name="search_param" value="all" id="search_param">
@@ -25,8 +26,8 @@
             </span>
 
         </div>
-        <p class="search-instructions"> You can filter subjects using the search bar above using
-            subject name, code, faculty, tag, description, undergrad/postgrad or season.</p>
+        <p class="search-instructions"> You can filter subjects using the search bar above using subject name, code, faculty, tag, description, undergrad/postgrad
+            or season.</p>
     </div>
 </div>
 <!-- results -->
@@ -39,7 +40,14 @@
                     <i class="glyphicon glyphicon-circle-arrow-right"></i></a>
                 </h4>
                 <div class="panel-body">
-                    <p class="info">{{subject.creditPoints}} Credit Points :: {{subject.faculty.name}}</p>
+                    <p class="info">{{subject.creditPoints}} Credit Points :: {{subject.faculty.name}} :: Availability: {{subject.session}}
+                        :: Student: {{subject.studentType}}
+                    </p>
+                    <p class="info">
+                        <span *ngFor="let tag of subject.tags">
+                            #{{tag.name}}
+                        </span>
+                    </p>
                     <p></p>
                     <p>{{subject.description}}</p>
                     <p></p>
@@ -50,15 +58,12 @@
         </section>
         <section *ngIf='displaySubjects.length === 0' class="empty-search-result">
             <div class="search-result-item-body">
-
                 <div class="row">
                     <div class="col-sm-9 text-center">
                         <h2 style="text-transform: uppercase; letter-spacing:4px; color:#adadad; margin-top:10%">No Result</h2>
                     </div>
                 </div>
-
             </div>
-
         </section>
     </div>
 </div>
