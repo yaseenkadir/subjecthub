@@ -31,9 +31,16 @@
     <h2>Add Comments</h2>
     <form [formGroup]="addCommentForm" (submit)="addComment(addCommentForm.value)">
         <ng-container *ngIf="user">
-            <p>Posting as: {{user.username}}</p>
-            <input formControlName="comment" type="text" placeholder="Type here to add comment." class="form-control">
-            <button class="btn btn-default">Post!</button>
+            <div class="form-group">
+                <p>Posting as: {{user.username}}</p>
+                <textarea formControlName="comment" rows="4" maxlength="1000" type="text" placeholder="Type here to add comment." class="form-control"></textarea>
+            </div>
+            <div class="form-group center">
+                <button type="submit" class="btn btn-labeled btn-primary">
+                    <span class="btn-label"><i class="glyphicon glyphicon-comment"></i></span>
+                    Comment
+                </button>
+            </div>
         </ng-container>
         <ng-container *ngIf="!user">
             <p>You are not logged in, please login to post a comment!</p>
