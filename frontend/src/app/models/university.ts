@@ -19,6 +19,7 @@ export class University {
 
       return this.id == other.id &&
         this.name == other.name &&
-        this.abbreviation == other.abbreviation;
+        this.abbreviation == other.abbreviation &&
+        this.imageUrl == other.imageUrl;
     }
 }
