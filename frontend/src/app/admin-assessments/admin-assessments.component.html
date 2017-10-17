@@ -1,7 +1,9 @@
 <div class="row">
     <div class="row">
         <div class="col-md-12 text-center">
-            <h2>Assessments</h2>
+            <h2>
+                <a class="title" (click)="goBack()"> <i class="glyphicon glyphicon-circle-arrow-left"></i> </a> Assessments
+            </h2>
         </div>
     </div>
     <div class="col-md-12" *ngIf="!fatalMessage">
@@ -11,27 +13,27 @@
         <div *ngIf="!isLoading">
             <table *ngIf="assessments.length != 0" class="table table-responsive core-table">
                 <thead>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Weighting</th>
-                <th>Actions</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Weighting</th>
+                    <th>Actions</th>
                 </thead>
                 <ng-container *ngIf="assessments.length != 0">
                     <tbody *ngFor="let assessment of assessments">
-                    <tr>
-                        <td>{{assessment.id}}</td>
-                        <td>{{assessment.name}}</td>
-                        <td>{{assessment.weighting}}</td>
-                        <td>
-                            <button (click)="deleteAssessment(assessment.id)" class="btn-action">
+                        <tr>
+                            <td>{{assessment.id}}</td>
+                            <td>{{assessment.name}}</td>
+                            <td>{{assessment.weighting}}</td>
+                            <td>
+                                <button (click)="deleteAssessment(assessment.id)" class="btn-action">
                                 <i class="glyphicon glyphicon-trash"></i>
                             </button>
 
-                            <button (click)="editAssessment(assessment.id)" class="btn-action">
+                                <button (click)="editAssessment(assessment.id)" class="btn-action">
                                 <i class="glyphicon glyphicon-edit"></i>
                             </button>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     </tbody>
                 </ng-container>
             </table>
