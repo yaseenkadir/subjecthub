@@ -25,6 +25,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.example.subjecthub</groupId>
+            <artifactId>frontend</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-security</artifactId>
         </dependency>
@@ -104,6 +109,26 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <!-- http://javasampleapproach.com/java-integration/integrate-angular-4-springboot-web-app-springtoolsuite -->
+                    <!-- ^ The tutorial I followed to package the angular app -->
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals><goal>copy-resources</goal></goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/static/</outputDirectory >
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/../frontend/dist</directory >
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -1,5 +1,6 @@
 .idea/
 *.iml
+backend/src/main/resources/static
 
 ## File-based project format:
 *.iws
@@ -72,6 +73,9 @@ frontend/npm-debug.log
 frontend/testem.log
 frontend/typings
 frontend/yarn-error.log
+frontend/target
+frontend/node
+frontend/etc
 
 # e2e
 frontend/e2e/*.js
