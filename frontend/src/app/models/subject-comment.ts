@@ -1,6 +1,8 @@
+import { User } from './user';
+
 export class SubjectComment {
     id: number;
-    user: object;
+    user: User;
     subject: object;
     post: string;
     postTime: Date;
