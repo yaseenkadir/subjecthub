@@ -12,7 +12,7 @@ export class Consts {
     static MIN_ASSESSMENT_NAME_LENGTH = 5;
     static MAX_ASSESSMENT_NAME_LENGTH = 100;
     static MIN_ASSESSMENT_DESCRIPTION_LENGTH = 5;
-    static MAX_ASSESSMENT_DESCRIPTION_LENGTH = 100;
+    static MAX_ASSESSMENT_DESCRIPTION_LENGTH = 1000;
     // Assessment has a field called length. These specify min/max lengths of the length field.
     static MIN_ASSESSMENT_LENGTH_LENGTH = 5;
     static MAX_ASSESSMENT_LENGTH_LENGTH = 100;
