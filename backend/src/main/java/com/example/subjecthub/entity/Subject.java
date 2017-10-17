@@ -17,8 +17,8 @@ public class Subject {
 
     // id refers to the id of the subject in our database, not the subject's code
     @Id
-    @GeneratedValue
     @Column(nullable = false, name = "subject_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // the subject's id within the university's domain, not the subject hub

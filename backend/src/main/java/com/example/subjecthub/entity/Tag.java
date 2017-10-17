@@ -16,8 +16,8 @@ import java.util.List;
 public class Tag {
 
     @Id
-    @GeneratedValue
     @Column(nullable = false, name = "tag_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

@@ -18,7 +18,7 @@ public class Assessment {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "assessment_id")
     private Long id;
 
