@@ -19,7 +19,7 @@
             </select>
             </div>
             <input type="hidden" name="search_param" value="all" id="search_param">
-            <input #searchForm id='search-form' class="search-query form-control" [(ngModel)]='term' (keyup)="search(searchForm.value)"
+            <input #searchForm id='search-form' class="search-query form-control" [(ngModel)]='term' (input)="search(searchForm.value)"
                 placeholder="Search here..." />
             <span class="input-group-btn">
                 <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
@@ -36,23 +36,61 @@
     <div>
         <section (click)="goToSubjectDetails(subject)" *ngFor="let subject of displaySubjects " class="panel panel-default">
             <div class="contents">
-                <h4 class="panel-heading well"><a [routerLink]="['/university', university.id, 'subject', subject.id]">{{subject.code}} - {{subject.name}}
+                <div class="text-left">
+                    <h4 class="panel-heading well"><a [routerLink]="['/university', university.id, 'subject', subject.id]">{{subject.code}} - {{subject.name}}
                     <i class="glyphicon glyphicon-circle-arrow-right"></i></a>
-                </h4>
+                    </h4>
+                </div>
+                <div class="text-left">
+                    <h3>
+                        <small>
+                            <div class="col-md-12">
+                                    <p class="info">
+                                        <span *ngFor="let tag of subject.tags">
+                                    #{{tag.name}}
+                                </span>
+                                    </p>
+                                </div>
+                    </small>
+                    </h3>
+                </div>
+
+                <hr/>
                 <div class="panel-body">
-                    <p class="info">{{subject.creditPoints}} Credit Points :: {{subject.faculty.name}} :: Availability: {{subject.session}}
-                        :: Student: {{subject.studentType}}
-                    </p>
-                    <p class="info">
-                        <span *ngFor="let tag of subject.tags">
-                            #{{tag.name}}
-                        </span>
-                    </p>
-                    <p></p>
-                    <p>{{subject.description}}</p>
-                    <p></p>
-                    <h4>Requirements</h4>
-                    <p *ngIf="subject.minRequirements" class="fs-mini text-muted"> {{subject.minRequirements}}</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="info">{{subject.creditPoints}} Credit Points :: {{subject.faculty.name}}
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <p class="info">
+                                Student Type: {{subject.studentType}}
+                            </p>
+                            <p class="info">
+                                Availability: {{subject.session}}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-12">
+                            <p>{{subject.description}}</p>
+                            <p></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Requirements</h4>
+                        </div>
+                        <div class="col-md-12 ">
+                            <p *ngIf="subject.minRequirements" class="fs-mini text-muted"> {{subject.minRequirements}}</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
