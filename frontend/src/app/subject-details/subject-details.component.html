@@ -1,18 +1,20 @@
 <div *ngIf="isLoading" class="spinner">
     <app-spinner></app-spinner>
 </div>
-<div *ngIf="!isLoading" class="text-center">
-    <div class="row">
-        <div class="col-md-12">
+<div *ngIf="!isLoading" class="col-md-8 col-md-offset-2">
+    <div class="row center">
+        <div>
             <h1><a class="title" href="#" (click)="navigateBack()"> <!--TODO: link to previous page, OR, subject's university's search-->
                 <i class="glyphicon glyphicon-circle-arrow-left"></i>
                 {{subject.name}} ({{subject.code}})
             </a></h1>
         </div>
-        <div class="col-md-12">
+        <div>
             <span *ngFor="let tag of subject.tags">#{{tag.name}} </span>
+            <!-- Tag-->
+            <app-add-tag [universityId]="universityId" [subjectId]="subjectId"></app-add-tag>
         </div>
-        <div class="col-md-12">
+        <div>
             <h3><small>{{subject.faculty.code}} :: {{subject.creditPoints}} Credit Points</small></h3>
             <ng-container *ngIf="user != null && user.admin">
                 <button class="btn btn-danger" (click)="deleteSubject()">Delete</button>
@@ -22,33 +24,18 @@
     <hr/>
     <!-- Description -->
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <p>{{subject.description}}</p>
-        </div>
+        <p>{{subject.description}}</p>
     </div>
     <hr/>
     <!-- Assignments-->
     <div *ngFor="let assessment of subject.assessments" class="row">
-        <div class="col-md-12">
-            <h4>{{assessment.name}} <small>Weight: {{assessment.weighting}}%</small></h4>
-        </div>
-        <div class="col-md-8 col-md-offset-2">
-            <p>{{assessment.description}}</p>
-        </div>
+        <h4>{{assessment.name}} &nbsp;&nbsp;<small>Weight: {{assessment.weighting}}%</small></h4>
+        <p>{{assessment.description}}</p>
     </div>
     <hr/>
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <app-subject-comments [universityId]="universityId" [subjectId]="subjectId"></app-subject-comments>
-        </div>
-    </div>
     <!-- Comment-->
-
-    <hr/>
-    <!-- Tag-->
     <div class="row">
-        <div class="col-md-12">
-            <app-add-tag [universityId]="universityId" [subjectId]="subjectId"></app-add-tag>
-        </div>
+        <app-subject-comments [universityId]="universityId" [subjectId]="subjectId"></app-subject-comments>
     </div>
+
 </div>

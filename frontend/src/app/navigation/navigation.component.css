@@ -1,4 +1,12 @@
 
+#nav-image {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  max-height: 50px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
 /*
 These navbar settings were generated using: https://work.smarchal.com/twbscolor/
 */
@@ -7,6 +15,7 @@ These navbar settings were generated using: https://work.smarchal.com/twbscolor/
   border-color: #296396;
 }
 .navbar-default .navbar-brand {
+  font-family: 'Muli', sans-serif;
   color: #ecf0f1;
 }
 .navbar-default .navbar-brand:hover,

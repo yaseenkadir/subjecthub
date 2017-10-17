@@ -33,14 +33,20 @@ export class SubjectService {
   }
 
   editSubject(universityId: number | string, subjectId: number | string, subject: Subject): Promise<Subject> {
+    // API doesn't accept tags in request
+    let s = Object.assign({}, subject);
+    s.tags = null;
     return this.handleSubjectResponse(
-      this.http.put(ApiUrlUtils.buildSubjectUrl(universityId, subjectId), subject)
+      this.http.put(ApiUrlUtils.buildSubjectUrl(universityId, subjectId), s)
     );
   }
 
   createSubject(universityId: number | string, subject: Subject): Promise<Subject> {
+    // API doesn't accept tags in request
+    let s = Object.assign({}, subject);
+    s.tags = null;
     return this.handleSubjectResponse(
-      this.http.post(ApiUrlUtils.buildSubjectsUrl(universityId) + '/subject', subject)
+      this.http.post(ApiUrlUtils.buildSubjectsUrl(universityId) + '/subject', s)
     );
   }
 
