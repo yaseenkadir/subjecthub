@@ -3,7 +3,7 @@
 
 # It assumes that the postgresql container is running!
 
-source ~/.subject-hub/secrets.sh
+source /home/spring/.subject-hub/secrets.sh
 IMAGE_NAME="subjecthub-backend"
 REPO="yaseenk/subjecthub"
 TAG="latest"
@@ -16,15 +16,17 @@ unset DOCKER_USERNAME
 unset DOCKER_PASSWORD
 echo -e "\nPulling latest changes"
 docker pull $REPO:$TAG
-echo -e "\nRunning new version of backend on port 80 and 443"
+echo -e "\nRunning new version of backend on port 80, 8080 and 443"
+
+# Spring will handle http -> https rerouting
 docker run \
     -v /etc/letsencrypt/:/etc/letsencrypt/ \
     -e KEYSTORE_PASSWORD="$KEYSTORE_PASSWORD" \
     -e JWT_SECRET_KEY="$JWT_SECRET_KEY" \
     -e SUBJECT_HUB_DB_PASSWORD="$SUBJECT_HUB_DB_PASSWORD" \
     -d \
-    -p 80:8443 \
-    -p 443:8443 \
+    -p 80:80 \
+    -p 443:443 \
     --link subjecthubdb:postgres \
     --name $IMAGE_NAME $REPO:$TAG
 unset KEYSTORE_PASSWORD

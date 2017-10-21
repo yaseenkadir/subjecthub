@@ -32,6 +32,8 @@ after_success:
 deploy:
   provider: script
   skip_cleanup: true
-  script: ssh spring@$SERVER 'bash -s' < run-new-version.sh
+  script:
+    - scp scripts/run-new-version.sh spring@$SERVER:/data/
+    - ssh spring@$SERVER '/data/run-new-version.sh'
   on:
     branch: master
