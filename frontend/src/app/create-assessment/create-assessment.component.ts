@@ -197,20 +197,18 @@ export class CreateAssessmentComponent implements OnInit {
     this.isLoading = true;
     this.assessmentService.getAssessment(this.universityId, this.subjectId, assessmentId)
       .then(assessment => {
-        setTimeout(() => {
-          this.existingAssessment = assessment;
-          this.title = `Editing ${assessment.name}`;
+        this.existingAssessment = assessment;
+        this.title = `Editing ${assessment.name}`;
 
-          // Create a new copy so we can modify without changing existing assessment.
-          this.editingAssessment = new Assessment(assessment.id, assessment.name,
-            assessment.description, assessment.weighting, assessment.groupWork, assessment.length,
-            assessment.type);
+        // Create a new copy so we can modify without changing existing assessment.
+        this.editingAssessment = new Assessment(assessment.id, assessment.name,
+          assessment.description, assessment.weighting, assessment.groupWork, assessment.length,
+          assessment.type);
 
-          // FormGroup elements are binded using ngModel except for assessment type which is set
-          this.assessmentType.setValue(AssessmentType[assessment.type]);
+        // FormGroup elements are binded using ngModel except for assessment type which is set
+        this.assessmentType.setValue(AssessmentType[assessment.type]);
 
-          this.isLoading = false;
-        }, 500);
+        this.isLoading = false;
       })
   }
 

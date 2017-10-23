@@ -46,10 +46,8 @@ export class UniversitiesComponent implements OnInit {
         this.cleanMessages();
         this.universityService.getUniversities()
             .then(universities => {
-                setTimeout(() => {
-                  this.isLoading = false;
-                  this.universities = universities;
-                }, 300);
+              this.isLoading = false;
+              this.universities = universities;
             })
             .catch(e => {
                 this.isLoading = true;

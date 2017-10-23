@@ -110,15 +110,13 @@ export class EditUniversityComponent implements OnInit {
     this.isLoading = true;
     this.universityService.getUniversity(universityId)
       .then((university: University) => {
-        setTimeout(() => {
-          this.isLoading = false;
-          this.university = university;
-          this.title = `Editing ${university.name}`;
-          console.log(university);
-          this.universityName.setValue(university.name);
-          this.universityAbbreviation.setValue(university.abbreviation);
-          this.universityImageUrl.setValue(university.imageUrl);
-        }, 500);
+        this.isLoading = false;
+        this.university = university;
+        this.title = `Editing ${university.name}`;
+        console.log(university);
+        this.universityName.setValue(university.name);
+        this.universityAbbreviation.setValue(university.abbreviation);
+        this.universityImageUrl.setValue(university.imageUrl);
       })
       .catch((error) => {
         // TODO: Display big error message;
@@ -161,12 +159,9 @@ export class EditUniversityComponent implements OnInit {
     this.isLoading = true;
     this.universityService.editUniveristy(newUni.id, newUni)
       .then((response: University) => {
-        setTimeout(() => {
-          this.isLoading = false;
-          this.toastr.success(`Edited ${response.name}`, null, {timeOut: 3000});
-          this.location.back();
-        }, 500)
-
+        this.isLoading = false;
+        this.toastr.success(`Edited ${response.name}`, null, {timeOut: 3000});
+        this.location.back();
       })
       .catch(error => {
         console.log(error);
@@ -182,11 +177,9 @@ export class EditUniversityComponent implements OnInit {
     this.isLoading = true;
     this.universityService.createUniversity(newUni)
       .then((response: University) => {
-        setTimeout(() => {
-          this.isLoading = false;
-          this.toastr.success(`Created ${response.name}`, null, {timeOut: 3000});
-          this.location.back();
-        }, 500)
+        this.isLoading = false;
+        this.toastr.success(`Created ${response.name}`, null, {timeOut: 3000});
+        this.location.back();
       })
       .catch(error => {
         console.log(error);
