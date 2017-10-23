@@ -25,6 +25,7 @@ docker run \
     -e JWT_SECRET_KEY="$JWT_SECRET_KEY" \
     -e SUBJECT_HUB_DB_PASSWORD="$SUBJECT_HUB_DB_PASSWORD" \
     -d \
+    --restart unless-stopped \
     -p 80:80 \
     -p 443:443 \
     --link subjecthubdb:postgres \
