@@ -15,7 +15,7 @@
                 </button>
             </td>
             <td class="post {{comment.flagged && 'grey' || ''}}">
-                <span class="comment-poster">{{comment.user.username}} - <span tooltip="{{comment.postTime | date: 'medium'}}">{{comment.postTime | timeAgo}}</span></span>
+                <span class="comment-poster">{{comment.user.username}} - <span tooltip="{{comment.postTime | date: 'medium'}}">{{comment.postTime | amTimeAgo}}</span></span>
                 <p class="comment-body {{comment.flagged && 'reported' || ''}}">{{comment.post}}</p>
             </td>
             <td class="action">

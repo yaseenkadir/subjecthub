@@ -6,7 +6,6 @@ import { AuthService } from '../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { User } from '../models/user';
-import { TimeAgoPipe } from 'time-ago-pipe';
 
 @Component({
   selector: 'app-subject-comments',

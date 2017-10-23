@@ -33,7 +33,7 @@ import { CreateFacultyComponent } from './create-faculty/create-faculty.componen
 import { CreateSubjectComponent } from './create-subject/create-subject.component';
 import { CreateAssessmentComponent } from './create-assessment/create-assessment.component';
 import { AdminAssessmentsComponent } from './admin-assessments/admin-assessments.component';
-import { TimeAgoPipe } from 'time-ago-pipe';
+import { MomentModule } from 'angular2-moment';
 
 
 
@@ -56,6 +56,7 @@ import { TimeAgoPipe } from 'time-ago-pipe';
       }),
     ModalModule.forRoot(),
     TooltipModule.forRoot(),
+    MomentModule,
   ],
   declarations: [
     AppComponent,
@@ -79,7 +80,6 @@ import { TimeAgoPipe } from 'time-ago-pipe';
     CreateSubjectComponent,
     CreateAssessmentComponent,
     AdminAssessmentsComponent,
-    TimeAgoPipe
   ],
   bootstrap: [AppComponent],
   providers: [

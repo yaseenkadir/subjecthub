@@ -12,7 +12,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     // Hide spinner that was displayed during bundle load
-    //
     document.getElementById('loadingContainer').style.display = 'None';
   }
 }
