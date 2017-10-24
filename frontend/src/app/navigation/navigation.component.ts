@@ -11,8 +11,7 @@ import {Subscription} from "rxjs/Subscription";
 })
 export class NavigationComponent implements OnInit {
 
-  private user: any;
-  private userSubscription: Subscription;
+  user: any;
 
   constructor(private authService: AuthService) { }
 

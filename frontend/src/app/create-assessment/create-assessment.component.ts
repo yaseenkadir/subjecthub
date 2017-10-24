@@ -17,8 +17,8 @@ import { Location } from '@angular/common';
 })
 export class CreateAssessmentComponent implements OnInit {
 
-  private isLoading: boolean;
-  private title: String;
+  isLoading: boolean;
+  title: String;
   private universityId;
   private subjectId;
 
@@ -28,22 +28,22 @@ export class CreateAssessmentComponent implements OnInit {
   // Assessment that already exists. This is used to compare if changes have been made.
   private existingAssessment: Assessment;
   // Assessment being edited in form
-  private editingAssessment: Assessment;
+  editingAssessment: Assessment;
 
-  private editForm: FormGroup;
+  editForm: FormGroup;
 
   // These are manually enabled when user tries to save an assessment and form is invalid.
   // Used to prevent errors from appearing as users are typing valid entries.
-  private nameError: boolean = false;
-  private descriptionError: boolean = false;
-  private lengthError: boolean = false;
+  nameError: boolean = false;
+  descriptionError: boolean = false;
+  lengthError: boolean = false;
 
-  private MIN_ASSESSMENT_NAME_LENGTH = Consts.MIN_ASSESSMENT_NAME_LENGTH;
-  private MAX_ASSESSMENT_NAME_LENGTH = Consts.MAX_ASSESSMENT_NAME_LENGTH;
-  private MIN_ASSESSMENT_DESCRIPTION_LENGTH = Consts.MIN_ASSESSMENT_DESCRIPTION_LENGTH;
-  private MAX_ASSESSMENT_DESCRIPTION_LENGTH = Consts.MAX_ASSESSMENT_DESCRIPTION_LENGTH;
-  private MIN_ASSESSMENT_LENGTH_LENGTH = Consts.MIN_ASSESSMENT_LENGTH_LENGTH;
-  private MAX_ASSESSMENT_LENGTH_LENGTH = Consts.MAX_ASSESSMENT_LENGTH_LENGTH;
+  MIN_ASSESSMENT_NAME_LENGTH = Consts.MIN_ASSESSMENT_NAME_LENGTH;
+  MAX_ASSESSMENT_NAME_LENGTH = Consts.MAX_ASSESSMENT_NAME_LENGTH;
+  MIN_ASSESSMENT_DESCRIPTION_LENGTH = Consts.MIN_ASSESSMENT_DESCRIPTION_LENGTH;
+  MAX_ASSESSMENT_DESCRIPTION_LENGTH = Consts.MAX_ASSESSMENT_DESCRIPTION_LENGTH;
+  MIN_ASSESSMENT_LENGTH_LENGTH = Consts.MIN_ASSESSMENT_LENGTH_LENGTH;
+  MAX_ASSESSMENT_LENGTH_LENGTH = Consts.MAX_ASSESSMENT_LENGTH_LENGTH;
 
   constructor(private route: ActivatedRoute,
               private assessmentService: AssessmentService,

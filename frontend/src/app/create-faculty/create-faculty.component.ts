@@ -15,10 +15,10 @@ export class CreateFacultyComponent implements OnInit {
   public title: string;
   public saved: boolean = false;
 
-  private editForm: FormGroup;
-  private displayNameError: boolean = false;
-  private displayAbbreviationError: boolean = false;
-  private attemptedSave: boolean = false;
+  editForm: FormGroup;
+  displayNameError: boolean = false;
+  displayAbbreviationError: boolean = false;
+  attemptedSave: boolean = false;
 
 
   constructor(public bsModalRef: BsModalRef, private fb: FormBuilder) {

@@ -6,10 +6,13 @@
             </h2>
         </div>
     </div>
-    <div class="col-md-12" *ngIf="!fatalMessage">
+    <div class="col-md-12">
         <div *ngIf="isLoading">
             <app-spinner></app-spinner>
         </div>
+        <p class="error" *ngIf="errorMessage">
+            {{ errorMessage }}
+        </p>
         <div *ngIf="!isLoading">
             <table *ngIf="assessments.length != 0" class="table table-responsive core-table">
                 <thead>

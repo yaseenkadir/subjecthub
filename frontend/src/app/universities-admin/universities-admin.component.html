@@ -2,11 +2,14 @@
     <div class="col-md-12 text-center">
         <h2>Universities</h2>
     </div>
-    <div class="col-md-12" *ngIf="!fatalMessage">
+    <div class="col-md-12">
         <div *ngIf="isLoading">
             <app-spinner></app-spinner>
         </div>
         <div *ngIf="!isLoading">
+            <p class="error" *ngIf="errorMessage">
+                {{ errorMessage }}
+            </p>
             <table class="table table-responsive core-table">
                 <thead>
                     <th>ID</th>
